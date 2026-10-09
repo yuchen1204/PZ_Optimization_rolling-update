@@ -30,8 +30,16 @@ local function shortcuts()
     return "(" .. PAD_SHORTCUT .. ")"
 end
 
+local function getTextShow()
+    return (PzoptI18n and PzoptI18n.t("dialogs.overlay.item_turn_on", TEXT_SHOW)) or TEXT_SHOW
+end
+
+local function getTextHide()
+    return (PzoptI18n and PzoptI18n.t("dialogs.overlay.item_turn_off", TEXT_HIDE)) or TEXT_HIDE
+end
+
 local function itemText(visible)
-    return (visible and TEXT_HIDE or TEXT_SHOW) .. "  " .. shortcuts()
+    return (visible and getTextHide() or getTextShow()) .. "  " .. shortcuts()
 end
 
 local function perf()

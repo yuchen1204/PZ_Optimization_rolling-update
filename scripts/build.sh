@@ -79,6 +79,18 @@ if [[ -d "$SRC/lua" ]]; then
   python3 "$REPO/scripts/option-classes.py"
   # ...and the release date of each key (the "Release date" sort), from the release tags
   python3 "$REPO/scripts/option-dates.py"
+  # ...and the i18n localization dictionaries from i18n/*.json
+  python3 "$REPO/scripts/i18n-build.py"
+  # A raw non-ASCII string literal compiles to mojibake (the game's lexer takes each character's low
+  # byte and re-decodes as UTF-8: "卸" -> "x"): data files come out pre-escaped from i18n-build.py,
+  # hand-written sources must be escaped (scripts/escape-cjk.py rewrites a file in place), or the
+  # whole UI is garbage in the CN translations. 2026-10-09: the Chinese options tab.
+  bad_cjk=$(python3 "$REPO/scripts/raw-cjk-gate.py" 2>&1 || true)
+  if [[ -n "$bad_cjk" ]]; then
+    echo "RAW CJK GATE FAILED: $bad_cjk" >&2
+    echo "  run: python3 scripts/escape-cjk.py <file.lua>" >&2
+    exit 1
+  fi
   mkdir -p "$OUT/media/lua"
   cp -r "$SRC/lua/." "$OUT/media/lua/"
   # Every file must compile the way a game launched with -debug compiles it: there a function declaring more than

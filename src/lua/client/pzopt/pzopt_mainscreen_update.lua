@@ -26,6 +26,18 @@ local ITEM_TEXT = "PZ OPTIMIZATION UPDATE"   -- the stock items are capitals (UI
 local COMPAT_TEXT = "PZ OPTIMIZATION MOD COMPATIBILITY CHECK"
 local ITEM_RESTART = "RESTART TO FINISH THE UPDATE"
 
+local function getItemText()
+    return (PzoptI18n and PzoptI18n.t("dialogs.update.item_update", ITEM_TEXT)) or ITEM_TEXT
+end
+
+local function getCompatText()
+    return (PzoptI18n and PzoptI18n.t("dialogs.compat.item_compat", COMPAT_TEXT)) or COMPAT_TEXT
+end
+
+local function getItemRestart()
+    return (PzoptI18n and PzoptI18n.t("dialogs.update.item_restart", ITEM_RESTART)) or ITEM_RESTART
+end
+
 local function perf()
     return getPerformance()
 end
@@ -131,9 +143,8 @@ function PzoptUpdateDialog:refresh(force)
                     or "Update now downloads the release zip, ")
                 .. "replaces the installed files that changed (the ones listed in "
                 .. "pzopt-installed.txt; the game's own files are never touched) and offers to restart the game: the new classes load "
-                .. "on the next start. Saves and options stay as they are."
-            self.primary:setTitle("Update now")
-            self.secondary:setTitle("Later")
+            self.primary:setTitle((PzoptI18n and PzoptI18n.t("dialogs.update.btn_update", "Update now")) or "Update now")
+            self.secondary:setTitle((PzoptI18n and PzoptI18n.t("ui.buttons.cancel", "Later")) or "Later")
         else
             body = head .. " <LINE> <LINE> "
                 .. "This copy was not installed by install.sh / install.ps1 (no pzopt-installed.txt in the game folder), "
@@ -141,33 +152,33 @@ function PzoptUpdateDialog:refresh(force)
                 .. (local_ and "Run install.ps1 / install.bash from the Workshop item's folder once; later updates then install from here."
                     or "Get the new zip from the release page and unpack it by hand, or install it once with the installer.")
             self.primary:setTitle(pageTitle)
-            self.secondary:setTitle("Close")
+            self.secondary:setTitle((PzoptI18n and PzoptI18n.t("ui.buttons.close", "Close")) or "Close")
         end
         local notes = richNotes(p:getPzoptUpdateNotes())
         if notes ~= "" then body = body .. " <LINE> <LINE> <RGB:0.8,0.8,0.8> " .. notes end
     elseif s == "downloading" then
         body = head .. " <LINE> <LINE> Downloading the files that changed..."
-        self.primary:setTitle("Hide")
+        self.primary:setTitle((PzoptI18n and PzoptI18n.t("ui.buttons.close", "Hide")) or "Hide")
         self.secondary:setTitle("")
     elseif s == "installing" then
         body = head .. " <LINE> <LINE> " .. (local_ and "Copying the Steam Workshop files over the installed ones..." or "Replacing the installed files...")
-        self.primary:setTitle("Hide")
+        self.primary:setTitle((PzoptI18n and PzoptI18n.t("ui.buttons.close", "Hide")) or "Hide")
         self.secondary:setTitle("")
     elseif s == "installed" then
         body = head .. " <LINE> <LINE> <RGB:0.6,1,0.6> " .. p:getPzoptUpdateMessage() .. " <RGB:1,1,1> <LINE> <LINE> "
             .. "The game keeps running the previous build until it restarts. Restart game closes it and starts it again with the update."
-        self.primary:setTitle("Restart game")
-        self.secondary:setTitle("Later")
+        self.primary:setTitle((PzoptI18n and PzoptI18n.t("ui.buttons.restart", "Restart game")) or "Restart game")
+        self.secondary:setTitle((PzoptI18n and PzoptI18n.t("ui.buttons.cancel", "Later")) or "Later")
     elseif s == "error" then
         body = head .. " <LINE> <LINE> <RGB:1,0.6,0.6> " .. (p:getPzoptUpdateMessage():gsub("[<>]", "")) .. " <RGB:1,1,1> <LINE> <LINE> "
             .. "Nothing was changed if the " .. (local_ and "copy" or "download") .. " failed; if the file swap failed, run the installer again "
             .. "(install.sh / install.ps1, --uninstall first). "
             .. (local_ and "The Workshop item's folder has the installers." or "The release page has the zip.")
         self.primary:setTitle(pageTitle)
-        self.secondary:setTitle("Close")
+        self.secondary:setTitle((PzoptI18n and PzoptI18n.t("ui.buttons.close", "Close")) or "Close")
     else
         body = "No update is offered right now."
-        self.primary:setTitle("Close")
+        self.primary:setTitle((PzoptI18n and PzoptI18n.t("ui.buttons.close", "Close")) or "Close")
         self.secondary:setTitle("")
     end
     self.text.text = body
@@ -237,7 +248,7 @@ end
 function PzoptUpdateDialog:prerender()
     ISPanelJoypad.prerender(self)
     self:refresh(false)
-    self:drawText("PZ Optimization update", PAD, PAD, 1, 1, 1, 1, UIFont.Medium)
+    self:drawText((PzoptI18n and PzoptI18n.t("dialogs.update.title", "PZ Optimization update")) or "PZ Optimization update", PAD, PAD, 1, 1, 1, 1, UIFont.Medium)
     -- progress bar above the buttons: the download share, full while the files swap, green when done
     local s = self.shownState
     local barY = self.height - PAD - BTN_HGT - PAD - BAR_HGT
@@ -418,7 +429,7 @@ local function addItem(self)
     if self.inGame or not self.creditOption or not self.exitOption or self.pzoptUpdateOption then return end
     local rowHgt = getTextManager():getFontHeight(UIFont.Large) + 8 * 2
     local labelHgt = rowHgt + FONT_HGT_SMALL   -- the version line starts 6 px above the stock row's bottom
-    local label = ISLabel:new(0, self.creditOption:getBottom(), labelHgt, ITEM_TEXT, 1, 1, 1, 1, UIFont.Large, true)
+    local label = ISLabel:new(0, self.creditOption:getBottom(), labelHgt, getItemText(), 1, 1, 1, 1, UIFont.Large, true)
     label.internal = "PZOPT_UPDATE"
     label:initialise()
     label.onMouseDown = onItemClick
@@ -427,7 +438,7 @@ local function addItem(self)
     label.pzoptEnabled = false
     label:setColor(0.45, 0.45, 0.45)
     label:setVisible(false)
-    local compat = ISLabel:new(0, label:getBottom(), rowHgt, COMPAT_TEXT, 1, 1, 1, 1, UIFont.Large, true)
+    local compat = ISLabel:new(0, label:getBottom(), rowHgt, getCompatText(), 1, 1, 1, 1, UIFont.Large, true)
     compat.internal = "PZOPT_COMPAT"
     compat:initialise()
     compat.onMouseDown = onCompatClick
@@ -437,8 +448,9 @@ local function addItem(self)
     compat:setVisible(false)
     self.exitOption:setY(self.exitOption:getY() + labelHgt + rowHgt)
     self.bottomPanel:setHeight(self.bottomPanel:getHeight() + labelHgt + rowHgt)
-    self.maxMenuItemWidth = math.max(self.maxMenuItemWidth or 0, getTextManager():MeasureStringX(UIFont.Large, ITEM_RESTART),
-        getTextManager():MeasureStringX(UIFont.Large, COMPAT_TEXT))
+    self.maxMenuItemWidth = math.max(self.maxMenuItemWidth or 0, getTextManager():MeasureStringX(UIFont.Large, getItemRestart()),
+        getTextManager():MeasureStringX(UIFont.Large, getCompatText()),
+        getTextManager():MeasureStringX(UIFont.Large, getItemText()))
     label:setWidth(self.maxMenuItemWidth)
     compat:setWidth(self.maxMenuItemWidth)
     self.bottomPanel:addChild(label)
@@ -524,13 +536,13 @@ local function syncItem(self)
             label:setColor(0.45, 0.45, 0.45)
         end
     end
-    local text = ITEM_TEXT
+    local text = getItemText()
     if s == "downloading" then
         text = "UPDATING... " .. perf():getPzoptUpdateProgress() .. " %"
     elseif s == "installing" then
         text = "UPDATING... INSTALLING"
     elseif s == "installed" then
-        text = ITEM_RESTART
+        text = getItemRestart()
     elseif s == "error" and enabled then
         text = "UPDATE FAILED"
     end

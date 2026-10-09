@@ -1,0 +1,1930 @@
+{
+  "meta": {
+    "language": "en_us",
+    "name": "English",
+    "version": "1.0.0"
+  },
+  "ui": {
+    "tabs": {
+      "pzopt": "PZ Optimization",
+      "optimizations": "Optimizations",
+      "enhancements": "Enhancements",
+      "profiler": "Profiler"
+    },
+    "views": {
+      "label": "View",
+      "simple": "Simple",
+      "advanced": "Advanced",
+      "everything": "Everything"
+    },
+    "view_tips": {
+      "simple": "The settings worth knowing about: the features and the main switches.",
+      "advanced": "Also the settings that change how something is done; the defaults are what was measured best.",
+      "everything": "Also the tuning numbers (budgets, thread counts, intervals). Change them to experiment."
+    },
+    "notes": {
+      "restart": "Takes effect on the next launch.",
+      "live": "Applies as soon as you press Apply; no restart needed.",
+      "home_note": "Apply or Accept saves your changes to Zomboid/pzopt/options.ini. Performance settings take effect on the next launch; Visuals and Tools apply at once (a few Visuals on the next launch). Settings pinned by the game folder's pzopt.properties or -Dpzopt.<key> cannot be changed here."
+    },
+    "masters": {
+      "enabled_label": "Optimizations enabled (master switch)",
+      "enabled_tip": "Off = the game runs stock: every override takes its original code path and the settings below are ignored. On = the settings below apply. The Tools are not affected: the performance overlay works either way.",
+      "enhancements_label": "Enhancements enabled (master switch)",
+      "enhancements_tip": "Off = the picture is the stock game's: upscaling, sprite filtering, HDR output, ambient occlusion, sun shadows, reflections, car glass, the darkness floor, remembered places, colour grading, per-pixel lighting, god rays and foliage sway are all off. On = the settings below apply.",
+      "profiler_label": "Profiler enabled (master switch)",
+      "profiler_tip": "Off = no performance overlay, no measuring and no frame log: the overlay's samplers never start and the toggle key only says the profiler is off. On = the settings below apply."
+    },
+    "groups": {
+      "perf": {
+        "title": "Performance",
+        "note": "Smoother frames and faster loads. Nothing here changes how the game looks."
+      },
+      "vis": {
+        "title": "Visuals",
+        "note": "Graphics the stock game does not have. Off by default; each card says what it costs."
+      },
+      "tools": {
+        "title": "Tools",
+        "note": "The performance overlay (F9), its game-thread profiler and the console log."
+      }
+    },
+    "categories": {
+      "smooth": {
+        "title": "Smoothness and pacing",
+        "blurb": "Even frame delivery, variable refresh and input latency."
+      },
+      "drive": {
+        "title": "Driving",
+        "blurb": "The car's stutter and rubber banding, and the world arriving at speed."
+      },
+      "world": {
+        "title": "World drawing",
+        "blurb": "What the chunk pictures hold and how many are drawn in a frame."
+      },
+      "weather": {
+        "title": "Lighting, cutaways and weather",
+        "blurb": "Light refreshes, see-through walls and roofs, fog, rain and puddles."
+      },
+      "zombies": {
+        "title": "Zombies and hordes",
+        "blurb": "The zombie simulation spread over every core, and cheaper checks."
+      },
+      "load": {
+        "title": "Boot and loading",
+        "blurb": "From launch to the menu, and from Continue to the world."
+      },
+      "ui": {
+        "title": "Menus, inventory and map",
+        "blurb": "Windows that answer in the frame you click."
+      },
+      "system": {
+        "title": "System, sound and mods",
+        "blurb": "Cores and power, the audio mix, other mods, updates."
+      },
+      "image": {
+        "title": "Image quality",
+        "blurb": "Upscalers, dynamic resolution, sprite filtering and HDR output."
+      },
+      "light": {
+        "title": "Lighting and shadows",
+        "blurb": "Per-pixel light, the real sky's shadows, ambient occlusion and god rays."
+      },
+      "refl": {
+        "title": "Reflections and glass",
+        "blurb": "Water and puddles, mirrors and windows, car glass, wet blood."
+      },
+      "atmos": {
+        "title": "Atmosphere and detail",
+        "blurb": "Darkness and colour grading, foliage sway, relief, zombie outlines."
+      },
+      "overlay": {
+        "title": "Performance overlay",
+        "blurb": "Frame times, utilization and what the game thread does, on screen."
+      }
+    },
+    "subcategories": {
+      "Frame pacing": "Frame pacing",
+      "Variable refresh": "Variable refresh",
+      "Input latency": "Input latency",
+      "Car smoothness": "Car smoothness",
+      "Chunk streaming": "Chunk streaming",
+      "Render distance": "Render distance",
+      "Trees while driving": "Trees while driving",
+      "What bakes": "What bakes",
+      "Bake budgets": "Bake budgets",
+      "Zoom": "Zoom",
+      "Blood and flies": "Blood and flies",
+      "Sprite buffers": "Sprite buffers",
+      "Lighting": "Lighting",
+      "Cutaways": "Cutaways",
+      "Fog": "Fog",
+      "Rain and puddles": "Rain and puddles",
+      "On other cores": "On other cores",
+      "Cheaper checks": "Cheaper checks",
+      "Detail by distance": "Detail by distance",
+      "Loading screen": "Loading screen",
+      "Boot": "Boot",
+      "Files and textures": "Files and textures",
+      "Windows": "Windows",
+      "Map": "Map",
+      "Lua": "Lua",
+      "Cores and power": "Cores and power",
+      "Sound": "Sound",
+      "Mods and multiplayer": "Mods and multiplayer",
+      "Updates": "Updates",
+      "Upscaling": "Upscaling",
+      "Dynamic resolution": "Dynamic resolution",
+      "Sprite filtering": "Sprite filtering",
+      "HDR output": "HDR output",
+      "Per-pixel lighting": "Per-pixel lighting",
+      "Sun, moon and clouds": "Sun, moon and clouds",
+      "Ambient occlusion": "Ambient occlusion",
+      "God rays": "God rays",
+      "Water and puddles": "Water and puddles",
+      "Mirrors and windows": "Mirrors and windows",
+      "Car glass": "Car glass",
+      "Wet blood": "Wet blood",
+      "Darkness and grading": "Darkness and grading",
+      "Foliage sway": "Foliage sway",
+      "Relief": "Relief",
+      "Zombie outlines": "Zombie outlines",
+      "Overlay": "Overlay",
+      "Fps colour": "Fps colour",
+      "Console log": "Console log",
+      "More": "More"
+    },
+    "buttons": {
+      "home": "<  Home",
+      "help": "HELP",
+      "fix_problem": "Fix a problem",
+      "show_more": "Show more",
+      "show_more_tip": "Switches the view so this subcategory shows the rest of its settings.",
+      "export": "Export settings",
+      "export_tip": "Copies the settings of the Optimizations, Enhancements and Profiler tabs to the clipboard as text and saves to Zomboid/pzopt/settings-export.ini",
+      "import": "Import settings...",
+      "import_tip": "Sets the controls of the tabs from exported text",
+      "uninstall": "Uninstall PZ Optimization...",
+      "compat": "Mod compatibility check",
+      "compat_tip": "Checks for conflicts between active Java mods and PZ Optimization.",
+      "update": "Check for updates",
+      "update_tip": "Checks for updates and opens the PZ Optimization updater dialog.",
+      "overlay": "Performance overlay",
+      "overlay_tip": "Toggles the performance overlay (F9 / L3 + R3).",
+      "restart": "Restart game",
+      "close": "Close",
+      "apply": "Apply",
+      "accept": "Accept",
+      "cancel": "Cancel",
+      "reset_group": "Reset group to defaults",
+      "reset_category": "Reset category to defaults",
+      "reset_category_tip": "Puts every setting of this category back to the build's default on this machine. Only the controls change; Apply or Accept saves them."
+    },
+    "presets": {
+      "label": "Presets",
+      "recommended": "Recommended defaults",
+      "recommended_tip": "Reset to recommended balanced parameters",
+      "recommended_btn": "Recommended (every optimization on)",
+      "recommended_tip_long": "Turns the Performance master switch on and puts every Performance setting back to the build's default on this machine. Visuals and Tools are not changed. Takes effect on the next launch.",
+      "stock": "Stock game",
+      "stock_tip": "Disable all optimizations, restoring vanilla behavior",
+      "stock_btn": "Stock game (every optimization off)",
+      "stock_tip_long": "Turns the Performance master switch off: the game runs its original code everywhere, as if the overrides were not installed. The settings are kept for when you turn it on again; Tools and the performance overlay are not affected. Takes effect on the next launch.",
+      "low_end": "Low-end hardware",
+      "low_end_btn": "Low-end hardware (4 cores or less)",
+      "low_end_tip": "A locked 60 fps on a 4-core CPU with an old GPU: turns the master switch on, a render distance of 9 chunks, no chunk worker pool, trees baked only while walking, vsync on with frame limit at 60, lighting updates 10/s, UI redrawn 30/s and texture compression. Takes effect on the next launch."
+    },
+    "pills": {
+      "advanced": "ADVANCED",
+      "expert": "EXPERT",
+      "changed": "CHANGED",
+      "next_launch": "next launch",
+      "pinned": "pinned",
+      "mod_off": "off for a mod"
+    },
+    "crumbs": {
+      "home": "Home",
+      "problems": "Help  >  Fix a problem",
+      "search": "Search",
+      "overview": "Overview"
+    },
+    "help": {
+      "hint": "Not sure what to change? Start from what you notice.",
+      "problem_desc": "Stutter while driving, low fps in a horde, slow loading, laggy input... Pick what you notice: why it happens, and the settings that help.",
+      "fix_subtitle": "Pick what you notice: why it happens, and the settings that help, wherever they live."
+    },
+    "clips": {
+      "label": "Before / after clips",
+      "tip": "Plays a short clip of the stock game and one with the setting on, side by side, above the description of the setting under the mouse. Off saves the memory the clips take (up to ~100 MB of video memory while this screen is open). Applies at once and is remembered."
+    },
+    "status": {
+      "on_changed": "{on} on, {changed} changed",
+      "on": "{on} on",
+      "changed": "{changed} changed",
+      "off": "Off",
+      "off_lower": "off",
+      "recommended": "Recommended"
+    },
+    "framecap": {
+      "menu_framerate": "Menu framerate",
+      "same_as_ingame": "Same as in-game"
+    },
+    "problems": {
+      "1": {
+        "title": "Stutter while driving",
+        "cause": "Chunks arrive faster than their pictures bake, and the car is drawn at its physics steps.",
+        "why": "At 120 km/h about 50 new chunks a second reach the screen. Stock bakes each chunk's picture in the frame it arrives, and it draws the car and the camera at the last 100 Hz physics step, so the car rubber-bands against the street. These spread the bakes over frames, draw the car between its physics steps and keep trees in the bake. Rosewood town drive at the 240 cap: stock 153 fps (p99 36 ms), with these 235 fps (p99 8 ms)."
+      },
+      "2": {
+        "title": "Low fps in a big horde",
+        "cause": "Stock runs the whole zombie simulation on the game thread.",
+        "why": "Every zombie's animation, decisions and drawing preparation run one after the other on the game thread, while the other cores idle. These run them on every core and skip checks that cannot change anything. The Louisville horde (about 2,000 zombies), same build with these off and on: 46 to 58 fps."
+      },
+      "3": {
+        "title": "Long boot and loading",
+        "cause": "Boot work runs one file at a time, and the loading screen waits for everything.",
+        "why": "Stock parses scripts, animations and textures on one thread at boot and shows a loading screen until the whole cell is ready. These do the boot work on several threads with caches, and enter the world from the centre outwards with the last view on screen meanwhile. Launch to menu 7.4 to 5.0 s, Continue to the world 6.5 to 4.0 s."
+      },
+      "4": {
+        "title": "Storms, fog and rain are slow",
+        "cause": "Stock redraws fog rows and every wet square each frame.",
+        "why": "Heavy fog is drawn as about 190 screen-wide rows per level, and rain re-packs every particle and puddle every frame. These draw fog in one pass, rain as repeated tiles and keep the puddles on the GPU. 120 km/h drive in heavy fog: 220 to 389 fps; thunderstorm: 83 to 131 fps."
+      },
+      "5": {
+        "title": "Input feels laggy",
+        "cause": "Input is read early and finished frames queue up for the GPU.",
+        "why": "Stock reads the keyboard and mouse well before the frame they move is shown, and lets the driver queue frames. These read the newest input when a frame starts, keep the queue short and draw the cursor at the newest mouse position."
+      },
+      "6": {
+        "title": "Screen tears or judders",
+        "cause": "Borderless never gets variable refresh, and frames reach the screen unevenly.",
+        "why": "A borderless window does not count as fullscreen for the desktop, so G-SYNC / FreeSync stay off, and frames reach the screen as soon as they are ready. These make the window count as fullscreen, keep the frame rate inside the display's range and hand frames over at even steps (judder 3.1 to 0.95 ms)."
+      },
+      "7": {
+        "title": "Menus and inventory are slow",
+        "cause": "Every window redraws every frame, with or without a change.",
+        "why": "An open inventory took the Lua UI from 2 to 12 % of the game thread in stock. These redraw only what changed, the moment you act, and keep the map's labels while the view stays."
+      },
+      "8": {
+        "title": "Laptop, Steam Deck or battery",
+        "cause": "The game's threads land on slow cores and the GPU clock goes up and down.",
+        "why": "On hybrid CPUs the game thread can end up on an efficient core; small GPUs spend frames at full resolution. These place the threads, hold the GPU clock steady, and render the world smaller when the GPU is the limit. The Low-end presets on the home page set them for you (4-core laptop, 120 km/h drive: 44 to 68 fps)."
+      },
+      "9": {
+        "title": "I play with other mods",
+        "cause": "A mod that patches the same game code can clash with an optimization.",
+        "why": "PZ Optimization scans the Java mods of each launch and can switch off what they patch. Max performance keeps everything on and reports clashes; Max compatibility switches the affected settings off. The main menu's compatibility check lists what it found."
+      }
+    }
+  },
+  "dialogs": {
+    "update": {
+      "title": "PZ Optimization update",
+      "tag": "Version",
+      "changes": "Changes:",
+      "up_to_date": "You are on the latest version!",
+      "btn_update": "Update now",
+      "btn_downloading": "Downloading...",
+      "btn_installing": "Installing...",
+      "btn_installed": "Installed, restart to finish",
+      "btn_failed": "Update failed",
+      "item_restart": "RESTART TO FINISH THE UPDATE",
+      "item_update": "PZ OPTIMIZATION UPDATE"
+    },
+    "compat": {
+      "title": "Mod compatibility check",
+      "scanning": "Scanning active mods...",
+      "safe": "No known mod conflicts found.",
+      "conflicts_found": "Potential mod conflicts detected:",
+      "item_compat": "PZ OPTIMIZATION MOD COMPATIBILITY CHECK",
+      "profile_perf": "Max performance",
+      "profile_compat": "Max compatibility",
+      "profile_perf_tip": "Java mods are checked and listed here but switch nothing off; windows a mod draws in are reused like the game's own.",
+      "profile_compat_tip": "The settings a Java mod patches are switched off so the mod meets the game code its author tested; windows a mod draws in are redrawn at the game's own rate.",
+      "profile_status_running": "Running now: {profile}. Applies after a restart."
+    },
+    "overlay": {
+      "item_turn_on": "SHOW PERFORMANCE OVERLAY",
+      "item_turn_off": "HIDE PERFORMANCE OVERLAY",
+      "keybinding": "Toggle Performance Overlay"
+    }
+  },
+  "options": {
+    "enabled": {
+      "label": "Optimizations enabled (master switch)",
+      "tip": "Off = the game runs stock: every override takes its original code path and the settings below are ignored. On = the settings below apply. The Tools are not affected: the performance overlay works either way."
+    },
+    "enhancementsEnabled": {
+      "label": "Enhancements enabled (master switch)",
+      "tip": "Off = the picture is the stock game's: upscaling, sprite filtering, HDR output, ambient occlusion, sun shadows, reflections, car glass, the darkness floor, remembered places, colour grading, per-pixel lighting, god rays and foliage sway are all off. On = the settings below apply."
+    },
+    "profilerEnabled": {
+      "label": "Profiler enabled (master switch)",
+      "tip": "Off = no performance overlay, no measuring and no frame log: the overlay's samplers never start and the toggle key only says the profiler is off. On = the settings below apply."
+    },
+    "treesInChunkTexture": {
+      "label": "Trees: bake into chunk textures",
+      "tip": "Static trees are drawn once into the chunk textures instead of every frame; only fading trees stay per-frame. Off = stock (every tree every frame)."
+    },
+    "windSpriteSway": {
+      "label": "Wind sprite effects: sway the baked plants",
+      "tip": "With the game's own \\ display option on, grass, bushes and trees stay in the chunk textures and bend in the wind through Foliage sway, instead of the option drawing every plant one by one every frame (a forest at max zoom on a laptop: 133 fps with the stock option, 369 with this, 372 without wind). Nothing changes while the game option is off. Off = the stock option's per-frame drawing."
+    },
+    "treeBakeMaxChunksPerSec": {
+      "label": "Trees: bake only below this chunk rate (chunks/s)",
+      "tip": "While chunks stream in faster than this (walking loads about 9 a second, driving at 60 km/h about 32, at 120 km/h about 72) new chunk textures are baked without their trees and the trees are drawn per frame instead: a texture that lives a second or two while driving costs more to bake its trees into than to draw them. Textures already baked keep their trees until they re-bake anyway."
+    },
+    "treeBakeDirect": {
+      "label": "Trees: bake through the plain sprite path",
+      "tip": "Baked trees go through the plain sprite path. The batched path drops the largest (jumbo) trees near buildings."
+    },
+    "treeBakePass": {
+      "label": "Trees: crowns across textures, depth by height",
+      "tip": "Baked trees are drawn by their own pass: into every chunk texture the crown reaches (a jumbo tree is up to 7 tiles wide) and with a depth that rises with the crown like walls do. Off = trees are clipped at their chunk texture's border and cut by upper-floor walls behind them (issue #5)."
+    },
+    "treeAppend": {
+      "label": "Trees: draw new ones into neighbour textures",
+      "tip": "A newly loaded chunk's trees that reach into an already baked neighbour texture are drawn on top of it instead of re-baking the whole texture; same picture, most of the re-bakes while driving."
+    },
+    "treeRebakeLazy": {
+      "label": "Trees: fewer re-bakes in the cutaway while driving",
+      "tip": "Since Build 42.21 every tree around your car turns see-through while you drive. A tree now re-bakes its chunk only when it leaves the baked picture; one coming back stays drawn every frame (as the stock game draws all trees) until its chunk re-bakes anyway. Same picture; Off = up to four re-bakes of the chunk and its neighbours per tree passed."
+    },
+    "treeRebakeLingerMs": {
+      "label": "Trees: longest per-frame stay after the cutaway (ms)",
+      "tip": "How long a tree back from the driving cutaway may stay drawn every frame before its chunk re-bakes it in. 0 = at once: a tree drawn every frame costs more than the re-bake."
+    },
+    "edgeTestFast": {
+      "label": "Zombies: fast wall / window / door test when they push apart",
+      "tip": "Build 42.21 rewrote the test whether a wall, window or door lies between two squares round new edge objects, through layers of small function objects the Java compiler cannot inline. Zombies pushing each other apart ask it for every neighbour square every frame; the same test is now written out directly. Same result."
+    },
+    "driveTreeCutaway": {
+      "label": "Trees: see-through round your car while driving (Build 42.21)",
+      "tip": "Build 42.21 counts driving as aiming for the tree cutaway: every tree whose base lies in the cutaway square round you turns see-through. On = as the game. Off (default) = Build 42.20's rule (only trees south-east of you, and while aiming); the 120 km/h drive is about 15-20 % faster at max zoom."
+    },
+    "treeCutawayReach": {
+      "label": "Trees: only trees reaching the cutaway leave the bake",
+      "tip": "The game makes a tree see-through when its base lies in the cutaway's square around you (while driving: every such tree), but only an ellipse in that square is cut away. A tree whose picture stays clear of the ellipse looks the same either way, so it stays in the chunk texture (no re-bake, no per-frame draw); its fade keeps running so it fades as before when it gets there. 120 km/h drive about a fifth faster."
+    },
+    "treeCutawayReachPx": {
+      "label": "Trees: cutaway reach margin (pixels)",
+      "tip": "How far ahead of the cutaway ellipse a tree already leaves the chunk texture, so its re-bake is done before the ellipse reaches it."
+    },
+    "bloodBake": {
+      "label": "Blood: how bakes draw the floor splats",
+      "tip": "Blood on the floor is baked into the chunk textures. Stock walks up to 18,000 splats of the chunk and its eight neighbours on every bake and sets the shader, depth test and blend for each splat it draws: at a thousand splats a chunk that doubled every chunk bake (the hitch when chunks arrive). gpu: each chunk keeps its splats sorted once, a bake draws them in one instanced draw per chunk with the same position, colour, age and light (pixel-identical to stock). cpu: the same list as sprites (any computer)."
+    },
+    "bloodAppend": {
+      "label": "Blood: draw new splats into finished textures",
+      "tip": "A new blood splat is drawn into the chunk textures it lands on instead of re-baking the chunk's floor (in a fight that was dozens of re-bakes a second), and into the neighbours' textures within a tile of a chunk edge, where stock cut it off until they re-baked. Hidden by the Blood Decals option: nothing at all (stock re-baked for it anyway). Where grass, a body or an item lies under it the floor re-bakes as stock."
+    },
+    "bloodSettleSec": {
+      "label": "Blood: exact re-bake after new splats (s)",
+      "tip": "Some seconds after the first splat drawn into a finished texture, that floor re-bakes once in stock's exact order (blood under anything flat on the floor that the depth test cannot tell from it)."
+    },
+    "bloodFadeFix": {
+      "label": "Blood: drop splats past a chunk's 1,000",
+      "tip": "Stock keeps drawing the splats pushed out at 1,000 per chunk: they were meant to fade out, but in chunk textures their fade only runs down one step per bake, so they stay for as long as the chunk is loaded. On: they go at the chunk's next bake. Off = stock."
+    },
+    "bloodRebakeCoalesceMs": {
+      "label": "Blood: gather re-bakes for new splats on grass (ms)",
+      "tip": "A new splat on grass, a body or an item still re-bakes its floor (see above); it waits this long first, so the splats one hit throws over the next few frames share a single re-bake."
+    },
+    "bloodAppendPlants": {
+      "label": "Blood: new splats under grass without a re-bake",
+      "tip": "Where grass or bushes grow under a new splat, it is drawn into the finished texture and those plants are drawn into it once more over it, the way the game's bake draws them after the blood (same light, same wind sway), instead of re-baking the whole floor. Bodies, items and flattened grass still re-bake."
+    },
+    "bloodAppendVegetation": {
+      "label": "Blood: draw new splats over grass too",
+      "tip": "Also draw new splats into finished textures where grass, a body or an item lies under them (the blood then covers them; stock bakes them over the blood). Off = those floors re-bake."
+    },
+    "fliesToggleFix": {
+      "label": "Corpse flies: no re-bake when nothing moved",
+      "tip": "The corpse-flies update cleared and set the same square's flies every few frames while driving, and each toggle re-baked the chunk texture next to you at once; the clear is skipped when the square stays the same."
+    },
+    "windowsInChunkTexture": {
+      "label": "Bake windows into chunk textures",
+      "tip": "Windows and glass doors bake like walls instead of being drawn every frame. Off by default: baked glass hides zombies standing behind it (outside the window you look through), and it measured no frame-time gain."
+    },
+    "translucentTilesInChunkTexture": {
+      "label": "Bake translucent tiles",
+      "tip": "Fences, railings, wall decorations and overlays bake into the chunk textures instead of being drawn every frame (about 3,000 draws a frame at max zoom)."
+    },
+    "glassTilesPerFrame": {
+      "label": "Glass tiles stay per frame",
+      "tip": "Translucent tiles made of glass (display cases, glass-door fridges, escalator and mall balustrades, glass partitions) are drawn every frame as in the stock game, so you and zombies stay visible behind them. Baked, the glass hid whoever stood behind it. A few draws a frame where there is glass."
+    },
+    "floorDecalsPerFrame": {
+      "label": "Floor decals stay per frame",
+      "tip": "Translucent tiles that lie on the ground (manhole covers, drains) are drawn every frame as in the stock game, over the rain puddles. Baked, a manhole cover in a puddle flickered in stripes while you walked, most visibly zoomed out. A few draws a frame."
+    },
+    "translucentLightsPerFrame": {
+      "label": "Light fixtures stay per frame",
+      "tip": "Translucent light fixtures that have a lit sprite (ceiling lights, lamps) are drawn every frame as in the stock game, so a lit ceiling light never shows through the floor or roof above it (a gas-station canopy's tubes did). A few draws a frame."
+    },
+    "curtainDepthNudgePct": {
+      "label": "Curtain depth nudge (hundredths of a tile)",
+      "tip": "Closed curtains draw this much nearer the camera than their tile geometry says, so a baked window never shows through them (north windows sit 0.017 tile in front of their curtain in the game's tile geometry)."
+    },
+    "bakeScheduler": {
+      "label": "One prioritized bake budget per frame",
+      "tip": "Every chunk-level bake of a frame (new chunks, cutaways, strong light, redraws, lighting drift) shares one budget, granted by urgency and distance, instead of each kind having its own; a level waiting past its kind's longest wait goes first. Driving through Rosewood at 120 km/h: 214 -> ~230 fps, worst frames 37 -> 16 ms. Replaces the per-kind budgets below."
+    },
+    "bakeFrameBudget": {
+      "label": "One budget: bakes per frame",
+      "tip": "The most chunk-level bakes a frame (the highest the adaptive budget goes); object changes to a texture next to you and up to four new chunk levels always come on top."
+    },
+    "bakeBudgetAdaptive": {
+      "label": "One budget: follow the frame time",
+      "tip": "The bake budget halves after a frame that used more than 90 % of the frame-rate cap's time and grows by one after frames under 60 %, between 2 and the budget above."
+    },
+    "occlusionGrantedOnly": {
+      "label": "One budget: occlusion only for the levels baked",
+      "tip": "The pass that finds which chunk levels are hidden behind buildings looks only at the levels baked this frame, not every one still waiting."
+    },
+    "bakeMipLevels": {
+      "label": "Mipmap levels built after a bake",
+      "tip": "The smaller copies of a chunk texture made after each bake; the widest zoom uses only the first ones. 3 cuts a bake's GPU time by a fifth, same picture."
+    },
+    "renderChunkTopUp": {
+      "label": "Chunk textures made ahead of need",
+      "tip": "Keeps this many empty chunk textures ready for the current zoom, made two a frame, so a burst of new chunks never waits for texture creation."
+    },
+    "bakeBudget": {
+      "label": "Chunk textures baked per frame",
+      "tip": "Chunk-level textures (re)baked in one frame; the rest wait for the next frame."
+    },
+    "rebakeBudget": {
+      "label": "Chunk texture re-bakes per frame",
+      "tip": "Textures dirtied only by lighting drift, a redraw or a cutaway change keep their previous image for a few frames past this many re-bakes."
+    },
+    "rebakeMaxFrames": {
+      "label": "Chunk texture re-bakes: longest hold (frames)",
+      "tip": "A held re-bake lands after at most this many frames."
+    },
+    "lightingRebakeBudget": {
+      "label": "Lighting-only re-bakes per frame",
+      "tip": "Textures dirtied only by a lighting change (daylight drift, a lightning flash) re-bake at most this many per frame."
+    },
+    "lightingRebakeMaxFrames": {
+      "label": "Lighting-only re-bakes: longest hold (frames)",
+      "tip": "A lighting-only re-bake lands after at most this many frames; a lightning strike spreads over this window instead of one long frame."
+    },
+    "lightingRebakeMs": {
+      "label": "Lighting-only re-bakes: minimum ms between two",
+      "tip": "A chunk texture dirtied only by a lighting change is not re-baked more often than this."
+    },
+    "zoomRetain": {
+      "label": "Zoom: keep chunk textures across changes",
+      "tip": "Chunk-level textures that leave the screen when the camera zooms in are kept (while the chunk would still be on screen at the widest zoom) instead of being freed, so zooming back out reuses them; the ones that return, and new ones a zoom-out reveals, are baked a few per frame nearest the player first, with the kept image shown meanwhile. Stock bakes every level a zoom-out reveals in the frame it appears: a fast wheel spin from 0.25 to 2.5 is a 80-375 ms frame."
+    },
+    "zoomRebakeBudget": {
+      "label": "Zoom: kept and new textures baked per frame",
+      "tip": "The most chunk-level textures a zoom change (kept ones coming back, new ones it reveals) may start per frame; the count drops after a long frame and grows back after short ones."
+    },
+    "zoomPlaceholder": {
+      "label": "Zoom: kept texture shown while the new one bakes",
+      "tip": "A chunk level whose texture at the new zoom scale is still queued draws its complete texture from the other scale meanwhile, so a zoom change never shows a hole; off, the level is blank until its own bake lands."
+    },
+    "zoomEaseMs": {
+      "label": "Zoom: motion time (ms)",
+      "tip": "A mouse-wheel zoom change takes this long, moving along a smooth curve (quick start, gentle stop) whatever the frame rate. Stock moves a fixed amount per frame and stops abruptly: 8 frames, 16 ms at 500 fps, 130 ms at 60."
+    },
+    "zoomEase": {
+      "label": "Zoom: motion timing curve",
+      "tip": "The cubic Bezier control points (x1,y1,x2,y2) of the zoom motion, as in CSS transitions: pick a preset or drag the four sliders under it (the plot beside them shows the zoom's progress over the motion time). x is the share of the time, y the share of the zoom change; y stays within 0-1 so the zoom never overshoots its target."
+    },
+    "zoomFrameMs": {
+      "label": "Zoom: slow-frame limit for the bakes (ms)",
+      "tip": "A frame longer than this halves the zoom bakes per frame; frames under three quarters of it grow the count back."
+    },
+    "lightingStrongDelta": {
+      "label": "Strong light changes: amount that re-bakes at once (0-255)",
+      "tip": "A square whose light moved by this much since its texture was last baked (a torch or headlight beam sweeping in) re-bakes now, like stock; smaller drift keeps the lighting-only re-bake hold (\\)."
+    },
+    "lightingStrongBudget": {
+      "label": "Strong light changes: budget per frame",
+      "tip": "How many chunk textures with a strong light change re-bake in the same frame; the rest keep the lighting-only re-bake hold. A torch or headlight beam touches a few per frame; turning moves the out-of-sight fade over every exterior tile (downtown Louisville: 10.8 fps with no cap)."
+    },
+    "lightingStrongFrameMs": {
+      "label": "Strong light changes: ease on slow frames",
+      "tip": "A game-thread frame longer than this many milliseconds halves the number of strong-light chunk re-bakes allowed next frame (it grows back on fast frames). Stops the slow-frame -> more re-bakes -> slower-frame loop of a big downtown horde."
+    },
+    "lightingGlobalDeltaPct": {
+      "label": "Global light move that keeps the spread (%)",
+      "tip": "A lightning flash or a fast dusk moves the whole scene's light at once; past this per-frame move the lighting re-bakes stay spread over frames instead of landing at once."
+    },
+    "lightingBudget": {
+      "label": "Lighting refreshes per frame (chunks)",
+      "tip": "Chunks whose square light info is refreshed in one frame; the rest continue next frame."
+    },
+    "lightingFlush": {
+      "label": "Lighting refreshes: flush the queue before a lighting pass",
+      "tip": "Chunks the per-frame lighting refresh budget still holds are refreshed just before the next lighting pass rewrites their dirty bits; off, they keep stale light until it changes again."
+    },
+    "visBlurReduce": {
+      "label": "Vision-cone edge blur summed once per texel",
+      "tip": "The soft edge of the vision cone is a 25-sample blur that stock runs for every pixel of the zoomed-out world image (at the widest zoom ~13 million pixels, 340 million texture reads a frame), although the sum only changes every few pixels. It is now summed once per blur texel and looked up per pixel: the same image, less GPU work."
+    },
+    "cutawayFast": {
+      "label": "Replay cutaway masks",
+      "tip": "Clean chunk levels replay their stored wall-cutaway occluder masks instead of re-testing every square."
+    },
+    "cutawayRadius": {
+      "label": "Cutaway radius (chunks)",
+      "tip": "Cutaway wall visits only consider chunks within this many chunks of the camera."
+    },
+    "gridStackInterval": {
+      "label": "Frames between buildings-in-front scans",
+      "tip": "While the camera square and facing are unchanged, the buildings-in-front scan runs this often."
+    },
+    "lightSwitchCheckFrames": {
+      "label": "Frames between light-switch power checks",
+      "tip": "Each light switch reuses its has-electricity answer for this many frames."
+    },
+    "rainTiles": {
+      "label": "Rain and snow as repeated tiles",
+      "tip": "The particle cell is packed once and drawn once per screen cell on the GPU instead of every copy being packed on both threads; same picture."
+    },
+    "rainSplashesFast": {
+      "label": "Rain splashes without the game RNG",
+      "tip": "Splash starts are drawn with a cheap local generator (one draw per splash instead of one game RNG call per idle square per frame); same chance, timing and sprites."
+    },
+    "puddleCache": {
+      "label": "Puddles: cache packed vertices per chunk",
+      "tip": "Rain puddles keep their packed vertices per chunk level and only refresh lighting, camera offset and depth each frame; 4.5 ms of a thunderstorm frame at max zoom."
+    },
+    "puddleCacheFrames": {
+      "label": "Puddles: cache rebuild interval (frames)",
+      "tip": "A cached puddle batch is rebuilt with the stock code after this many frames at the latest; bakes and cutaway changes rebuild it at once."
+    },
+    "puddleEarlyZ": {
+      "label": "Puddles: early depth test in the shader",
+      "tip": "The puddle shaders take their depth from the vertex instead of writing it per pixel, so wet ground hidden behind walls, roofs and objects is skipped before the expensive shader runs; same picture."
+    },
+    "puddleVbo": {
+      "label": "Puddles: keep batches on the GPU",
+      "tip": "Each chunk level's cached puddle vertices stay in their own GPU buffer and are re-sent only when a light changed, the camera crossed a chunk edge or the batch was rebuilt; the camera offset is a matrix translation. Nothing is copied per frame."
+    },
+    "weatherMaskIdleSkip": {
+      "label": "Skip the weather mask while nothing is drawn",
+      "tip": "Outdoors with no clouds, fog or rain the per-frame weather-mask view scan and mask draw are skipped; indoors only the player's building is scanned."
+    },
+    "weatherFxScalePct": {
+      "label": "Weather effects buffer size (% of screen)",
+      "tip": "Clouds, fog, rain and the interior mask they are cut by are drawn into screen-sized buffers every frame; smaller buffers cost far less GPU and CPU and the soft content looks the same."
+    },
+    "fogPass": {
+      "label": "Fog drawn in one pass (experimental)",
+      "tip": "EXPERIMENTAL. Heavy fog is drawn in one batch into a smaller buffer that is depth-tested against the scene and blended over it once, instead of shading every pixel up to twelve times with one draw call per row: fog at 120 km/h went from 220 to ~340 fps (clear: 447) on the 5120x2160 desktop. Known issue: power lines can flicker slightly in fog while the camera moves; disabling this removes it (stock fog, stock cost)."
+    },
+    "fogScalePct": {
+      "label": "Fog pass: buffer size (% of screen)",
+      "tip": "The fog buffer per axis as a percentage of the screen; 50 costs a quarter of the fog GPU work, 25 a sixteenth. Fog is soft, so the smaller buffers look the same, and edges where fog meets walls or wires are resolved against the real depth."
+    },
+    "fogMaskFrames": {
+      "label": "Fog pass: square masks refresh (frames)",
+      "tip": "The fog rows are built from per-chunk masks of the squares that take fog instead of reading every square each frame; a mask is refreshed this many frames after its last refresh, so a newly built room reaches the fog within that many frames."
+    },
+    "roofHideDebounceFrames": {
+      "label": "Carport roof hide/show settle time (frames)",
+      "tip": "A carport or pergola roof is hidden or shown only after the decision has held for this many frames, so a player on its edge (or pushed by zombies) does not make the roof flicker every frame."
+    },
+    "cutawayVisitPrefilter": {
+      "label": "Skip cutaway walls that cannot cut",
+      "tip": "A cutaway visit only walks the squares of walls that occlude a cutaway room, belong to a collapsing building, or may hide a window being peeked through; the rest are skipped before their squares are looked up."
+    },
+    "cutawayInvalidateChanged": {
+      "label": "Re-bake cutaway chunks only when a cutaway changed",
+      "tip": "A cutaway visit re-flags every cut-away wall square; stock re-bakes every chunk holding one on every visit. Only chunks where a square's cutaway flag actually changed are re-baked."
+    },
+    "occlusionSkipLightingOnly": {
+      "label": "Keep the occlusion grid when only lighting changed",
+      "tip": "The occluded-squares grid and the per-level rendered-square counts are rebuilt only when a visible chunk level changed for a reason other than lighting drift."
+    },
+    "lightInfoChunkGate": {
+      "label": "Ask the lighting engine about a chunk level first",
+      "tip": "Before refreshing the 64 squares of a chunk level about to be re-baked, one chunk-level question to the lighting engine says whether any of them changed."
+    },
+    "lightInfoOncePerFrame": {
+      "label": "Ask the lighting engine once per square per frame",
+      "tip": "The per-square light-info JNI call is skipped when the same square was already refreshed this frame."
+    },
+    "soundZoneCache": {
+      "label": "Reuse ambient sound zone distances per square",
+      "tip": "The 80x80 zone scan behind each ambient zone parameter runs when the listener's square changes (at most every 30 frames), not every frame."
+    },
+    "worldSoundFast": {
+      "label": "Cheap world sounds (alarms, helicopter, gunshots)",
+      "tip": "A world sound is attached to the loaded chunks only instead of walking every chunk of its radius, and the fish-scaring square walk (a third of the radius squared, every frame while a house alarm rings) runs once per game minute per identical sound."
+    },
+    "animBonesParallel": {
+      "label": "Zombie animation bone math on other cores",
+      "tip": "After the object update loop the zombies' animation blending (bone, twist, model and skin matrices, 9 % of the game thread in a horde) runs on worker threads and is joined before rendering; off, it runs inline like stock."
+    },
+    "frameThreads": {
+      "label": "Worker threads for the zombie batches",
+      "tip": "Threads of the per-frame zombie batches (bone math, transition evaluation, lighting reads; the game thread joins in); more than cores - 1 is clamped."
+    },
+    "actionEvalParallel": {
+      "label": "Zombie decision rules evaluated on other cores",
+      "tip": "Each zombie's action-state transition rules (dozens of variable tests per zombie per frame, 7-10 % of the game thread in a horde) are evaluated on worker threads after the object loop; the state changes, the animator and the model update then run on the game thread in the stock order. Rules that call Lua or a zombie mid-grapple stay on the game thread."
+    },
+    "animatorParallel": {
+      "label": "Zombie animators on other cores",
+      "tip": "After its decision rules, each zombie's animator (which animations play and how they blend), its turn and move speeds and its animation clock run on worker threads; the sounds, footsteps and state hooks those animations trigger are replayed on the game thread in the stock order. A zombie whose animator fires such an event this frame finishes on the game thread. 12 % of the game thread in a horde."
+    },
+    "headOnWorker": {
+      "label": "Zombie turning checks on other cores",
+      "tip": "The start of each zombie's animation step (which way it faces, its aim angle, whether it is turning, turning 90 degrees or turning around) runs in its decision-rule task on a worker thread instead of on the game thread; a zombie starting or re-aiming a 180-degree turn, whose event must go through the game thread first, is left to it."
+    },
+    "lazyPose": {
+      "label": "Look up animation keyframes only when used",
+      "tip": "Every animation track searched the keyframes of all 60 bones every frame; the search now happens when a bone is first read. A zombie drawn as a far sprite reads one or two bones, a modelled one reads them in the bone batch on the workers. Same poses."
+    },
+    "animatorPipeline": {
+      "label": "Overlap the zombie batches with the game thread",
+      "tip": "The workers run the decision rules and the animators alone while the game thread applies each zombie's result as soon as it is ready, instead of taking a share of the batch and then applying everything."
+    },
+    "animBatchAsync": {
+      "label": "Zombie bone math alongside the rest of the frame",
+      "tip": "The bone math batch starts after the zombie updates and runs on the workers while the game thread carries on with the rest of the frame's logic; it is joined where the game itself would wait for animation, right before drawing (anything touching a zombie's bones earlier waits for it first)."
+    },
+    "guardedCallbacks": {
+      "label": "Read more zombie rules on other cores",
+      "tip": "Eight zombie rules (has a target, should sprint, should attack, thump, lunge, attack a car, passenger exposed, eat a body) only change something in rare cases (a target that died, a door that is out of reach, a body next to it). They are now read on the worker threads, and the rare case falls back to the game thread before anything changes."
+    },
+    "modelLockPerInstance": {
+      "label": "One model lock per character",
+      "tip": "The engine's model update lock is a single text constant shared by every character, so the worker threads queued behind each other on it (each animator task ran 2.4x slower in parallel). Each model now has its own lock; stock only ever updates a model from one thread."
+    },
+    "poolStatsBatched": {
+      "label": "Batch the pool statistics of the workers",
+      "tip": "Every reuse of a pooled engine object bumps shared statistics counters; the worker threads now count in private tallies and add them once per batch. Same totals, no fight over one memory line."
+    },
+    "ecsLookupFast": {
+      "label": "Cheap state-machine lookups",
+      "tip": "Every state-machine, action-context and animation-variable access of a character went through a class walk, a map probe and a reflective cast; the answer is memoised and zombies keep their component in a field (5 % of the game thread in a horde). Same results."
+    },
+    "actionConditionFast": {
+      "label": "Typed decision-rule variables",
+      "tip": "A rule comparing a true/false or integer animation variable reads it directly; stock printed the value to text and parsed it back for every rule of every zombie every frame. Same outcomes."
+    },
+    "skinTransformsPrecompute": {
+      "label": "Bone worker: skin matrices of zombies",
+      "tip": "The worker that blends a zombie's bones also multiplies them into the skin matrices of the body and clothing models it wore last frame, so the render pass finds them ready (3 % of the game thread in a horde)."
+    },
+    "skinPalettePrecompute": {
+      "label": "Bone worker: skin palettes for the shader",
+      "tip": "The same worker also stores those matrices in the shader palette layout, so the draw data copies one block instead of sixteen numbers per bone."
+    },
+    "shadowPrep": {
+      "label": "Bone worker: zombie shadow ellipses",
+      "tip": "The shadow blob under a zombie (head and feet projected to the ground) is computed right after its bones on the worker instead of in the render pass; same numbers."
+    },
+    "boneIndexCache": {
+      "label": "Remember bone lookups by name",
+      "tip": "The head and feet bone indices the shadow asks for by name every frame are cached per skeleton."
+    },
+    "lightingReadParallel": {
+      "label": "Lighting reads on other cores",
+      "tip": "When a lighting pass lands, the per-square light reads of the queued chunk levels (two engine calls per visible square, 12 % of the game thread in a horde) run one chunk level per worker thread; the room-discovery hooks run on the game thread afterwards in the stock order."
+    },
+    "zombieCullSortFast": {
+      "label": "Cheap zombie relevance sort",
+      "tip": "The per-frame sort that decides which zombies get a full update computes each zombie's relevance score once and sorts primitive keys; stock recomputed both scores in every comparison of the sort. Same order."
+    },
+    "vehicleCull": {
+      "label": "Skip far vehicles in the zombie line-of-sight test",
+      "tip": "A zombie checking whether a car blocks its view of you tests only the cars near you whose bounding circle reaches the line (one list per frame); stock ran the exact box test on every loaded car (6 % of the game thread downtown)."
+    },
+    "playerLosFast": {
+      "label": "Remember spotted zombies in a set",
+      "tip": "The list of everything you have spotted since the last quiet moment is searched once per spotted object per frame; stock walked it end to end each time, so in a horde the cost grew with the square of the zombies in view (12 % of the game thread in Louisville). The search is one hash probe now, and the sneak modifier zombies ask for is computed once per frame."
+    },
+    "zombieSpotFast": {
+      "label": "Skip the spot roll for zombies that cannot see you",
+      "tip": "A zombie facing away from you or with you beyond its vision radius already has a zero chance to notice you; it skips the remaining modifiers, the car test and the dice roll (same outcome), instead of computing them all first."
+    },
+    "charDrawPrep": {
+      "label": "Zombie draw data built on other cores",
+      "tip": "The draw data of every zombie model on screen (its lights, one render record and matrix palette per body and clothing model, the depth and light setup) is built on worker threads before the game thread queues the draws in the stock order; stock built it one zombie at a time on the game thread (13 % of it in a Louisville horde). Same pixels."
+    },
+    "charDrawThreads": {
+      "label": "Zombie draw data threads",
+      "tip": "Threads of the zombie draw-data pool; the data has to be ready before the zombies are queued, so on a 16-core machine 14 keep the game thread from waiting. More than cores - 2 is clamped."
+    },
+    "zombieAtlasFast": {
+      "label": "Flat draw call for far zombies",
+      "tip": "A zombie too far for a 3D model is drawn as a small pre-rendered sprite; its draw goes through a flat copy of the game's render chain (the same tests, the same sprite call) instead of five nested virtual calls per zombie. ~1,100 such zombies per frame in a Louisville horde. Same pixels."
+    },
+    "actionSnapshotFilter": {
+      "label": "Read only the animation variables that need it",
+      "tip": "Before a zombie's transitions are evaluated on a worker, the game thread reads the variables whose engine callback has a side effect. It used to resolve every variable of every transition to find out which those are; the answer only depends on the variable's name, so it is now decided once per state. Same values."
+    },
+    "emitterParamSkip": {
+      "label": "Skip sound parameters for silent characters",
+      "tip": "A character's sound parameters (the floor material under its feet, the room it is in) are recomputed only while it actually has a sound playing or about to start; stock recomputed all of them for every zombie every frame and wrote them nowhere. Same sounds."
+    },
+    "separateFast": {
+      "label": "Push-apart for zombies: cheap pass",
+      "tip": "The pass that pushes overlapping zombies apart skips the half of the engine's version that only ever applies to the player, and the grid answer 'is my square walled off from that neighbour' is computed once per square per frame instead of once per zombie. Same positions."
+    },
+    "separateParallel": {
+      "label": "Push-apart for zombies: on other cores",
+      "tip": "That push-apart is computed for the whole horde on worker threads before the update loop; the game thread applies each zombie's result at the same point in its update as before, so the collide events and window climbs keep their order. The neighbours' positions are read at the top of the frame instead of as the loop advances."
+    },
+    "sleepCheckMemo": {
+      "label": "Check 'everyone asleep' once per frame",
+      "tip": "The game asks whether all players are asleep on the way into every character update, and a zombie asks several times per update; the answer cannot change inside a frame, so it is computed once."
+    },
+    "stateParamMemo": {
+      "label": "Faster AI scratch lookups",
+      "tip": "The per-character scratch values the AI states keep were looked up through two maps and allocated a throwaway object on every read. Same values, one probe, no allocation."
+    },
+    "actionGroupCache": {
+      "label": "Keep the zombie action group",
+      "tip": "Every zombie asked the engine for its action group by name twice a frame, which copied the name into a new lower-case string and probed a map for a group loaded once at startup. It is held instead."
+    },
+    "profilerThreadMemo": {
+      "label": "Cheap profiler thread check",
+      "tip": "Every performance probe in the game asks twice whether it is on a profiled thread, and the engine answers by scanning a list of thread names. The answer per thread is remembered. Costs nothing when the profiler is off, which is always in normal play."
+    },
+    "zombieSimLodTiles": {
+      "label": "Distant zombies simulated less often (tiles)",
+      "tip": "The game already updates a zombie every 2nd, 4th or 8th frame once it is 30, 60 or 80 tiles from you. This adds one more step at a closer distance. It roughly halves what the horde costs the game thread, and distant zombies move in slightly coarser steps - it is a change to how the world is simulated, so it is off by default."
+    },
+    "zombieSimLodSteps": {
+      "label": "Distant zombies simulated less often: extra steps",
+      "tip": "Each further step applies at twice the distance of the previous one, like the game's own ladder. Two steps is the measured sweet spot."
+    },
+    "zombieCheckSpread": {
+      "label": "Spread the zombie thump probe (frames)",
+      "tip": "The grid test for 'is there a door or window in front of me to thump' runs on one frame in N per zombie, spread evenly by zombie. A thump starts at most N-1 frames later than it would."
+    },
+    "zombieLodDynamic": {
+      "label": "Zombie detail follows the frame cap",
+      "tip": "The game draws the 510 nearest zombies on screen as 3D models (the rest as flat sprites) and lets the 20 nearest blend their animations. With this on, both numbers follow your frame cap: while frames take longer than the cap allows they come down (the farthest zombies turn into sprites first), and they climb back towards the game's numbers while there is time to spare. Big hordes keep the cap at the cost of detail on far zombies; small crowds look exactly like the stock game. Off by default because it changes what you see."
+    },
+    "zombieLodMin3d": {
+      "label": "Zombie detail: fewest 3D zombies",
+      "tip": "The lowest number of zombies still drawn as 3D models when the detail comes down. The game's own number is 510."
+    },
+    "zombieLodMinBlend": {
+      "label": "Zombie detail: fewest blending zombies",
+      "tip": "The lowest number of zombies that still blend smoothly between animations when the detail comes down. The game's own number is 20."
+    },
+    "zombieLodUncappedFps": {
+      "label": "Zombie detail: target while uncapped (fps)",
+      "tip": "With the frame rate uncapped there is no cap to follow; this is the frame rate the detail aims for instead."
+    },
+    "entityUpdateParallel": {
+      "label": "Entity updates on other cores (experimental)",
+      "tip": "The update loop itself - the only part of the frame that grows with the whole moving-object population - runs the eligible entities on the worker threads instead of one after another on the game thread, with the stock four-step sequence per entity kept exactly. Players, animals, vehicles and physics objects stay on the game thread; Lua events fired from a worker are replayed on the game thread in the stock order; an entity that fails on a worker turns the batching off for the rest of the session. EXPERIMENTAL: it moves the simulation itself, so it is off by default."
+    },
+    "entityUpdatePipeline": {
+      "label": "Entity updates: overlap with the next batch",
+      "tip": "With entity updates on other cores, the workers finish one batch while the game thread already collects the next, instead of standing still between batches. The frame-timing multiplier each entity reads is captured per batch, so timings stay exactly right. Only active while the setting above is on."
+    },
+    "emitterDefer": {
+      "label": "Entity updates: sound ticks after the batch",
+      "tip": "With entity updates on other cores, a zombie's per-frame sound work (FMOD parameters, position, tick) queues instead of running on the worker, and the game thread runs the queue right after the batch in the stock order - same frame, before anything renders. The workers stop queuing on the sound locks, so the batch finishes sooner."
+    },
+    "entityUpdateSafeStates": {
+      "label": "Entity updates: calm zombies only",
+      "tip": "With entity updates on other cores, only zombies that are idle, walking or following a path, with no player within 12 squares, nothing physical going on (no bullet hit being tracked, no ragdoll, not falling, not burning, not grappled) run on the worker threads; everything else updates as in the stock game. Without it the worker threads crashed the game when zombies were shot. On by default."
+    },
+    "ragdollCorpseGuard": {
+      "label": "Ragdolls: none for corpses (game bug fix)",
+      "tip": "When a shot zombie's ragdoll settles and it turns into a corpse, the game builds a second, invisible ragdoll for the corpse in the same frame from the animation left over, and nothing ever owns it: it stays in the physics world, counts against the maximum number of ragdolls, and quitting while one is there crashes the game on the way out. With this on no ragdoll is made for a character that is already a corpse. On by default."
+    },
+    "ragdollQuitSweep": {
+      "label": "Ragdolls: clear leftovers before quitting (game bug fix)",
+      "tip": "Just before the physics world is destroyed on the way out of a game, any ragdoll still in it is removed first; the physics library destroys the world before its ragdolls, and a ragdoll left over then crashed the game at quit. A safety net behind the fix above. On by default."
+    },
+    "physicsDefer": {
+      "label": "Entity updates: physics calls after the batch",
+      "tip": "With entity updates on other cores, the two physics engine calls a zombie's update can make queue instead of running on the worker, and the game thread makes them right after the batch in the stock order - same frame, before anything renders. They are the bullet hitbox of a zombie you have a gun aimed at, and the contact test between a ragdolling zombie and a car. The physics engine is not safe to call from several threads at once, and a crash inside it cannot be caught and turned off the way a Java error can, so leave this on: without it, shooting into a horde with entity updates on other cores ends the game process. Only active while entity updates on other cores is on."
+    },
+    "animalLosFast": {
+      "label": "Animals: skip far-zombie sight checks",
+      "tip": "An animal's line-of-sight update walks every zombie in range even when it is too far to change anything; those calls are skipped with the same bookkeeping applied afterwards (bit-identical numbers), and players are never skipped. Matters on farms and near hordes."
+    },
+    "renderPrepParallel": {
+      "label": "Character shadows and reflections: prepared on other cores",
+      "tip": "Every character on screen asks the sun shadows how much sun reaches it (a walk through the buildings towards the sun) and the reflections whether water is near it. Both answers only read the world, so they are worked out on the worker threads while the game thread draws the ground; the characters then take them ready. Same picture."
+    },
+    "pplPackParallel": {
+      "label": "Per-pixel lighting: light map built on other cores",
+      "tip": "With per-pixel lighting, the light of every changed piece of the screen is packed on the worker threads, each piece into its own slot, instead of one after another on the game thread. Same light."
+    },
+    "pplTorchNearChunk": {
+      "label": "Per-pixel lighting: torch test per chunk",
+      "tip": "With per-pixel lighting, whether a torch reaches a square is first decided for the whole 8x8 chunk; only a chunk a torch can reach tests its squares. Same result."
+    },
+    "schedulerClassifyParallel": {
+      "label": "Update schedule computed on other cores",
+      "tip": "Every frame the game decides how often each zombie, animal and car is updated (distance, visibility, what it is doing); the worker threads compute it and the game thread files the results in the same order. Same schedule."
+    },
+    "zombieStatsFold": {
+      "label": "Zombie travel statistics once per frame",
+      "tip": "Every zombie added its walked distance to the statistics and re-checked the achievements, 2,000 times a frame in a horde. The same additions are summed in the same order and written once per frame. Same totals."
+    },
+    "visPolyAsync": {
+      "label": "Vision cone shape: computed on its own thread",
+      "tip": "While you walk, drive or turn, the shape of your vision cone (the walls and trees that cast its shadows) is recomputed every frame. It only depends on where you stand and look, so it is worked out on a thread of its own while the game thread draws the ground, and is ready when the cone is drawn. Same cone."
+    },
+    "aoContextParallel": {
+      "label": "Shadows and ambient occlusion: bake data on other cores",
+      "tip": "With ambient occlusion or sun shadows on, every chunk the game redraws also gathers which squares hold grass, trees, walls and roofs around it. Those reads are done for all the chunks of a frame at once on the worker threads, instead of one by one inside each redraw. Same shading."
+    },
+    "translucentOrderCache": {
+      "label": "See-through objects: drawing order kept",
+      "tip": "Objects drawn every frame (windows, doors, wind-blown plants, items) are put in drawing order level by level, every frame. That order only changes when the level changes, so it is kept and reused until then. Same order, checked against the recomputed one over a whole drive."
+    },
+    "losLightPrefetch": {
+      "label": "Player sight: light read ahead on other cores",
+      "tip": "The squares the player's sight check reads have their light refreshed on the worker threads first. Measured slower than reading them one by one (off)."
+    },
+    "persistentVbo": {
+      "label": "Persistently mapped sprite buffers",
+      "tip": "Sprite ring buffers use persistently mapped buffer storage instead of an orphan and re-map per batch. About 2.7x the uncapped frame rate at max zoom."
+    },
+    "persistentVboFrameSync": {
+      "label": "Sprite buffers: one fence per frame",
+      "tip": "The persistent sprite buffers are fenced once per frame instead of per 64 KB batch, and a buffer last used 8 frames ago is reused without asking the driver (each check is a round trip to NVIDIA's driver thread)."
+    },
+    "persistentVboSlots": {
+      "label": "Sprite buffers: storage slots",
+      "tip": "Each persistent sprite buffer holds this many batches before it wraps, so a wrap rarely meets one the GPU still reads."
+    },
+    "vboBatchKb": {
+      "label": "Line/particle batch buffer (KB)",
+      "tip": "Rain and snow particles, debug lines and other VBORenderer quads are uploaded and drawn in batches of this size instead of 4 KB."
+    },
+    "vboFastQuads": {
+      "label": "Single-advance particle quads",
+      "tip": "VBORenderer writes a textured quad's four vertices in one go instead of four bookkeeping round trips; same bytes."
+    },
+    "keyboardFresh": {
+      "label": "Keyboard read in the frame it was polled",
+      "tip": "The game read the keyboard one frame behind the mouse and the controller: it filled its key table from the previous poll and swapped the new one in afterwards. With this on it reads the new one. One frame less for every key (4 ms at 240 fps, 17 ms at 60). Applies on the next launch."
+    },
+    "inputLatch": {
+      "label": "Read the newest input when a frame starts",
+      "tip": "The game polled input once, right after the previous frame was shown, and used that until its next frame started (the frame limiter's idle time later). With this on, the game asks for a fresh poll the moment its frame starts: mouse and controller reach the game in ~2 ms instead of ~5.5 at 240 fps, and up to a frame sooner at low frame caps. Applies on the next launch."
+    },
+    "reflexSleep": {
+      "label": "Low-latency mode (Reflex-style pacing)",
+      "tip": "What NVIDIA Reflex does, built with OpenGL (Reflex itself has no OpenGL version): each frame measures how long it waited in the queue to the screen (the hand-off to the render thread, a vsync swap that blocks, the driver's queue), and the next frame starts that much later so it arrives just in time, carrying newer input. With vsync on and an uncapped game, together with the cap below: 25-28 ms from input to screen became 5-10 ms. Does nothing when nothing queues (a frame cap below the refresh, vsync off). Applies on the next launch."
+    },
+    "reflexBoost": {
+      "label": "Low-latency boost: keep the GPU clocks up (NVIDIA)",
+      "tip": "At a frame cap the GPU is idle most of each frame, so the driver lowers its clocks and the frame it does draw takes longer (4 ms at 60 fps against 1.3 ms at 240 on an RTX 4090), which the input waits for. This holds the driver's \\ setting while a world is loaded, what Reflex's On + Boost does. The driver drops it again when the game exits, even after a crash. Uses more power; NVIDIA only. Applies on the next launch."
+    },
+    "reflexCapFps": {
+      "label": "Low-latency mode: cap just below the refresh",
+      "tip": "With vsync on, a game that runs a hair faster than the screen refills the queue the low-latency mode drained. Auto caps the frame rate at refresh - refresh x refresh / 3600 (157 at 165 Hz, 224 at 240 Hz), what Reflex does with vsync. On a fixed-refresh screen one frame in ~20 is shown twice. Applies on the next launch."
+    },
+    "vblankLock": {
+      "label": "Start each frame a measured time before the vblank",
+      "tip": "With vsync on, the render thread waits until the display's next refresh is a measured window away (GLX_NV_delay_before_swap) and only then lets the game read input and build the frame. Needs an X11 session with NVIDIA's GLX; under XWayland (Wayland desktops) the extension is missing and this stays off. Applies on the next launch."
+    },
+    "gpuMaxFrames": {
+      "label": "Frames allowed to queue for the GPU",
+      "tip": "After each frame the render thread waits until at most this many frames are waiting for the GPU (the driver's \\). Helps a GPU-bound game; with vsync the low-latency mode above does more and should be used instead. Applies on the next launch."
+    },
+    "frameStartGate": {
+      "label": "Wait for room before reading input",
+      "tip": "When the render thread is still busy with the previous frame, the game waits for it before it reads input rather than after building the new frame on older input. Only matters when the render thread or the GPU is the limit. Applies on the next launch."
+    },
+    "vsyncAdaptive": {
+      "label": "Adaptive vsync (a late frame tears instead of waiting)",
+      "tip": "With vsync on, a frame that misses the refresh is shown at once with a tear line instead of waiting a whole refresh (swap interval -1, needs the driver's swap_control_tear). Applies on the next launch."
+    },
+    "cursorLatch": {
+      "label": "Draw the in-game cursor at the newest mouse position",
+      "tip": "With \\ the game draws its own cursor where the mouse was when the frame started, so it trails the hand by the whole frame pipeline. With this on it is moved to the newest pointer position just before the frame is drawn. The OS cursor (lock off) has no such lag. Applies on the next launch."
+    },
+    "aimHoldMs": {
+      "label": "Right-mouse hold before aiming",
+      "tip": "The game starts aiming only after the right button has been held this long, so a quick right-click still opens the context menu. Shorter aims sooner; at 0 every right-click aims for a moment. Applies on the next launch."
+    },
+    "mainMenuButtons": {
+      "label": "Show buttons on the main menu",
+      "tip": "Adds 'PZ Optimization update', 'Mod compatibility check' and 'Show/Hide performance overlay' directly to the game's main menu. Off by default: all buttons are available here in the PZ Optimization options tab."
+    },
+    "uiRetained": {
+      "label": "UI: redraw only what changed, the moment you act",
+      "tip": "The game redrew every open window's Lua 60 times a second into the UI picture, although almost all of them drew exactly the same as the frame before, and showed a click or key only at the next of those redraws. With this on each window's drawing is kept and reused while nothing can have changed it (no click, key, wheel or mouse over it, no change to its data, the inventory not marked for refresh); anything you do is drawn in the same frame. Measured at 240 fps: the UI's share of the frame 4 -> 0.9 % with the HUD, 9.8 -> 1.4 % with the inventory open, 16.6 -> 2.2 % with the crafting window, 40 -> 4 % with the map."
+    },
+    "uiRetainedChildren": {
+      "label": "UI: reuse unchanged buttons and panels inside windows",
+      "tip": "The same for the buttons, lists and panels inside a window that is redrawn (the map's symbol buttons, the inventory's container buttons): only the part under the mouse or with new data is drawn again. Map 6.4 -> 4.1 % of the frame."
+    },
+    "uiTickStagger": {
+      "label": "UI: window updates spread over frames",
+      "tip": "Every window's Lua update ran in the same frame ten times a second (~0.5 ms with the inventory, ~1.3 ms with the crafting window open). Each window now keeps its own tenth of a second, spread over the frames: the same updates, no periodic spike."
+    },
+    "uiLuaFast": {
+      "label": "UI: inventory window shortcuts",
+      "tip": "A hidden inventory window no longer rebuilds its container buttons row ten times a second (it does when shown), and the item list skips a second pass over every item when nothing is being dragged. Same result on screen; not used when a mod replaced those functions."
+    },
+    "hotsaveWarmup": {
+      "label": "Transfers: first save warmed up while loading",
+      "tip": "Dropping or looting items makes the game save the map's building, room and zone records on the next save pass, on the game thread. The first time in a session that code ran cold: a 17 ms stutter a moment after the first transfer. It is now run three times into a scratch buffer on the loading screen (36 ms of load), so that save takes ~6 ms."
+    },
+    "mapStreetMemo": {
+      "label": "Map: street names laid out once per view",
+      "tip": "The world map measured every street, translated every street name for every letter and sorted the visible streets with a list search in every frame. Lengths and names are kept per view and language. Map UI 6.4 -> 3.8 ms a redraw."
+    },
+    "mapStreetCache": {
+      "label": "Map: street labels reused while the view stays",
+      "tip": "While the map is not moved or zoomed the whole street-label layout is reused. Map UI 3.8 -> 1.4 ms a redraw."
+    },
+    "mapVisitedFast": {
+      "label": "Map: explored-area texture built a row at a time",
+      "tip": "The map's dark / explored overlay was rebuilt pixel by pixel, re-computing the row width for every pixel; the first map open after loading rebuilds all 16 million. Built a row at a time, the same pixels: the first map open's stutter 97 -> 67 ms."
+    },
+    "luaIndexCache": {
+      "label": "Lua: class lookups remembered",
+      "tip": "A Lua method looked up through a class chain is remembered until any class changes. Exact; no measurable change on the UI scenes."
+    },
+    "luaInternConstants": {
+      "label": "Lua: shared text constants",
+      "tip": "Text constants of every Lua file are shared, so table lookups compare them by identity first. Exact; no measurable change on the UI scenes."
+    },
+    "luaSkipEmpty": {
+      "label": "Lua: empty UI handlers not called",
+      "tip": "A window's draw, update or mouse handler that is an empty Lua function is not called. Exact; no measurable change on the UI scenes."
+    },
+    "modProfile": {
+      "label": "Mods: max performance or max compatibility",
+      "tip": "Sets the two settings below at once (also from the main menu's PZ OPTIMIZATION MOD COMPATIBILITY CHECK). Performance (default): Java mods are checked and listed but switch nothing off, and windows mods draw in are reused like the game's own. Compatibility: the settings a Java mod patches are switched off so the mod meets the code its author tested, and windows mods draw in are redrawn at the game's own rate. A value you pick for either setting below still wins. Applies on the next launch."
+    },
+    "modCompat": {
+      "label": "Java mods: switch off what they patch",
+      "tip": "PZ Optimization ships whole game classes; a Java mod (a ZombieBuddy mod, or a -javaagent such as PZMulticore) patches methods of the same classes. At launch the mods' jars are read: where one patches a method we changed, the settings that live in that method are switched off, so the mod meets the code its author tested. Mods tested together with ours keep everything. Your own choice on this tab still wins. Report = only list them (Zomboid/pzopt/mod-compat.txt, the console and the main menu's mod compatibility check); off = no check. The default follows Mods: max performance (report) or max compatibility (auto). Applies on the next launch."
+    },
+    "uiRetainedMods": {
+      "label": "UI: reuse windows that mods draw in",
+      "tip": "Windows and buttons that carry a mod's drawing (a mod's own window, or a game window whose drawing a mod replaced or extended). On = reused like the game's own windows (faster, but a mod's display can lag by up to a second, because a mod may draw from state the reuse cannot see); off = redrawn at the game's own rate. The default follows Mods: on for max performance, off for max compatibility. Applies on the next launch."
+    },
+    "luaWorkerGate": {
+      "label": "Lua from helper threads runs on the game thread",
+      "tip": "With zombie updates spread over helper threads, a mod's Lua the update reaches (a zombie trampling a crop runs the farming mod code, a mod hooked into the zombie update) ran on the helper thread, beside the game's own Lua: an error \\ and, at worst, a broken Lua stack. With this on such calls run on the game thread, in the game's order. Applies on the next launch."
+    },
+    "vehicleSmooth": {
+      "label": "Vehicles drawn between physics steps",
+      "tip": "Car physics runs in fixed 10 ms steps. Stock draws the car, its passengers and the camera that follows it at the last whole step, so at 120 fps one frame in six shows no motion at all and at 240 fps the car moves on 5 frames of 12: the whole world judders under the car. Drawn at the matching point between two steps, the motion is even at any frame rate (world judder at 120 km/h, zoom 1: 6.5 -> 0.9 px). The simulation itself is untouched."
+    },
+    "driveCameraLate": {
+      "label": "Driving camera placed after the car moved",
+      "tip": "Stock places the camera inside the player's update; when the game updates the player before the car (it depends on the save), the camera sits one physics step behind on most frames and catches up on the others: the car jumps back and forth by ~20 pixels, 20 times a second (the rubber band). On: the camera is centred on the driver after every update of the frame. Included in the setting above whenever that is on."
+    },
+    "driveLookSmooth": {
+      "label": "Driving look-ahead in fractions of a pixel",
+      "tip": "The camera looks ahead of a moving car. Stock moves that look-ahead in whole pixels, paced by a millisecond clock, so the car creeps across the screen in uneven steps. On: fractional, paced by the nanosecond clock (the car moving backwards on screen: 4.2 -> 1.0 % of frames at zoom 1)."
+    },
+    "cameraScreenPixels": {
+      "label": "Zoomed in: camera in screen pixels",
+      "tip": "Zoomed in closer than 100 %, stock moves the world in whole pixels of the zoomed image: 2 screen pixels at 50 %. On: in whole screen pixels, so the scroll is twice as fine at 50 % and every tile still lands exactly on a pixel. No change at 100 % and out."
+    },
+    "frameClockSmooth": {
+      "label": "Game time on the display's refresh grid",
+      "tip": "Each frame simulates the time the previous one took; with vsync or a frame cap the frames reach the screen on a fixed grid, so a frame that started half a millisecond late moves the world by that much more than the screen shows. On: frames close to the grid step exactly one (or two...) refresh periods and the difference to the real clock is fed back slowly, so game time never drifts."
+    },
+    "physicsStepHz": {
+      "label": "Vehicle physics steps per second",
+      "tip": "The fixed rate Bullet runs the vehicles at. Matching the display (120 at 120 Hz) makes one step per frame, but only at exactly that frame rate; the drawing between steps above does the same at any rate and keeps the physics stock. For comparison."
+    },
+    "physicsStepMode": {
+      "label": "Vehicle physics: steps per frame",
+      "tip": "Frame steps make every frame advance the cars by exactly its own time, at the price of physics that change a little with the frame rate. For comparison."
+    },
+    "vrr": {
+      "label": "Variable refresh rate",
+      "tip": "While the display runs variable refresh (G-SYNC, FreeSync, Adaptive-Sync), every frame is shown the moment it is ready, so how evenly frames arrive is exactly how smooth the game looks. With this on, the frame cap stays inside the display's range and each frame is held until a steady time after the game moment it shows. Linux reads the display state itself; on Windows and macOS choose On if your display runs variable refresh."
+    },
+    "vrrCap": {
+      "label": "Variable refresh: keep the frame rate inside the display's range",
+      "tip": "While variable refresh is on and your cap is Uncapped or above the display's maximum, the game caps itself a little below it (refresh - refresh^2/3600: 157 fps at 165 Hz, 224 at 240 Hz). Above the maximum a VRR display falls back to vsync (queued frames, more delay) or tears. Off = your own cap applies."
+    },
+    "presentPacing": {
+      "label": "Even frame delivery (present pacing)",
+      "tip": "The game samples its time at an even rate, but each frame takes a different time to update and draw, so on a variable refresh display the gaps between frames on screen wander around the game-time steps: judder. Measured at a 100 fps cap on a 165 Hz G-SYNC display, frames landed on average 3.1 ms off their game-time step (54 % of them more than 2 ms off); held to a steady delay after their game moment, 0.95 ms (13 %), for about 5 ms more input delay. On a fixed-refresh display it evens out when frames leave the game: driving through Rosewood at 240 Hz, frames off their slot 28 -> 11 %, frame-to-frame jitter 1.3 -> 0.4 ms, for ~1.7 ms more delay on average (~2.6 ms typical, less than one 240 Hz frame)."
+    },
+    "borderlessFullscreen": {
+      "label": "Borderless window counts as fullscreen (compositor VRR)",
+      "tip": "KWin, Mutter and gamescope only switch variable refresh on for fullscreen windows; the stock borderless window is just a screen-sized window, so a G-SYNC / FreeSync display stayed at its fixed refresh (0 % of the time in VRR vs 100 % with this on, desktop KDE test). The window is held as a fullscreen window at the desktop's own resolution (no mode switch) and stays on screen when you switch away."
+    },
+    "macGlCore": {
+      "label": "macOS: OpenGL 4.1 (needed by the Enhancements)",
+      "tip": "On a Mac the game asks for Apple's old OpenGL 2.1, the only version Apple offers that still has the 1990s drawing calls the game uses here and there. Everything newer (OpenGL 4.1, GLSL 4.10) only comes without them, so every Enhancement (shadows, ambient occlusion, reflections, god rays, per-pixel light, HDR effects...) stayed off on macOS. With this on the game runs on OpenGL 4.1 and pzopt stands in for the old calls: its shaders are translated, the old alpha test, matrices and immediate-mode quads are emulated. Same picture as before; the Visuals then work on a Mac (screen-space reflections use the ray march there: OpenGL 4.1 has no image atomics). Applies on the next launch; if the Mac cannot give a 4.1 context the game starts on 2.1 as before."
+    },
+    "macGlTimerQueries": {
+      "label": "macOS (OpenGL 4.1): GPU timer queries",
+      "tip": "The performance overlay's GPU load and present pacing's GPU timing ask the graphics driver to time each frame. On a Mac's OpenGL 4.1 (Apple's OpenGL runs on top of Metal) that cost a third of the frame rate (106 -> 68 fps on the test route, MacBook Pro M1 Pro), so it is off: the overlay shows no GPU load and present pacing measures on the CPU, as on OpenGL 2.1. On for a measurement that needs the GPU time. Applies on the next launch."
+    },
+    "macPresent": {
+      "label": "macOS: present through Metal (ProMotion timing)",
+      "tip": "OpenGL frames on a Mac are shown on the 120 Hz grid, so a cap like 90 fps alternates 8 ms and 17 ms frames. Presented through Metal, a ProMotion or Adaptive-Sync display shows frames at any multiple of 4.17 ms in fullscreen: the frame cap is snapped to what the panel shows exactly (120, 80, 60, 48, 40 fps) and every frame is held on screen for exactly that long."
+    },
+    "limiterSleep": {
+      "label": "Frame limiter sleeps instead of spinning",
+      "tip": "While the game waits for its next frame under a frame cap, the stock limiter keeps one core busy spinning. This sleeps until 0.2 ms before the frame (1.5 ms on Windows, where a sleep wakes on the 1 ms timer tick) and spins only that: same frame timing, about half a core less CPU at a 120 fps cap. On by default except on Windows."
+    },
+    "corePlacement": {
+      "label": "Which cores the game's threads run on (hybrid CPUs)",
+      "tip": "CPUs such as the Ryzen AI 300 series (Zen 5 + Zen 5c), Intel's P + E core chips and Apple silicon have fast cores that cost several times the power of their efficient ones for the same work: one busy thread drew 9.2 W on a Zen 5 core and 2.2 W on a Zen 5c core of an Ayaneo Flip. Linux put the game's lighting, compiler, audio and loader threads on the fast cores as often as not. Auto keeps all of that on the efficient cores and moves the game and render threads to the fast cores only while they would otherwise miss the frame cap. Linux sets the cores directly; macOS gets the matching quality-of-service classes. Applies on the next launch."
+    },
+    "gpuPstate": {
+      "label": "AMD GPU clock level while playing (Linux)",
+      "tip": "At a frame cap the Radeon driver runs the GPU at its top clock (2.7-2.9 GHz on a Radeon 890M, the highest voltage) for a few milliseconds and then idles it. Most of the game's GPU work waits on memory, not on the clock: at a fixed 640 MHz the 890M still held 120 fps on the bench walk. Auto measures the GPU time of every frame and holds the lowest clock level that keeps the cap, stepping up the moment it does not. The level applies to the whole GPU while the game runs and is released when it exits (a crash included). Applies on the next launch."
+    },
+    "jitSteady": {
+      "label": "Java compiler: no speculative recompiles",
+      "tip": "Java's optimizing compiler leaves out the branches a method never took while it was being profiled; when the game later takes one (a new street, a different zombie state) the compiled code is thrown away and compiled again. A 100 s walk through the world did that ~2,000 times and kept a compiler thread busy the whole walk (16,600 compilations). With this on the compiler keeps every branch: the compiler's CPU time halves, the game runs as fast. Written into the game's launcher file for the next launch; the uninstallers take it out again."
+    },
+    "lightingSyncPark": {
+      "label": "Lighting thread sleeps between updates",
+      "tip": "The lighting thread updates 15 times a second (the Lighting FPS setting) and waited for its next update with LWJGL's timer, which sleeps in 1 ms steps and then spins the last millisecond. This sleeps straight to the next update. Applies on the next launch."
+    },
+    "gcHeap": {
+      "label": "Java memory for the game (heap size)",
+      "tip": "Auto (the default) gives the game 4 GB, or 8 GB when 30 or more mods are enabled (in the main menu or in the save you played last), never more than half your RAM. The most memory the game's Java objects may use. The game ships with 3 GB. In a big horde (Louisville, ~2,000 zombies) 3 GB ran 95 % full, so the collector worked all the time and was one step from a full stop-the-world collection; at 2 GB that stop came and froze the game for 205 ms. 4 GB and more gave it room (the heap then settles at 3.6-3.9 GB); beyond 4 GB nothing changed. Driving and walking used about 2-2.5 GB, and on the desktop the frame rate was the same from 3 GB up; a bigger heap is a margin against that freeze in bigger hordes and long sessions. Mods need more: with 132 popular Workshop mods the game held 3.7-4.1 GB right after loading, 4 GB filled up and froze it for 150-280 ms at a time (up to 1.1 s in a row) in 3 of 5 runs, the game's own 3 GB in every run; 8 GB never did. With a big mod list pick 6 or 8 GB. The larger sizes are for very large mod lists: the most any test needed was 4.7 GB (132 mods, 8 GB heap). A size over half your RAM is lowered to half (64 GB needs a 128 GB machine). From 32 GB up Java stores every object reference in 8 bytes instead of 4, so a 32 GB heap holds less than a 31 GB one would and every collection walks more memory: go past 24 GB only if you need far more than that. Never more than half of your RAM is used, whatever you pick. Written into the game's launcher file for the next launch; the uninstallers put the game's own value back."
+    },
+    "luaGcNoop": {
+      "label": "Ignore mods' requests for a full memory clean-up",
+      "tip": "Some mods call Lua's collectgarbage() to \\. In this game that is a full stop-the-world collection of all of Java's memory: every call froze the game for 120-140 ms in a vanilla game (more with a bigger heap); Java's own concurrent mode was worse, 270-320 ms, because the game thread waits for the whole cycle. Java collects the same memory on its own anyway, so with this on (the default) such calls return at once; asking how much memory Lua uses still works."
+    },
+    "gcHeapFixed": {
+      "label": "Reserve the whole heap from the start",
+      "tip": "The heap starts at its full size instead of growing as the game needs it (Java's -Xms equal to the heap size), so it is never resized while you play. The memory is taken from the system at once. Applies on the next launch."
+    },
+    "gcPreTouch": {
+      "label": "Touch the heap's memory at boot",
+      "tip": "Java writes every page of the heap at boot (-XX:+AlwaysPreTouch) so the system never has to hand out a page while the game runs. Uses the memory at once and adds a moment to the boot; best together with \\. Applies on the next launch."
+    },
+    "gcMode": {
+      "label": "Garbage collector",
+      "tip": "The game ships with ZGC, which collects alongside the game on its own threads. In a horde its 3 GB heap ran 95 % full and ZGC fell behind: the game thread had to wait for it and the horde ran 66 fps against 72-90 with G1; uncapped on the spinning route ZGC was 3 % slower too. G1 pauses the game for a few milliseconds a few times a minute instead. Applies on the next launch."
+    },
+    "gcPauseMs": {
+      "label": "G1 pause target",
+      "tip": "The longest pause G1 aims for. Its pauses in the game are already 10-20 ms against its own 200 ms target; a 25 ms target made no measurable difference to the frame times. Applies on the next launch."
+    },
+    "audioLimiter": {
+      "label": "Limiter on the game's final mix",
+      "tip": "The game mixes in 5.1 at 32 kHz and has no limiter: a gun fired next to you over alarms and a horde went over full scale and the sound card clipped it (about 6,000 clipped samples in 25 s in the test scene). FMOD's own limiter now sits at the very end of the mix; below its ceiling it changes nothing. Applies on the next launch."
+    },
+    "audioLimiterCeilingDb": {
+      "label": "Limiter ceiling",
+      "tip": "The highest level the mix may reach, in dB below full scale. -2 leaves room for the conversion to your sound card's rate (the game mixes at 32 kHz). Applies on the next launch."
+    },
+    "audioLimiterStereoFold": {
+      "label": "Fold to stereo before the limiter on stereo devices",
+      "tip": "On headphones or stereo speakers the system mixer folds the game's six channels into two by adding them up, after the game, where nothing could stop the sum from clipping. With this on the game does that fold itself, just before the limiter, so the limiter sees what you hear. 5.1 and 7.1 devices keep their surround. Applies on the next launch."
+    },
+    "soundTickHz": {
+      "label": "Sound upkeep rate",
+      "tip": "How often per second the ambient-object sounds, the wall emitters, the room and weather sound parameters and the sound parameters of zombies making noise are refreshed. The sound engine applies them every 20 ms, so above ~60 fps stock recomputed them several times for every change you could hear. Below this rate nothing changes."
+    },
+    "emitterIdleSkip": {
+      "label": "Skip silent zombies' sound emitters",
+      "tip": "A zombie that is not making any sound skips its three sound emitters entirely; a flag set when it starts a sound brings it back. Stock checked every zombie's emitters every frame (about 2 % of the game thread in a horde of 2,000). Same sounds."
+    },
+    "worldSoundCleanupFast": {
+      "label": "Cheap cleanup of expired noises",
+      "tip": "Every noise zombies can hear (alarms, shots, thumps) is listed in each loaded chunk it reaches and cleared out of those lists when it expires. Stock swept every chunk's list every frame and shifted the list for each expired entry; now the sweep only runs after a frame in which a noise expired, and clears a list in one pass. Same lists, same order."
+    },
+    "hearingHoist": {
+      "label": "Zombie hearing: fewer repeated lookups",
+      "tip": "When a zombie looks for the loudest noise around it, its own hearing and the square it stands on were looked up again for every noise in the list; they are now looked up once per search. Same answer."
+    },
+    "luaChecksumExempt": {
+      "label": "Leave the pzopt Lua files out of the server file check",
+      "tip": "When joining a server the game lists every Lua file under media/lua to the server; the pzopt files (this tab and its search index, the frame cap combo, the key binding, the update item) only exist on clients and a server without them refused the join with \\. They are skipped like the game skips SandboxVars.lua. Applies on the next launch."
+    },
+    "updateCheck": {
+      "label": "Offer new releases in the main menu",
+      "tip": "Once per boot the main menu asks the GitHub releases (one request to api.github.com) whether a newer build for this game revision exists. The \\ item between Credits and Exit is greyed out while the build is current and enabled when a newer one exists: it downloads the zip, replaces the installed files and asks to quit so the next launch loads them. Nothing is downloaded without that click. Applies on the next launch."
+    },
+    "updatePrefetch": {
+      "label": "Get an offered update ready in the background",
+      "tip": "When the check finds a newer build, the files that differ from the installed ones are fetched right away (a release apart is usually a few files, tens of KB, read out of the release zip with range requests; the whole zip is never downloaded without the click), so Update now only writes them: a few milliseconds instead of downloading and unpacking 59 MB. Needs the first setting. Applies on the next launch."
+    },
+    "updateFromWorkshop": {
+      "label": "Update from the Steam Workshop copy",
+      "tip": "Subscribers already have every release: Steam downloads the Workshop item (the same files as the GitHub release zip) into the Steam library. The update check looks there first, before GitHub, and offers that copy when it is newer than the installed build: Update now then copies it from the disk, no download. GitHub is still asked afterwards and only replaces the offer with a newer release, so the check also works where GitHub cannot be reached. Needs the setting above. Applies on the next launch."
+    },
+    "chunkGridWidth": {
+      "label": "Render distance (chunk grid width)",
+      "tip": "How many chunks (8 tiles each) per side are loaded, simulated, lit and drawn around you. Vanilla picks it from the screen size but stops at 19 (152 tiles), sized for 1080p: on a 4K or ultrawide screen the world ends before the screen corners at the widest zooms. Auto picks the smallest grid that fills your screen at the widest zoom, never less than vanilla (21 at 3840x2160, 25 at 5120x2160, vanilla at 1080p). Smaller than vanilla = less world to update every frame, which helps CPU-limited setups (heavy mod lists, NPC mods), with the world ending nearer the screen edge. Larger = more CPU, RAM and VRAM and longer loads; zombies, vehicles and sounds are simulated further out. Only the grid size changes; zombie AI, streaming and culling are untouched."
+    },
+    "chunkGridFollowView": {
+      "label": "Render distance follows the view upstairs",
+      "tip": "The camera looks at you from above, so on an upper floor the ground in the middle of the screen is 3 tiles north and 3 tiles west of you per level. With a render distance wider than vanilla the grid then moves with that ground point, so the screen corners stay filled upstairs as on the ground floor (25 at 5120x2160 up to level 8). You always stay at least as far from every grid edge as in vanilla; a grid no wider than vanilla never moves. Off = the grid stays centred on you and the top corners go dark from the second or third floor at the widest zoom. Single player only. Applies on the next launch."
+    },
+    "parallel": {
+      "label": "Chunk loading in parallel",
+      "tip": "Chunk recalculation runs on a worker pool. Off = the stock single-threaded pass."
+    },
+    "workers": {
+      "label": "Chunk worker threads",
+      "tip": "Width of the recalc pool; never more than cores - 1."
+    },
+    "loadWorkers": {
+      "label": "Chunk worker threads while a world loads",
+      "tip": "The initial 361-chunk recalc uses this many threads, then the pool shrinks back."
+    },
+    "wake": {
+      "label": "Wake the streamer on demand",
+      "tip": "The streamer thread wakes when a chunk is queued instead of polling every 140 ms."
+    },
+    "chunkHandoffDivisor": {
+      "label": "Chunk hand-off budget (queue divisor)",
+      "tip": "At most 1 + queued/divisor freshly loaded chunks are handed to the game thread per frame, so a chunk row arriving at once is spread over a few frames instead of one long one."
+    },
+    "hotsaveStaged": {
+      "label": "Staged hot save",
+      "tip": "The periodic hot save serialises the meta grid and other systems one part per streamer update instead of all in one frame."
+    },
+    "hotsaveIntervalSec": {
+      "label": "Seconds between hot saves",
+      "tip": "Minimum seconds between the game-thread saves of the meta grid, game time, world map and entities that follow every drained chunk-save queue."
+    },
+    "fmodAsync": {
+      "label": "Start audio on a boot thread",
+      "tip": "FMOD and its banks (~1.6 s) initialise on a thread during boot."
+    },
+    "preloadAnimSets": {
+      "label": "Parse animation sets on a boot thread",
+      "tip": "The player and zombie animation-set XML trees parse off the loader thread (1.1 s)."
+    },
+    "bootPump": {
+      "label": "Decode textures during boot",
+      "tip": "A thread pumps the async file system during boot so texture pages and animations decode before the main menu."
+    },
+    "bootFileThreads": {
+      "label": "File threads during boot",
+      "tip": "File pool width while the boot pump runs; shrinks to the in-game width at the load."
+    },
+    "earlyModels": {
+      "label": "Register models early",
+      "tip": "Models and the animation queue register right after the scripts load, giving the boot pump ~2 s more."
+    },
+    "luaPrecompile": {
+      "label": "Precompile Lua on a pool",
+      "tip": "Every Lua file compiles on a thread pool during boot; the game takes the prototypes from that cache."
+    },
+    "animClipCache": {
+      "label": "Cache animation clips",
+      "tip": "Imported animation clips are written under Zomboid/pzopt/anims and read from there on later boots."
+    },
+    "packIndex": {
+      "label": "Index texture packs",
+      "tip": "Texture packs keep their page offsets under Zomboid/pzopt/packs so the reader seeks instead of scanning 526 MB at boot."
+    },
+    "scriptParserFast": {
+      "label": "Linear script parser",
+      "tip": "Script comments strip in one pass and tokens parse without re-substringing; identical output (the stock passes cost 1.8 s at boot)."
+    },
+    "itemParamSwitch": {
+      "label": "Item parameter switch",
+      "tip": "Item script fields dispatch through a switch instead of a chain of 361 string compares per parameter (0.9 s of boot)."
+    },
+    "fileThreads": {
+      "label": "File threads in game",
+      "tip": "Worker threads of the game's async file system (texture decode, model and animation import, depth maps). Stock: 2 on up to 4 cores, else 4."
+    },
+    "fileInflight": {
+      "label": "File tasks in flight",
+      "tip": "File tasks handed to the file threads at once."
+    },
+    "textureBufferMb": {
+      "label": "Decoded texture buffer (MB)",
+      "tip": "Decoded texture bytes that may wait for the render thread before the decoders pause. Large values pile uploads onto one frame."
+    },
+    "parallelDepthMaps": {
+      "label": "Decode depth maps in parallel",
+      "tip": "The 218 depth-map tilesets decode concurrently instead of one at a time under one lock."
+    },
+    "loaderCpuFixes": {
+      "label": "Loader thread algorithmic fixes",
+      "tip": "Lot headers, vehicle zones and room ids resolve once per cell instead of repeatedly; identical results."
+    },
+    "shaderCache": {
+      "label": "Reuse model shaders",
+      "tip": "A model takes a shader an earlier model already created instead of waiting one loading-screen frame for the render thread."
+    },
+    "mipmapArrays": {
+      "label": "Row-based texture mipmaps",
+      "tip": "Texture mipmaps and alpha premultiply build row by row on byte arrays; same pixels as stock."
+    },
+    "texCompress": {
+      "label": "Texture compression: who compresses",
+      "tip": "Only matters with the game's own \\ option on (the low-end preset and the Steam Deck defaults). Stock hands every texture to the graphics driver uncompressed and lets it compress; Mesa does that on the CPU inside the upload, on the render thread (about 26 s a boot on a Radeon 890M: the main menu at 25-34 fps for 10-16 s). Auto: the file threads build the levels and the GPU encodes them (render thread ~0.1 s a boot). Worker: the file threads also encode them, the GPU does no compression work. Applies on the next launch."
+    },
+    "tileDefPreload": {
+      "label": "Build tile definitions during boot",
+      "tip": "The ~60k tile sprites are built on a thread while the main menu loads; Continue only binds their textures instead of parsing the tile files again."
+    },
+    "skipIdChecks": {
+      "label": "Skip room-id consistency checks",
+      "tip": "A log-only check over every building and room of the map (six walks per load) runs in debug mode only."
+    },
+    "voronoiFast": {
+      "label": "Fast zombie-density noise",
+      "tip": "The zombie voronoi noise of every map cell is computed per sector instead of per sample; identical values, half the map loading time."
+    },
+    "earlyTilePacks": {
+      "label": "Load tile textures earlier in boot",
+      "tip": "The tile texture packs and depth maps start decoding before the boot Lua load instead of after it, so the world load does not wait for them."
+    },
+    "aotCache": {
+      "label": "Warm-start cache (Java AOT)",
+      "tip": "The game records a Java AOT cache on one launch and starts from it afterwards: warm code for the menu and every world load. Changes the launcher config (backed up once); off puts it back."
+    },
+    "noLoadFade": {
+      "label": "Skip the loading-screen fade",
+      "tip": "The loading screen does not fade to black (350 ms) before the world's own fade-in."
+    },
+    "noIntroWait": {
+      "label": "Click-to-start as soon as a new game is loaded",
+      "tip": "A new game shows click-to-start when loading is done instead of after the 33 s intro text."
+    },
+    "noClickToStart": {
+      "label": "Enter the world without click-to-start",
+      "tip": "The loading screen goes straight into the world when loading is done instead of waiting for a click or A."
+    },
+    "noLoadingScreen": {
+      "label": "No loading screen",
+      "tip": "Single player: no fade from black into the world, and with \\ no loading screen either."
+    },
+    "resumeShot": {
+      "label": "Show the last view while loading",
+      "tip": "Quitting keeps the view around you (see Last view detail); Continue shows it while loading, its chunks appearing the way the world loads, and the world builds over it. Saves without it show the normal loading screen."
+    },
+    "resumeShotDetail": {
+      "label": "Last view detail",
+      "tip": "What the last view keeps when you quit: floors = the ground only; buildings = floors, walls, doors and furniture; world = everything that does not move, trees included; full = the frame as you left it, zombies and cars too. Taken at the next quit."
+    },
+    "centerFirstLoad": {
+      "label": "Load the world from the centre outwards",
+      "tip": "The chunks around you load and light first and the world appears as soon as they are ready; the rest streams in around you."
+    },
+    "upscaler": {
+      "label": "Upscaler",
+      "tip": "The world is rendered at a fraction of the screen size (see \\) and scaled back up before the UI, text and the stock screen shader, which stay at full resolution. GPU-bound scenes (fog, storms, big towns, 4K, laptops) gain roughly the pixel ratio. fsr1 is a sharp spatial upscaler that works on every GPU; dlss accumulates detail over frames on an RTX card; bicubic is the plain stretch."
+    },
+    "upscalerQuality": {
+      "label": "Upscaler quality (render size)",
+      "tip": "The render size per axis. Quality keeps most of the detail; performance halves the axes for a quarter of the world-pass GPU work."
+    },
+    "upscalerScalePct": {
+      "label": "Upscaler render scale of your own (%)",
+      "tip": "A render scale of your own in percent per axis instead of the quality preset (10-100)."
+    },
+    "fsrSharpnessPct": {
+      "label": "Upscaler, AMD FSR 1.0: sharpening (%)",
+      "tip": "The contrast-adaptive sharpening (RCAS) after the FSR 1.0 upsample; 80 is AMD's usual default."
+    },
+    "dlssPreset": {
+      "label": "Upscaler, NVIDIA DLSS: model preset",
+      "tip": "Which DLSS network runs. The transformer models (DLSS 4) reconstruct the most detail but cost ~2.5 ms a frame at 5120x2160 on an RTX 4090 (231 fps on the 120 km/h drive vs 377 with preset F and 619 with FSR 1.0); at 1440p and below the cost is a third or less."
+    },
+    "dlssOutputPct": {
+      "label": "Upscaler, NVIDIA DLSS: output size (%)",
+      "tip": "DLSS costs time per pixel it writes, not per pixel it reads. Writing less than the screen and letting a cheap filter finish the upscale is what makes DLSS faster than no upscaler on a 4K screen: on an RTX 4090 at 5120x2160 in a heavy storm with fog, DLSS at quality with preset E gains +22 % at 67 % with the sharpen finish (and a sharper image than full-size DLSS with the default model), +17 % at 75 %, +10 % at the full size. At DLAA (native) the output is always the screen size."
+    },
+    "dlssOutputFilter": {
+      "label": "Upscaler, NVIDIA DLSS: output finish",
+      "tip": "How a DLSS output smaller than the screen (the size above) is brought to the screen."
+    },
+    "dlssSharpen": {
+      "label": "Upscaler, NVIDIA DLSS: sharpening",
+      "tip": "Asks DLSS for its mild extra sharpening pass on top of the super resolution; off is the plain reconstruction."
+    },
+    "upscalerObjectMv": {
+      "label": "Upscaler, temporal: character and vehicle motion vectors",
+      "tip": "The temporal upscalers get each character's and vehicle's own motion on top of the camera's, so moving zombies and cars do not ghost or smear. Off = camera motion only (an A/B)."
+    },
+    "dlssWaterCurrent": {
+      "label": "Upscaler, NVIDIA DLSS: water from the current frame",
+      "tip": "DLSS blends each frame with the previous ones; the water's ripples move in place with no motion vectors, so that blend slowed them to half speed. On: the water pixels show the frame just drawn, so rivers and lakes flow like the stock game. Off = DLSS's own image everywhere (an A/B)."
+    },
+    "dlssWaterHistoryPct": {
+      "label": "Upscaler, NVIDIA DLSS: water smoothing (%)",
+      "tip": "With the water from the current frame, how much of the previous frame's water is mixed in. DLSS shifts each frame by a fraction of a pixel; one frame of history evens that out so the ripples do not shimmer, without slowing them."
+    },
+    "dynRes": {
+      "label": "Dynamic resolution",
+      "tip": "The world's render size follows the GPU's time per frame so it fits your frame rate cap: when a scene gets heavy (fog, storms, big towns, a laptop) the world renders smaller for as long as it needs to and grows back when the GPU has room again. The UI and text stay sharp. Only lowers the resolution when the picture's pixels are what costs the time (chunk loading spikes are left alone: a smaller picture would not help them). Uses the upscaler above; with the upscaler off it uses the choice below. Uncapped: stays at the highest size."
+    },
+    "dynResUpscaler": {
+      "label": "Dynamic resolution: upscaler when the upscaler is off",
+      "tip": "How the smaller world picture is brought to the screen when \\ is off. The temporal upscaler builds the picture over several frames at the screen size, so a change of the render size is hard to see."
+    },
+    "dynResTargetPct": {
+      "label": "Dynamic resolution: GPU budget (% of the frame time)",
+      "tip": "How much of each frame's time (1 / your cap) the GPU may use; the rest is headroom for the frame-to-frame noise. Lower holds the cap more firmly at a lower resolution."
+    },
+    "dynResMinPct": {
+      "label": "Dynamic resolution: lowest render size (%)",
+      "tip": "The smallest render size per axis it may go down to."
+    },
+    "dynResMaxPct": {
+      "label": "Dynamic resolution: highest render size (%)",
+      "tip": "The largest render size per axis."
+    },
+    "dynResFps": {
+      "label": "Dynamic resolution: frame rate to hold",
+      "tip": "The frame rate the GPU time is held to; 0 = the cap in force (the variable-refresh cap when VRR is on)."
+    },
+    "dynResController": {
+      "label": "Dynamic resolution: controller",
+      "tip": "How the render size is chosen. The model separates the part of the GPU time that follows the pixel count from the part that does not, ignores lone spikes, and keeps a headroom sized to the measured noise."
+    },
+    "spriteFilter": {
+      "label": "Sprite filtering",
+      "tip": "How the world's art is scaled to your zoom. The game draws it sharp at 100 % and 50 %, soft at 75 % (a linear blur) and when zoomed out (a blend of the full picture and a blurred half-size copy: the blurry look while driving). Sharp: zoomed in, every texel of the art stays a hard square and only the one screen pixel an edge crosses is blended by how much of it the texel covers, so edges are crisp at any zoom and do not crawl while the camera glides; zoomed out, four samples per pixel from a sharper copy of the art keep fences, window frames and road lines sharp without shimmer. At 100 % the picture is the game's own. Nearest: hard pixels at every zoom-in step (75 % included), no blending. Costs next to nothing (the world picture is sampled by a variant of the same program, picked once a frame for the zoom). Windows, Linux and macOS (on a Mac with \\ on, the default); with per-pixel lighting on it applies on the next launch."
+    },
+    "spriteFilterMin": {
+      "label": "Sprite filtering: zoomed out",
+      "tip": "How the sharp filter shrinks the art when you zoom out. The game blends a half-size and a quarter-size copy of the art (soft); the sharp filter reads the one copy that fits the zoom. Adaptive spreads two (or four) samples as the zoom approaches the next copy, where fine lines would otherwise shimmer; one sample is the sharpest and cheapest with a little grain; four fixed samples is the steadiest and softest. The default costs less than the game's own blend."
+    },
+    "spriteFilterSharpnessPct": {
+      "label": "Sprite filtering: edge sharpness zoomed in (%)",
+      "tip": "100 blends each texel edge over exactly one screen pixel, the smoothest motion. Higher narrows the blend: harder edges, a little more crawl while the camera glides."
+    },
+    "spriteFilterSprites": {
+      "label": "Sprite filtering: also the tiles drawn per frame",
+      "tip": "The tiles the game draws every frame instead of into the chunk pictures (open doors, items, things near the cut-away walls) get the same filtering, so they match the rest of the world."
+    },
+    "hdrAuto": {
+      "label": "HDR output: automatic",
+      "tip": "On by default: when the game starts on an HDR screen it is shown as HDR by itself (Linux: a Wayland desktop with HDR switched on; macOS: a display with HDR headroom, e.g. a MacBook Pro's XDR screen), on an SDR screen nothing changes. Untick it to keep the SDR picture on an HDR screen. Applies on the next launch."
+    },
+    "hdr": {
+      "label": "HDR output: always on",
+      "tip": "Turns HDR on even when the automatic check finds no HDR screen. The game is shown as HDR: the menus and the HUD stay at your desktop's white, lamps, torches, headlights, fires and lightning go above it up to your screen's peak. Needs an HDR screen with HDR switched on in the desktop settings; on Linux the game then runs as a native Wayland window. On a Mac the lights and lightning go above the screen's white (the other HDR settings below are Linux only for now); an XDR display (MacBook Pro 14/16, Pro Display XDR) has the most room above it. Without an HDR screen, or on Windows for now, nothing changes. Applies on the next launch."
+    },
+    "hdrLightPct": {
+      "label": "HDR: how bright light sources make things (%)",
+      "tip": "What makes it HDR: every square the game lights with a lamp, a torch, a headlight or a fire is shown brighter in proportion to how much light falls on it, up to the screen's peak, with its colours intact; the dark stays dark."
+    },
+    "hdrBloomPct": {
+      "label": "HDR: glow around bright light (%)",
+      "tip": "The light the HDR highlights add also spills a little into the dark around them, the way a bright lamp glows in the eye. Costs about 0.2 ms a frame at 4K. Linux only for now."
+    },
+    "hdrSunPct": {
+      "label": "HDR: sunlight (%)",
+      "tip": "On a clear day the sunlit outdoors is shown brighter than the SDR picture by this much, less with the sun low or behind clouds; shade and interiors stay as they are. Linux only for now."
+    },
+    "hdrGlintPct": {
+      "label": "HDR: sparkle on water and puddles (%)",
+      "tip": "The sun glitters on rivers, lakes and puddles above the desktop's white, the sky reflects in them, and at night lamps, torches and headlights glint on the water. Linux only for now."
+    },
+    "hdrPaperPct": {
+      "label": "HDR: world brightness (% of the desktop's white)",
+      "tip": "The brightness of the world's ordinary (unlit by lamps) surfaces relative to your desktop's white. Lower leaves more room above it for the highlights: they look brighter by contrast. Linux only for now."
+    },
+    "hdrItmPct": {
+      "label": "HDR: bright pixels at night become highlights (%)",
+      "tip": "At night, pixels that are already near white (lit windows, bright signs) are also pushed above the desktop's white. Off in daylight. Linux only for now."
+    },
+    "hdrSaturationPct": {
+      "label": "HDR: extra colour (%)",
+      "tip": "A little more colour saturation, using the wider colour range of HDR screens. Linux only for now."
+    },
+    "hdrPeakNits": {
+      "label": "HDR: brightest highlight (nits)",
+      "tip": "Caps the brightest highlight below what the screen can do, if the peaks are too much. Linux only (macOS gives no nits)."
+    },
+    "hdrUiNits": {
+      "label": "HDR: menu and HUD white (nits)",
+      "tip": "The brightness of the menus and the HUD. By default the desktop's own white, so switching windows does not change brightness. Linux only (on a Mac the screen brightness sets it)."
+    },
+    "ambientOcclusion": {
+      "label": "Ambient occlusion",
+      "tip": "Soft shading where surfaces meet: floors darken a little along the base of walls, in room corners, under and around furniture, fences, stairs and bushes, so buildings and objects sit on the ground instead of floating on it. Computed from the game's own depth when a chunk's picture is drawn and baked into it, so it costs nothing on frames that draw no new chunk picture and nothing while the camera moves. Characters and vehicles keep their own shadows. Windows, Linux and macOS (on a Mac with \\ on, the default; on OpenGL 2.1 it stays off). Changing an ambient occlusion setting redraws every chunk picture over the next few frames."
+    },
+    "aoStrengthFloorPct": {
+      "label": "Ambient occlusion: strength on floors (%)",
+      "tip": "How dark the shading gets on floors and flat ground where it is strongest: along the base of walls, in room corners, under furniture and around what stands on them. 0 leaves floors unshaded. The three strengths replace the single strength of earlier versions, whose value they take until you set them."
+    },
+    "aoStrengthWallPct": {
+      "label": "Ambient occlusion: strength on walls (%)",
+      "tip": "How dark the shading gets on walls: where they meet the floor and each other, and behind furniture standing against them. 0 leaves walls unshaded."
+    },
+    "aoStrengthObjectPct": {
+      "label": "Ambient occlusion: strength on objects (%)",
+      "tip": "How dark the shading gets on everything that is neither floor nor wall nor tree nor plant: furniture, counters, fences, stairs, crates. 0 leaves them unshaded."
+    },
+    "aoStrengthVegetationPct": {
+      "label": "Ambient occlusion: strength on trees (%)",
+      "tip": "How dark the shading gets on trees and the soft shade their crowns cast on the ground straight below them. 0 leaves trees bright and removes the dark patch under them. Bushes, grass and flowers have their own strength below."
+    },
+    "aoStrengthPlantPct": {
+      "label": "Ambient occlusion: strength on bushes, grass and flowers (%)",
+      "tip": "How dark the shading gets on bushes, hedges, tall grass and flowers where walls, fences, furniture and the ground close them in (their own leaves do not shade each other). 0 leaves them bright; the contact shading where a bush meets the floor follows the floor strength. Until you set it, it takes the value of the trees' strength (one strength for all vegetation in earlier versions)."
+    },
+    "aoRadiusPct": {
+      "label": "Ambient occlusion: reach (% of a tile)",
+      "tip": "How far from a wall or an object the shading reaches, in tiles. Longer reach is softer and wider."
+    },
+    "aoScalePct": {
+      "label": "Ambient occlusion: detail (% of the chunk picture)",
+      "tip": "The resolution the shading is computed at. Lower costs less when a chunk's picture is redrawn with new objects, and is softer."
+    },
+    "sunShadows": {
+      "label": "Sun shadows",
+      "tip": "By day, walls, trees, fences, cars parked in the world's pictures and furniture outdoors cast soft shadows of the sun onto the ground and onto each other: sharp where they touch the ground, softer further away, like real sunlight. The sun stands where it really does over Kentucky for the game's date and hour (high and short-shadowed in summer, low and long in winter, rising in the north-east in June and the south-east in December), so the shadows turn and lengthen through the day; rain and fog thin them out and they fade away at dusk. Indoors stays as it is (rooms have a roof). Computed with the ambient occlusion when a chunk's picture is drawn and baked into it, so a still or moving camera costs nothing; when the sun has moved a little (every few in-game minutes) the pictures on screen are updated a few per frame. Windows, Linux and macOS (on a Mac with \\ on, the default)."
+    },
+    "sunShadowStrengthPct": {
+      "label": "Sun shadows: strength (%)",
+      "tip": "How much of the daylight a full shadow takes away on a clear day. Clouds, rain and fog lower it further."
+    },
+    "sunShadowCharacters": {
+      "label": "Sun shadows: characters",
+      "tip": "Characters cast the shadow of their body onto the ground, walls and furniture around them, drawn every frame, and a character standing in a building's or a tree's shadow is shaded too. Only characters drawn with a model (the ones near enough to animate); the far ones drawn as flat pictures cast a simple upright shape."
+    },
+    "sunShadowMeshes": {
+      "label": "Sun shadows: the true shape of characters, animals and vehicles",
+      "tip": "Each character, animal and vehicle is drawn once more, as the sun sees it, into a small shadow picture of its own, and its shadow takes that shape: arms, legs, hair, clothes, backpacks and weapons; an animal's legs, head and tail; a car's body and wheels. How often the pose is renewed: \\. Off: a simpler shape of rounded pieces."
+    },
+    "sunShadowRate": {
+      "label": "Sun shadows: update rate",
+      "tip": "How often the true-shape shadow of a character, animal or vehicle takes its new pose. Every frame: the shadow is drawn in the same frame as the character, so arms and legs move in step with it. 15 times a second: each pose is kept for several frames and shown a frame late, which reads as a slightly choppy shadow next to a smoothly animated character; the shadow still follows the character's position every frame. With 40 characters on screen every frame cost about 0.09 ms a frame on an RTX 4090 against 0.03 ms for 15 a second; in big crowds at most 32 are renewed a frame (your own every frame), the rest in turns."
+    },
+    "sunShadowAnimals": {
+      "label": "Sun shadows: animals",
+      "tip": "Farm and wild animals cast sun shadows too."
+    },
+    "entityShadows": {
+      "label": "Shadows on characters and vehicles",
+      "tip": "The player, zombies, animals and cars take the shadows of buildings, walls, roofs and trees where they stand, part by part: a zombie half behind a wall has its legs in the shade and its head in the sun, a car under a porch roof is dark under the roof only. With Sun shadows turned on during a game, part by part from the next launch (one shade for a whole character until then). Off: one shade for a whole character, none for cars."
+    },
+    "entityShadowFormPct": {
+      "label": "Shadows on characters: sunlit side (%)",
+      "tip": "How much the side of a body facing the sun is brighter and the far side darker. The overall brightness stays the same. 0: flat, as the game draws them."
+    },
+    "entityShadowCasters": {
+      "label": "Shadows on characters: from other characters and cars",
+      "tip": "Characters and cars also shade each other: a zombie standing in a car's shadow, the player in a crowd's. Cheap with few characters; in a dense crowd at a shadow's edge about 0.02 ms a frame on an RTX 4090."
+    },
+    "entityShadowSelf": {
+      "label": "Shadows on characters: their own shadow",
+      "tip": "A character's or a car's own body shades itself: an arm on the chest, a hat brim on the face, the cabin on the hood. For the 16 nearest characters, when zoomed in enough to see it."
+    },
+    "entityShadowImpostors": {
+      "label": "Shadows on characters: far zombies",
+      "tip": "Zombies drawn as flat pictures (far away, big hordes) take the shade of where they stand too, one shade for the whole body."
+    },
+    "entityShadowTorches": {
+      "label": "Shadows on characters: torches and headlights",
+      "tip": "At night (and in dark places), a character standing in another character's or a car's shadow from a torch or headlights is shaded too, as the ground there: a zombie behind another in your torch beam stays dark. With \\ this matches the shadows on the ground. Costs nothing measurable."
+    },
+    "entityShadowAoPct": {
+      "label": "Shadows on characters: from the bodies next to them (%)",
+      "tip": "Characters standing close together, or against a car, hide part of the surrounding light from each other: the sides that face each other are a little darker, so a packed crowd has depth instead of every body lit the same. About 0.01 ms a frame in a dense crowd on an RTX 4090."
+    },
+    "entityShadowClouds": {
+      "label": "Shadows on characters: clouds",
+      "tip": "With cloud shadows on, a cloud's soft shadow crosses characters and cars as it crosses the ground: a car half under a cloud's edge is half shaded, and a character's head can be in the sun while their feet are not (the shadow falls along the sun). Off: one cloud value for each character or car. Costs nothing measurable."
+    },
+    "sunShadowVehicles": {
+      "label": "Sun shadows: vehicles",
+      "tip": "Cars and trucks outdoors cast a sun shadow of their body."
+    },
+    "sunShadowTreeCards": {
+      "label": "Sun shadows: the true shape of trees",
+      "tip": "A tree casts the shadow of its own picture, trunk, branches and leaves, in one piece from its foot to its crown, turned towards the sun so it never thins to a line. Off: a soft oval for the crown."
+    },
+    "sunShadowStockFadePct": {
+      "label": "Sun shadows: the game's round shadow under characters (fade, %)",
+      "tip": "Where a character or a vehicle casts a real sun shadow, the game's own round shadow under its feet fades by this much (it was a second shadow beside the sun's). Overcast, at night and indoors it stays."
+    },
+    "sunShadowTorches": {
+      "label": "Shadows from torches and headlights",
+      "tip": "At night (and in dark places), characters caught in a torch beam or in headlights cast long soft shadows away from the light. The one holding the torch does not shadow their own beam."
+    },
+    "sunShadowSoftnessPct": {
+      "label": "Sun shadows: softness (%)",
+      "tip": "How quickly a shadow's edge blurs with the distance from what casts it (the size of the sun's disk). 25 is close to real sunlight: a tree's shadow keeps its branches and leaves, a character's its arms and legs; 100 and more blur every shadow into a soft shape; 10 is as sharp as the real sun."
+    },
+    "moonShadows": {
+      "label": "Moon shadows",
+      "tip": "At night the moon casts the same soft shadows when it is up: where it really is for the game's date and hour, as strong as its phase allows (a full moon high in a clear sky casts clear shadows, a thin crescent barely any, a new moon none), once the sky is dark. The game's own night brightness already follows the moon's phase."
+    },
+    "moonShadowPct": {
+      "label": "Moon shadows: strength (% of the sun's)",
+      "tip": "How dark a full moon's shadows are compared with the sun's."
+    },
+    "cloudShadows": {
+      "label": "Cloud shadows",
+      "tip": "The shadows of the clouds drift over the sunlit (or moonlit) ground, walls and roofs with the wind: as many as the weather's cloud cover, changing shape as they go, lying where the sun ray through each cloud meets the ground. Under a cloud the sunlit outdoors takes exactly the shade of a building's shadow, and the shadows the sun casts fade there; characters and cars walking into one are shaded too. Only where there is a cloud: a clear sky costs nothing, and a cloudy one a few texture reads per pixel of the world picture. Full overcast has no cloud gaps and so no shadows. Windows and Linux. Applies on the next launch when sun shadows or cloud shadows were off when the game started (the game's own shaders stay untouched then)."
+    },
+    "cloudOpacityPct": {
+      "label": "Cloud shadows: darkness (%)",
+      "tip": "How much of the sun a thick cloud holds back (100: all of it, so the shade under it is as dark as a building's shadow)."
+    },
+    "cloudSpeedPct": {
+      "label": "Cloud shadows: drift speed (%)",
+      "tip": "How fast the cloud shadows travel, % of the wind at the clouds' height (they follow the game's clock: they stop when it is paused and race with fast-forward)."
+    },
+    "cloudScalePct": {
+      "label": "Cloud shadows: cloud size (%)",
+      "tip": "The size of the clouds (100: fair-weather cumulus, their shadows a hundred to two hundred tiles across)."
+    },
+    "reflections": {
+      "label": "Reflections",
+      "tip": "Buildings, fences, trees, lamp posts, cars and characters are mirrored in rivers, lakes and puddles, rippled by the waves and the rain, sharp where they meet the water and softer further out, stronger at grazing angles of the waves. Every surface picture the game already draws writes itself where its mirror image lands, so the water only looks up one value: nothing extra is drawn where there is no water or puddle on screen. Characters' reflections are one frame behind. Windows, Linux and macOS (on a Mac with \\ on, the default; there the water marches up its pixel column for the reflection, OpenGL 4.1 has no image atomics for the pixel-projected method). Turning it on applies on the next launch (the game's water and chunk shaders are only patched when it starts with reflections on; off, they stay exactly the game's own)."
+    },
+    "reflectionStrengthPct": {
+      "label": "Reflections: strength (%)",
+      "tip": "How strongly the water mirrors the scene. Real water seen from the game's camera angle reflects little (a few percent, more on the side of a wave); higher is more of a mirror."
+    },
+    "reflectionPuddles": {
+      "label": "Reflections: in puddles",
+      "tip": "Puddles mirror the scene too once the rain has made them big enough (the rain's rings blur them)."
+    },
+    "carGlass": {
+      "label": "Car glass",
+      "tip": "Car windows become glass instead of the stock opaque blue: they mirror the sky (the game's own, with its clouds and sunsets, turned to the real sun), the buildings, trees and road around the car (each car's small reflection probe, marched through the scene before the cars are drawn), and glint where they mirror the sun, the moon, the street lamps and headlights, more at grazing angles (Fresnel); and through them you see the cabin: seats, headrests, the dashboard, the driver and passengers, and the street behind the car where you look out through the far window. Cracks, blood and broken-out windows stay as the game draws them; rain beads on the glass. About a hundredth of a millisecond for a street of parked cars on a fast GPU; nothing when no car is on screen. Windows, Linux and macOS (on a Mac with \\ on, the default). Turning it on applies on the next launch (the game's vehicle shaders are only patched when it starts with car glass on)."
+    },
+    "carGlassReflectPct": {
+      "label": "Car glass: reflection strength (%)",
+      "tip": "How strongly the windows mirror (100: real glass, four percent head-on, more at grazing angles; higher reads more like a mirror)."
+    },
+    "carGlassInteriorPct": {
+      "label": "Car glass: cabin light (%)",
+      "tip": "How bright the inside of the car is behind the glass."
+    },
+    "carGlassSunPct": {
+      "label": "Car glass: sun and moon glint (%)",
+      "tip": "The sharp highlight where a window mirrors the sun (or the moon at night)."
+    },
+    "carGlassRainPct": {
+      "label": "Car glass: raindrops (%)",
+      "tip": "Drops beading on the windows of cars standing out in the rain, each a tiny lens that catches the sky and the glints."
+    },
+    "carOccupant": {
+      "label": "Car glass: the people inside",
+      "tip": "Who sits in a car shows through its glass. The game never draws a seated character (cars look empty whoever drives them), though it animates them. impostor: the game's own model of the driver and passengers, hands on the wheel, in their clothes, drawn into a small picture of their own before the cars and looked up by the glass wherever it shows the cabin; redrawn when they move (turning the wheel up to 60 times a second, still a few times a second), between that the glass moves the last picture with the car: about a thousandth of a millisecond a frame parked, a few thousandths driving on a fast GPU. proxy: a simple body (head, torso, arms, legs) in their skin, hair and clothing colours, worked out by the glass itself (nothing extra drawn; cruder). box: the first release's dark torso shape. Applies on the next launch."
+    },
+    "carOccupantOcclusion": {
+      "label": "Car glass: seats hide the people inside",
+      "tip": "Off (default): the people inside show wherever the glass shows the cabin, over the seats in front of them (a cutaway: from the game's high camera angle the roof and the seats would otherwise hide most of a driver). On: the seats, headrests and floor hide them where they stand between them and the glass. Applies on the next launch."
+    },
+    "carOccupantLightPct": {
+      "label": "Car glass: light on the people inside (%)",
+      "tip": "How bright the people inside the car are, against how the game lights them outside (the roof shades them). Applies on the next launch."
+    },
+    "occludedZombieOutlines": {
+      "label": "Outline the hidden parts of zombies you see",
+      "tip": "A zombie you can see that walks behind a wall, a tree, a fence or a car keeps a thin contour where the scenery hides it, so you know where it went. Only zombies your character sees right now (the same sight that draws them): no unseen or remembered zombies, nothing through the dark (the contour fades with the light on the zombie). The parts hidden behind other characters are not outlined. Next to nothing on a fast GPU: the zombies' own draws mark what they cover, then one pass draws the contour where they are hidden. Applies at once. Off while DLSS / TAAU object motion is on (it uses the same buffer bits)."
+    },
+    "occludedOutlineIgnorePlants": {
+      "label": "Occluded outlines: ignore grass and bushes",
+      "tip": "A zombie standing in grass or bushes, with nothing solid in front of it, does not get its legs outlined by the plants; a wall, a fence, a tree or a car further in front still outlines it."
+    },
+    "occludedOutlineWidth": {
+      "label": "Occluded outlines: width (render pixels)",
+      "tip": "The contour's width in pixels of the world picture (an upscaler draws them larger). Only the zombie's own outline is drawn, never a line along the edge of what hides it."
+    },
+    "occludedOutlineColour": {
+      "label": "Occluded outlines: colour",
+      "tip": "Pick the contour colour, then press Apply. The aiming and interaction outlines keep theirs."
+    },
+    "occludedOutlineOpacityPct": {
+      "label": "Occluded outlines: opacity (%)",
+      "tip": "How opaque the contour is in daylight; dimmer in the dark and while the zombie fades in or out of sight."
+    },
+    "mirrors": {
+      "label": "Mirror and window reflections",
+      "tip": "Wall mirrors, mirrored medicine cabinets and dressers, and window panes reflect what stands in front of them: the floor and the room, the street, and you, the zombies and the cars as their real other side (the game's own models drawn once more through the mirror's plane, lit as they are lit), so a mirror shows your face, not your back. From the game's high camera a wall mirror shows the floor and whoever stands within a couple of squares of it; a window upstairs shows the street below. Someone inside a room seen through a window keeps the reflection over them, as glass does; a closed curtain stops it. The room part of each pane's reflection is worked out once and kept while nothing changes (the camera's pan does not change it), panes hidden under a roof or behind a building are skipped, and the people in it are redrawn at most 120 times a second: a few hundredths of a millisecond a frame for a street of windows on a fast GPU, nothing when no mirror or window is on screen. Applies on the next launch (mirror tiles are drawn on their own instead of into the chunk pictures)."
+    },
+    "mirrorsWindows": {
+      "label": "Mirrors: windows reflect too",
+      "tip": "On: window panes reflect as well (subtly, as glass does). Off: only wall mirrors. Applies on the next launch."
+    },
+    "mirrorsWindowPct": {
+      "label": "Mirrors: window reflection strength (%)",
+      "tip": "How much of a window pane is its reflection. Real glass reflects a few percent head-on, more where the room behind it is dark; higher reads more like a shop window by day. Applies on the next launch."
+    },
+    "mirrorsProps": {
+      "label": "Mirrors: glass, screens and steel reflect too",
+      "tip": "On: the things in a room that are not mirrors or windows reflect as well: glass doors, shop fronts and railings, shower screens, display counters and cases, glass-door fridges, the glass table, switched-off televisions and monitors, the gym's wall mirrors, steel counters, sinks and appliances, toilets. Each surface reflects the way it faces: a glass top shows what stands behind it, a door or a pane what stands in front, faintly as glass does; steel, ceramic and dark screens keep their own look and show the people and cars passing in front as a soft sheen. Their shape comes from the game's own depth maps, so nothing is guessed per object. Reflections fade where you cannot see (out of your sight the prop is dark, so is its reflection). Costs about a tenth of a millisecond on a handheld with a room full of them, a few hundredths on a fast GPU; worked out once per prop and kept while nothing changes. Applies on the next launch (with Mirror and window reflections on)."
+    },
+    "mirrorsPropGlassPct": {
+      "label": "Mirrors: glass prop reflection strength (%)",
+      "tip": "How much of a glass door, counter or case is its reflection. Real glass reflects a few percent head-on and more at a grazing angle (a glass top more than an upright pane: the game's camera sees tops at 60 degrees). Applies on the next launch."
+    },
+    "mirrorsGeometry": {
+      "label": "Mirrors: the room behind the glass",
+      "tip": "On: a wall mirror's room is rebuilt behind the glass from the game's own tiles, so the mirror shows what the camera can never see: the far side of the bathtub or the bed in front of it (the furniture's other facing, as the game draws it when you turn it), the floor behind it, and the wall across the room. Off: the reflection is made of what the camera sees, and where that is hidden (behind a table, a bathtub) the floor seen last stands in. Built once when a mirror comes on screen and kept; costs nothing while it stands. Applies on the next launch."
+    },
+    "mirrorsCutawayHoldMs": {
+      "label": "Mirrors: steady walls by a room corner (ms)",
+      "tip": "The game cuts the walls round you away so you stay in sight; standing or walking by a room's corner it flips a wall between cut and shown every few tenths of a second, and a mirror on that wall blinked in and out with it. A wall with a mirror changes at most once in this time (it still goes at once the first time) and comes back only after it has not been needed for twice this, the game's own cutaway lock that its newer renderer skips. 0: the game's flipping. Applies on the next launch."
+    },
+    "mirrorsModels": {
+      "label": "Mirrors: people and cars in the reflection",
+      "tip": "On: characters and vehicles in front of a mirror or window are drawn once more through its plane, so the mirror shows their faces and the side of the car facing it. Off: the reflection is made of what the camera sees (cheaper; you see their backs). Applies on the next launch."
+    },
+    "mirrorsViewLateralPct": {
+      "label": "Mirrors: where you appear along the glass (%)",
+      "tip": "0: you appear straight in front of where you stand, as you see yourself in a mirror. 100: the game camera's true reflection, which puts someone a square out from the mirror a square to its side (off a small medicine cabinet). Windows always use the true reflection. Applies on the next launch."
+    },
+    "mirrorsViewDropPct": {
+      "label": "Mirrors: how high you appear (%)",
+      "tip": "How much higher someone farther from the mirror appears in it, as a share of the game camera's true reflection (100: a third of a floor per square out, a head at the sink above the medicine cabinet). 0: at their own height, eye level, below the game's high-hung cabinets. 50: your head in the cabinet from the sink, as if looking slightly down into the mirror. Applies on the next launch."
+    },
+    "bloodWet": {
+      "label": "Wet blood",
+      "tip": "Fresh blood on the floor is a film of liquid until it dries: the rims of the pools catch the sun and the lamps, the sky and (with Reflections on) the zombies and walls standing in them are mirrored at the film's own angle, and with HDR output the highlights go above white. The film's shape comes from the splat itself (flat pools, bright edges) and it dries from the edges in. Only the wet splats on screen are drawn, once a frame, like the puddles; walls, tables and bodies in front of the floor hide it. Windows, Linux and macOS (on a Mac with \\ on, the default)."
+    },
+    "bloodWetMinutes": {
+      "label": "Wet blood: stays wet (game minutes)",
+      "tip": "How long a splat stays wet, in game time."
+    },
+    "bloodReflectPct": {
+      "label": "Wet blood: reflection strength (%)",
+      "tip": "How much of the sky and the scene the film mirrors (100: a liquid film's own amount, a few percent of the sky, more of what stands in the pool)."
+    },
+    "bloodSheenPct": {
+      "label": "Wet blood: sheen (%)",
+      "tip": "How bright the sun and lamp highlights on the pools' rims are."
+    },
+    "bloodGlintPct": {
+      "label": "Wet blood: HDR glints (%)",
+      "tip": "With HDR output: how bright the highlights above white are."
+    },
+    "godRays": {
+      "label": "God rays",
+      "tip": "Sunlight (and moonlight) falls through windows and open doorways into rooms as shafts of light in the dust, with sunlit patches on the floor, tables and walls where it lands, cut exactly by the window frames; outdoors, in fog, rain and morning mist, the shadows of buildings and trees stretch through the haze; torches, headlights and lamps glow in the dust and fog around them. Walls, roofs, upper floors, curtains and barricades block the light; tree crowns let it through their gaps. Nothing is drawn where no light comes in: a clear day costs only the rooms with sunlit windows on screen (one draw), the haze pass runs only in fog, rain or mist. Windows, Linux and macOS (on a Mac with \\ on, the default)."
+    },
+    "godRaysStrengthPct": {
+      "label": "God rays: brightness (%)",
+      "tip": "How bright the shafts of light and the sunlit patches are."
+    },
+    "godRaysDustPct": {
+      "label": "God rays: dust in rooms (%)",
+      "tip": "How dusty the air in rooms is: the more dust, the brighter the shafts through the windows (0: only the sunlit patches)."
+    },
+    "godRaysPatchPct": {
+      "label": "God rays: sunlit patches (%)",
+      "tip": "How bright the sun lands on the floor, furniture and walls where a shaft reaches them (0: the shafts only)."
+    },
+    "godRaysSoftPct": {
+      "label": "God rays: soft edges (%)",
+      "tip": "How soft the edges of the shafts and of their sunlit patches are: the light spreads a little the farther it gets from the window, so the shafts blur out instead of ending in hard lines (0: cut exactly by the window frame)."
+    },
+    "godRaysGlintPct": {
+      "label": "God rays: dust glints (%)",
+      "tip": "Specks of dust drifting in the shafts now and then catch the sun and glint."
+    },
+    "godRaysHazePct": {
+      "label": "God rays: haze outdoors (%)",
+      "tip": "How hazy the open air is: fog, rain and the mist of the hours after sunrise add to it, and the shadows of buildings and trees stretch through it as rays. A clear midday has almost none (and costs nothing)."
+    },
+    "godRaysLocal": {
+      "label": "God rays: torches, headlights and lamps",
+      "tip": "Torch beams, headlights, street lamps and fires glow in the dust of rooms and in fog and rain, their cones shaped by the light's reach and direction."
+    },
+    "godRaysLocalPct": {
+      "label": "God rays: torch and lamp glow (%)",
+      "tip": "How strong the glow around torches, headlights and lamps is."
+    },
+    "foliageSway": {
+      "label": "Foliage sway",
+      "tip": "Grass, bushes and trees bend and sway in the wind: they lean with it, gusts roll across fields and tree crowns, each plant swings at its own pace (grass quick, trees slow) and leaves flutter. The plants stay in the game's cached chunk pictures; the pass that puts those pictures on screen every frame moves each plant's pixels by the wind, so nothing extra is drawn. The game's own \\ option (off by default) does this by drawing every plant every frame instead. Windows, Linux and macOS (on a Mac with \\ on, the default)."
+    },
+    "foliageSwayPct": {
+      "label": "Foliage sway: strength (%)",
+      "tip": "How far the plants bend in the wind."
+    },
+    "foliageSwayTaps": {
+      "label": "Foliage sway: quality",
+      "tip": "How the moving plants cover what is behind them: 1 moves each plant's pixels inside its own outline only (the cheapest); 2 to 4 also let the plant's edge move out over the ground behind it, looking 1 to 3 steps upwind."
+    },
+    "darknessFloorPct": {
+      "label": "Darkness floor (% of full light)",
+      "tip": "No place you have already seen gets darker than this: pitch-black rooms and nights keep a faint, cool light, so you can make out the floor, walls and furniture instead of a black void. Lamps, fires, torches and daylight are unchanged; places you have never seen stay black. Basements stay pitch black unless you tick the next box. Applied to the game's own light values, so it costs nothing per frame; the chunk pictures on screen are redrawn once when you change it."
+    },
+    "darknessFloorBasements": {
+      "label": "Darkness floor: also in basements",
+      "tip": "Basements and everything below ground get the darkness floor too. Off: below ground stays as dark as the game makes it."
+    },
+    "memoryTint": {
+      "label": "Remembered places",
+      "tip": "What you cannot see right now (behind walls, behind you) is drawn like a memory, desaturated, dimmer and cooler, with a soft edge, instead of darkened; rooms of a building you walked out of keep a dim remembered light and their furniture instead of going black. Zombies and other characters out of sight stay hidden as always. Replaces the view cone's own darkening in the same pass, so it costs nothing extra. Windows, Linux and macOS (on a Mac with \\ on, the default)."
+    },
+    "memoryTintPct": {
+      "label": "Remembered places: strength (%)",
+      "tip": "How strongly what you cannot see is desaturated and dimmed. 100 turns it fully grey."
+    },
+    "memoryLightPct": {
+      "label": "Remembered places: light of remembered rooms (% of full light)",
+      "tip": "How bright rooms you have seen stay once they are out of sight (the game fades them to black)."
+    },
+    "colorGrading": {
+      "label": "Colour grading",
+      "tip": "The picture is colour graded by time of day and weather, like a film: nights shift towards the desaturated blue-green your eyes see in the dark (the Purkinje effect) while lamps and fires keep their colour, dawn is pink and cool in the shadows, the hour before dusk golden, overcast and rain greyer and cooler, storms dark and cold, fog soft and flat. Clear daylight is unchanged. The game's own screen filter and the grade become one colour lookup per pixel, which makes the screen pass cheaper than the game's own (its invisible film grain is left out); the lookup table is rebuilt in the background when the weather or the hour moves it. Custom looks: .cube files named base, night, dawn, dusk, overcast, rain, storm, fog or snow in Zomboid/pzopt/luts. Windows, Linux and macOS (on a Mac with \\ on, the default)."
+    },
+    "colorGradingPct": {
+      "label": "Colour grading: strength (%)",
+      "tip": "How strong the grade is. 0 would be the game's own colours."
+    },
+    "colorGradingNightPct": {
+      "label": "Colour grading: night vision shift (%)",
+      "tip": "How much dark places at night lose their colour and turn blue-green, like human night vision. 0 keeps the night's colours."
+    },
+    "pixelLight": {
+      "label": "Per-pixel lighting",
+      "tip": "The world's light is drawn per pixel instead of being painted into the chunk pictures square by square. The game's own lighting still decides how much light every square gets and what walls hide; the picture follows it smoothly between squares instead of in blocky steps, and a torch or headlight beam is drawn from its own cone, so it has straight edges and follows your aim every frame. A light change no longer redraws chunk pictures, which saves work when torches, headlights or lightning move the light. Nights look a little darker than stock: stock spreads every lit square's light half a square into its neighbours, even through walls. Windows, Linux and macOS (on a Mac with \\ on, the default). Applies on the next launch."
+    },
+    "pplAnalytic": {
+      "label": "Per-pixel lighting: torch, headlight, lamp and fire shapes",
+      "tip": "Torches and headlights drawn from their cone, lamps and fires from their round falloff, pixel by pixel. Off: the game's per-square light only, smoothed between squares."
+    },
+    "pplPointLights": {
+      "label": "Per-pixel lighting: lamp and fire shapes",
+      "tip": "Lamps and fires drawn from their round falloff, pixel by pixel. Off: their light is the game's per-square light, smoothed between squares, and the pictures they reach are drawn with the cheaper light-free program (the GPU cost of per-pixel lighting then only applies near torches and headlights)."
+    },
+    "pplNormals": {
+      "label": "Per-pixel lighting: surfaces facing the light",
+      "tip": "Walls and objects turned towards a torch, a headlight or a lamp catch more of its light, those turned away less (the direction of every surface is read from the game's depth picture). Floors are unchanged."
+    },
+    "pplWrapPct": {
+      "label": "Per-pixel lighting: how far light wraps around surfaces (%)",
+      "tip": "Higher softens the effect of the surface direction: the sprites already carry painted shading, so a strong effect can shade them twice."
+    },
+    "pplSmooth": {
+      "label": "Per-pixel lighting: smooth between tiles",
+      "tip": "The light changes smoothly from one tile to the next (no faint diamond pattern where its slope changes). Off: straight blends between tile centres."
+    },
+    "pplWetSpecular": {
+      "label": "Per-pixel lighting: wet glints in the rain",
+      "tip": "While the rain wets the ground outdoors (and while it dries), torches, headlights and lamps glint on it."
+    },
+    "pplSpecPct": {
+      "label": "Per-pixel lighting: wet glint strength (%)",
+      "tip": "How bright the glints on wet ground are."
+    },
+    "pplShadows": {
+      "label": "Per-pixel lighting: torch shadows (experimental)",
+      "tip": "Fence posts, furniture and walls cast shadows into your torch's beam (computed from the picture's depth at half resolution, one frame late). Experimental."
+    },
+    "pplTorchFeetGlow": {
+      "label": "Per-pixel lighting: torch glow at your feet",
+      "tip": "A torch in your hands also lights a small circle round your feet, behind and beside you. Off: only the beam in front of you is lit. Applies at once."
+    },
+    "torchSource": {
+      "label": "Light from the torch itself",
+      "tip": "A flashlight, lantern, lighter or weapon light shines from the item in your hand, on your webbing or under your gun barrel, at its height, instead of from the middle of your feet: the beam starts at the lens and moves with your arm, a lantern held at your side lights that side, and with Per-pixel lighting the beam, its shadows, the glow in fog and the shadows other people cast from it all start there too. The game's own square-by-square lighting starts from the same spot (never through a wall) and holds still while you stand still. Costs a few microseconds a frame. Applies at once."
+    },
+    "torchSourceAim": {
+      "label": "Light from the torch itself: beam direction",
+      "tip": "Where the beam points. Where you look (the game's own) keeps the beam steady on your aim; where the item points makes it follow the flashlight in your hand as you walk and turn, and a flashlight tilted down lights the ground nearer (with Per-pixel lighting)."
+    },
+    "torchSourceSelfShadow": {
+      "label": "Light from the torch itself: your body casts a shadow",
+      "tip": "With Per-pixel lighting: your own body shades the light you carry, so a lantern in one hand leaves the other side of you in a soft shadow, and a light at your hip does not light what is behind you. A torch held out in front is never tested. Applies on the next launch."
+    },
+    "relief": {
+      "label": "Relief (parallax textures)",
+      "tip": "The fine relief the art paints (mortar between bricks and stones, gaps between planks and floor tiles, roof shingles, cobbles) catches the light that moves: a low sun or the moon rakes it and the grooves fall into shade, a torch, headlight or lamp sweeping along a wall brings the stones out. The height is read once from each chunk picture after it is drawn (two bytes per pixel of video memory); the sun and the moon are baked into the picture with it and redone a few pictures a frame when they move a step, so they cost nothing per frame; a torch, headlight or lamp reads one byte where it shines. Floors and walls only: furniture keeps its painted shading. Sun and moon: needs Sun shadows. Torches, headlights and lamps: needs Per-pixel lighting. Windows, Linux and macOS (on a Mac with \\ on, the default). Applies on the next launch."
+    },
+    "reliefDepthPct": {
+      "label": "Relief: depth (%)",
+      "tip": "How deep the grooves between bricks, planks and tiles are."
+    },
+    "reliefSunPct": {
+      "label": "Relief: in sunlight and moonlight (%)",
+      "tip": "How strongly the sun and the moon bring the relief out (the part of their light that reaches the surface directly: none in shade)."
+    },
+    "reliefTorchShadowSteps": {
+      "label": "Relief: grooves in torch shadow",
+      "tip": "The grooves also fall into the shadow of their own edges in torch, headlight and lamp light (each lit pixel follows the light a few texels across the relief). The sun and the moon always have it (baked)."
+    },
+    "overlaySampling": {
+      "label": "Sample frame times and utilization (needed for F9 / L3 + R3)",
+      "tip": "Records every presented frame, times the GPU with GL timer queries and samples the CPU load twice a second on a background thread. Off by default: without it F9 (or L3 + R3 on a controller) only shows a notice. \\ and \\ turn it on too."
+    },
+    "overlay": {
+      "label": "Show the overlay from boot",
+      "tip": "Frame rate, frame-time tail (p99, p99.9, max, 1%-low, jitter, spikes), GPU busy share, game and render thread load, and a frame-time graph. The key (F9) or L3 + R3 on a controller toggles it any time."
+    },
+    "overlayLog": {
+      "label": "Log every presented frame",
+      "tip": "Writes Zomboid/pzopt-overlay.out, one CSV row per frame in MangoHud's column names, for harness/analyze.py. Harness runs log regardless."
+    },
+    "overlayStats": {
+      "label": "Frame statistics",
+      "tip": "The lines at the top of the overlay."
+    },
+    "overlayPower": {
+      "label": "Power draw",
+      "tip": "A line with the watts the machine draws while you play and the energy each frame costs (J/frame = watts / fps): CPU package, GPU board power, an AMD APU's socket, or the whole machine while a laptop runs on battery. Read from the counters the system exposes: NVIDIA GPUs through the driver (Windows and Linux), AMD GPUs and APUs, and on Linux the CPU's RAPL counters, which only root may read on most distributions (the line then says CPU n/a). While the frame log is on it also writes Zomboid/pzopt-power.out twice a second."
+    },
+    "overlayTree": {
+      "label": "Game-thread tree",
+      "tip": "What the game thread is doing, from its call stack sampled on a background thread: the phases (update / render / lighting) with their share of the time, under each the biggest sub-phases (chunk bakes, zombies, UI draw, frame hand-off...) with a bar, the wait share in red and the hottest methods. Also logged per second to Zomboid/pzopt-gamethread.out for harness/analyze.py."
+    },
+    "overlayVerdict": {
+      "label": "Verdict line",
+      "tip": "What is holding the frame rate below the cap."
+    },
+    "overlayGraph": {
+      "label": "Frame-time graph",
+      "tip": "A bar per presented frame (green under 1.1x the cap budget, amber under 2x, red above; GPU time in blue) with ms ticks and the budget line."
+    },
+    "overlayGraphHz": {
+      "label": "Frame-time graph redraws per second",
+      "tip": "With \\ on, the frame-time bars are redrawn into that texture this often instead of drawn as ~480 sprites every frame. 0 draws them every frame."
+    },
+    "overlayFlame": {
+      "label": "Game-thread flame graph",
+      "tip": ""
+    },
+    "overlayFlameDepth": {
+      "label": "Game-thread flame graph rows",
+      "tip": "How many call levels above GameWindow.frameStep the flame graph shows."
+    },
+    "gameThreadProfileHz": {
+      "label": "Game-thread stack samples per second",
+      "tip": "Higher resolves short phases sooner; each sample briefly stops the game thread (tens of microseconds). 25 (the default) gives 125 samples over the overlay's 5 s window; each sample costs the game thread about 0.15 ms on a MacBook, so 100 a second takes 1.5 % of its time. Sampling only runs while the overlay is shown or its log is on, and only when the tree, the flame graph, the detailed verdict or the log needs it."
+    },
+    "overlayTexture": {
+      "label": "Draw the overlay as one texture",
+      "tip": "The overlay's text, tree and flame graph only change four times a second, so they are drawn into an offscreen texture then and each frame shows that texture plus the live frame-time bars. Off draws every letter and box as its own sprite every frame (thousands of quads), which costs frame rate on slower PCs."
+    },
+    "overlayRefreshMs": {
+      "label": "Overlay refresh interval (ms)",
+      "tip": "How often the overlay's numbers, game-thread tree and verdict are recomputed and its texture redrawn. Longer is cheaper; the frame-time graph has its own rate."
+    },
+    "overlayCorner": {
+      "label": "Overlay corner",
+      "tip": "Where the overlay sits: top-left, top-right, bottom-left, bottom-right."
+    },
+    "overlayFont": {
+      "label": "Overlay font",
+      "tip": "The UI font the overlay text uses. auto follows the screen height: CodeSmall under 1000 px, CodeMedium under 1800, CodeLarge above. Whatever the font, the panel fits the screen: the frame graph shows fewer frames, the flame graph keeps up to a third of the width (hints and legend are cut to the rest) or moves under the frame graph and long lines are cut when it would not."
+    },
+    "overlayFpsColor": {
+      "label": "Colour the fps number",
+      "tip": "The fps number takes one of four colours by how close it is to the target; off = white like the rest of the line."
+    },
+    "overlayFpsFollowCap": {
+      "label": "Colour thresholds follow the framerate cap",
+      "tip": "On: with a framerate cap the thresholds are percentages of it (the three \\ values). Off, or uncapped: the three fixed fps thresholds apply."
+    },
+    "overlayFpsCapBluePct": {
+      "label": "Threshold, capped: blue, at the cap (% of the cap)",
+      "tip": "At or above this share of the cap counts as at the cap. The limiter rarely lands exactly on it, so 100 is stricter than it looks."
+    },
+    "overlayFpsCapGreenPct": {
+      "label": "Threshold, capped: green, at or above (% of the cap)",
+      "tip": "Green from this share of the cap up to the blue threshold."
+    },
+    "overlayFpsCapYellowPct": {
+      "label": "Threshold, capped: yellow, at or above (% of the cap)",
+      "tip": "Yellow from this share of the cap up to the green threshold; red below it."
+    },
+    "overlayFpsBlueAbove": {
+      "label": "Threshold, uncapped: blue, above (fps)",
+      "tip": "Uncapped, or with follow-cap off: blue above this many fps."
+    },
+    "overlayFpsGreenAbove": {
+      "label": "Threshold, uncapped: green, at or above (fps)",
+      "tip": "Uncapped, or with follow-cap off: green from this many fps up to the blue threshold."
+    },
+    "overlayFpsYellowAbove": {
+      "label": "Threshold, uncapped: yellow, at or above (fps)",
+      "tip": "Uncapped, or with follow-cap off: yellow from this many fps up to the green threshold; red below it."
+    },
+    "overlayFpsColorBlue": {
+      "label": "Tier colour 1: \\",
+      "tip": "Named colour, or a RRGGBB hex value typed into Zomboid/pzopt/options.ini."
+    },
+    "overlayFpsColorGreen": {
+      "label": "Tier colour 2: \\",
+      "tip": "Named colour, or a RRGGBB hex value typed into Zomboid/pzopt/options.ini."
+    },
+    "overlayFpsColorYellow": {
+      "label": "Tier colour 3: \\",
+      "tip": "Named colour, or a RRGGBB hex value typed into Zomboid/pzopt/options.ini."
+    },
+    "overlayFpsColorRed": {
+      "label": "Tier colour 4: \\",
+      "tip": "Named colour, or a RRGGBB hex value typed into Zomboid/pzopt/options.ini."
+    },
+    "consoleLog": {
+      "label": "PZ Optimization lines in the console",
+      "tip": "Which [pzopt] lines go to console.txt and the debug-mode console. Turn it down to read another mod's output without PZ Optimization's startup notes and statistics in between. Applies at once; the game's own lines are not affected. When reporting a problem with PZ Optimization, set it back to all first."
+    }
+  }
+}

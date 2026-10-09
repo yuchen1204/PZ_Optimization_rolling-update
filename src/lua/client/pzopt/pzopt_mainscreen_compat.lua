@@ -232,7 +232,14 @@ end
 
 local PROFILE_KEY = "modProfile"
 local PROFILE_FOLLOWERS = { "modCompat", "uiRetainedMods" } -- their defaults follow modProfile (Config)
-local PROFILE_NAMES = { performance = "Max performance", compatibility = "Max compatibility" }
+local function getProfileName(v)
+    if v == "performance" then
+        return (PzoptI18n and PzoptI18n.t("dialogs.compat.profile_perf", "Max performance")) or "Max performance"
+    elseif v == "compatibility" then
+        return (PzoptI18n and PzoptI18n.t("dialogs.compat.profile_compat", "Max compatibility")) or "Max compatibility"
+    end
+    return tostring(v)
+end
 
 -- the value since this launch, the one the next launch reads, and what pins it ("" = the player decides)
 local function profileState()
@@ -272,9 +279,11 @@ function PzoptCompatDialog:syncProfile()
     if pinned ~= "" then
         self.profileStatus = "Pinned by " .. pinned .. " on this install"
     elseif pending then
-        self.profileStatus = "Running now: " .. (PROFILE_NAMES[now] or now) .. ". Applies after a restart."
+        local runningProfile = getProfileName(now)
+        local statusFmt = (PzoptI18n and PzoptI18n.t("dialogs.compat.profile_status_running", "Running now: {profile}. Applies after a restart.")) or "Running now: {profile}. Applies after a restart."
+        self.profileStatus = statusFmt:gsub("{profile}", runningProfile)
     else
-        self.profileStatus = "In use since this launch."
+        self.profileStatus = (PzoptI18n and PzoptI18n.t("dialogs.compat.profile_status_in_use", "In use since this launch.")) or "In use since this launch."
     end
     self.restart:setVisible(pending and pinned == "")
     self:syncJoypadButtons()
@@ -294,22 +303,24 @@ function PzoptCompatDialog:createChildren()
     local rowY = PAD + FONT_HGT_MEDIUM + PAD
     self.profileButtons = {}
     local x = PAD
+    local defaultSuffix = (PzoptI18n and PzoptI18n.t("ui.presets.default_suffix", " (default)")) or " (default)"
     for _, value in ipairs({ "performance", "compatibility" }) do
-        local title = PROFILE_NAMES[value] .. (value == perf():getPzoptOptionDefault(PROFILE_KEY) and " (default)" or "")
+        local title = getProfileName(value) .. (value == perf():getPzoptOptionDefault(PROFILE_KEY) and defaultSuffix or "")
         local w = math.max(150, getTextManager():MeasureStringX(UIFont.Small, title) + 24)
         local btn = ISButton:new(x, rowY, w, BTN_HGT, title, self, function(dlg) dlg:choose(value) end)
         btn:initialise()
         btn:instantiate()
-        btn.tooltip = value == "performance"
-            and "Java mods are checked and listed here but switch nothing off; windows a mod draws in are reused like the game's own (a mod's display can lag by up to a second)."
-            or "The settings a Java mod patches are switched off so the mod meets the game code its author tested; windows a mod draws in are redrawn at the game's own rate."
+        local perfTip = (PzoptI18n and PzoptI18n.t("dialogs.compat.profile_perf_tip", "Java mods are checked and listed here but switch nothing off; windows a mod draws in are reused like the game's own (a mod's display can lag by up to a second).")) or "Java mods are checked and listed here but switch nothing off; windows a mod draws in are reused like the game's own (a mod's display can lag by up to a second)."
+        local compatTip = (PzoptI18n and PzoptI18n.t("dialogs.compat.profile_compat_tip", "The settings a Java mod patches are switched off so the mod meets the game code its author tested; windows a mod draws in are redrawn at the game's own rate.")) or "The settings a Java mod patches are switched off so the mod meets the game code its author tested; windows a mod draws in are redrawn at the game's own rate."
+        btn.tooltip = value == "performance" and perfTip or compatTip
         self:addChild(btn)
         self.profileButtons[value] = btn
         x = x + w + PAD
     end
     self.profileStatusX = x
-    local rw = math.max(130, getTextManager():MeasureStringX(UIFont.Small, "Restart game") + 24)
-    self.restart = ISButton:new(self.width - PAD - rw, rowY, rw, BTN_HGT, "Restart game", self, PzoptCompatDialog.onRestart)
+    local restartTitle = (PzoptI18n and PzoptI18n.t("ui.buttons.restart", "Restart game")) or "Restart game"
+    local rw = math.max(130, getTextManager():MeasureStringX(UIFont.Small, restartTitle) + 24)
+    self.restart = ISButton:new(self.width - PAD - rw, rowY, rw, BTN_HGT, restartTitle, self, PzoptCompatDialog.onRestart)
     self.restart:initialise()
     self.restart:instantiate()
     self.restart:enableAcceptColor()
@@ -342,8 +353,9 @@ function PzoptCompatDialog:createChildren()
         self:setY((getCore():getScreenHeight() - self.height) / 2)
     end
 
-    local w = math.max(110, getTextManager():MeasureStringX(UIFont.Small, "Close") + 24)
-    self.close_ = ISButton:new((self.width - w) / 2, self.height - PAD - BTN_HGT, w, BTN_HGT, "Close", self, PzoptCompatDialog.close)
+    local closeTitle = (PzoptI18n and PzoptI18n.t("ui.buttons.close", "Close")) or "Close"
+    local w = math.max(110, getTextManager():MeasureStringX(UIFont.Small, closeTitle) + 24)
+    self.close_ = ISButton:new((self.width - w) / 2, self.height - PAD - BTN_HGT, w, BTN_HGT, closeTitle, self, PzoptCompatDialog.close)
     self.close_:initialise()
     self.close_:instantiate()
     self:addChild(self.close_)
@@ -352,7 +364,7 @@ end
 
 function PzoptCompatDialog:prerender()
     ISPanelJoypad.prerender(self)
-    self:drawText("PZ Optimization mod compatibility check", PAD, PAD, 1, 1, 1, 1, UIFont.Medium)
+    self:drawText((PzoptI18n and PzoptI18n.t("dialogs.compat.title", "PZ Optimization mod compatibility check")) or "PZ Optimization mod compatibility check", PAD, PAD, 1, 1, 1, 1, UIFont.Medium)
     if self.profileStatus then
         local a = self.restart:isVisible() and 1 or 0.65
         self:drawText(self.profileStatus, self.profileStatusX, PAD + FONT_HGT_MEDIUM + PAD + (BTN_HGT - FONT_HGT_SMALL) / 2,

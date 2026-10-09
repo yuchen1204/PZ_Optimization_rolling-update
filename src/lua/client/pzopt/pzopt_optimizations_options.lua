@@ -25,23 +25,26 @@
 -- Installed by scripts/pzopt.sh into <game dir>/media/lua/client/pzopt/ (loose game-dir Lua is
 -- loaded like any other, no mod to enable).
 
-local TAB = "PZ Optimization"
-local ENHANCEMENTS_TAB = "Enhancements"
-local PROFILER_TAB = "Profiler"
-local RESTART_NOTE = "Takes effect on the next launch."
-local LIVE_NOTE = "Applies as soon as you press Apply; no restart needed."
+local TAB = (PzoptI18n and PzoptI18n.t("ui.tabs.pzopt", "PZ Optimization")) or "PZ Optimization"
+local ENHANCEMENTS_TAB = (PzoptI18n and PzoptI18n.t("ui.tabs.enhancements", "Enhancements")) or "Enhancements"
+local PROFILER_TAB = (PzoptI18n and PzoptI18n.t("ui.tabs.profiler", "Profiler")) or "Profiler"
+local RESTART_NOTE = (PzoptI18n and PzoptI18n.t("ui.notes.restart", "Takes effect on the next launch.")) or "Takes effect on the next launch."
+local LIVE_NOTE = (PzoptI18n and PzoptI18n.t("ui.notes.live", "Applies as soon as you press Apply; no restart needed.")) or "Applies as soon as you press Apply; no restart needed."
 
 -- The master switch, drawn before the sections with the two buttons.
-local MASTER = { key = "enabled", label = "Optimizations enabled (master switch)",
-  tip = "Off = the game runs stock: every override takes its original code path and the settings below are ignored. On = the settings below apply. The Tools are not affected: the performance overlay works either way." }
+local MASTER = { key = "enabled",
+  label = (PzoptI18n and PzoptI18n.t("ui.masters.enabled_label", "Optimizations enabled (master switch)")) or "Optimizations enabled (master switch)",
+  tip = (PzoptI18n and PzoptI18n.t("ui.masters.enabled_tip", "Off = the game runs stock: every override takes its original code path and the settings below are ignored. On = the settings below apply. The Tools are not affected: the performance overlay works either way.")) or "Off = the game runs stock: every override takes its original code path and the settings below are ignored. On = the settings below apply. The Tools are not affected: the performance overlay works either way." }
 -- The Enhancements and Profiler tabs' master switches (2026-09-28): off, Java reads every feature of the tab as off
 -- (Config's GATED list) while the choices below stay saved for when it is on again. Both apply at once; the features
 -- that pick their shaders or window at start-up (NEXT_LAUNCH_ONLY) follow on the next launch.
-local ENHANCEMENTS_MASTER = { key = "enhancementsEnabled", label = "Enhancements enabled (master switch)", live = true,
+local ENHANCEMENTS_MASTER = { key = "enhancementsEnabled",
+  label = (PzoptI18n and PzoptI18n.t("ui.masters.enhancements_label", "Enhancements enabled (master switch)")) or "Enhancements enabled (master switch)", live = true,
   restartKeys = { "hdr", "hdrAuto", "pixelLight", "reflections", "carGlass", "mirrors" },
-  tip = "Off = the picture is the stock game's: upscaling, sprite filtering, HDR output, ambient occlusion, sun shadows, reflections, car glass, the darkness floor, remembered places, colour grading, per-pixel lighting, god rays and foliage sway are all off, whatever the settings below say (they are kept for when you switch it on again). On = the settings below apply. HDR output, per-pixel lighting, reflections and car glass switch on the next launch." }
-local PROFILER_MASTER = { key = "profilerEnabled", label = "Profiler enabled (master switch)", live = true,
-  tip = "Off = no performance overlay, no measuring and no frame log: the overlay's samplers never start and the toggle key only says the profiler is off, whatever the settings below say (they are kept for when you switch it on again). On = the settings below apply." }
+  tip = (PzoptI18n and PzoptI18n.t("ui.masters.enhancements_tip", "Off = the picture is the stock game's: upscaling, sprite filtering, HDR output, ambient occlusion, sun shadows, reflections, car glass, the darkness floor, remembered places, colour grading, per-pixel lighting, god rays and foliage sway are all off, whatever the settings below say (they are kept for when you switch it on again). On = the settings below apply. HDR output, per-pixel lighting, reflections and car glass switch on the next launch.")) or "Off = the picture is the stock game's: upscaling, sprite filtering, HDR output, ambient occlusion, sun shadows, reflections, car glass, the darkness floor, remembered places, colour grading, per-pixel lighting, god rays and foliage sway are all off, whatever the settings below say (they are kept for when you switch it on again). On = the settings below apply. HDR output, per-pixel lighting, reflections and car glass switch on the next launch." }
+local PROFILER_MASTER = { key = "profilerEnabled",
+  label = (PzoptI18n and PzoptI18n.t("ui.masters.profiler_label", "Profiler enabled (master switch)")) or "Profiler enabled (master switch)", live = true,
+  tip = (PzoptI18n and PzoptI18n.t("ui.masters.profiler_tip", "Off = no performance overlay, no measuring and no frame log: the overlay's samplers never start and the toggle key only says the profiler is off, whatever the settings below say (they are kept for when you switch it on again). On = the settings below apply.")) or "Off = no performance overlay, no measuring and no frame log: the overlay's samplers never start and the toggle key only says the profiler is off, whatever the settings below say (they are kept for when you switch it on again). On = the settings below apply." }
 
 -- Colour names pzopt.Overlay.color knows (a RRGGBB hex typed into options.ini also works).
 local FPS_COLOURS = { "blue", "green", "yellow", "red", "white", "cyan", "lime", "orange", "magenta", "purple" }
@@ -1334,7 +1337,8 @@ function PzoptOptionLabel(key)
         for _, section in ipairs(list) do
             for _, entry in ipairs(section.entries or {}) do
                 if entry.key == key and type(entry.label) == "string" then
-                    return entry.label, section.title
+                    local label = (PzoptI18n and PzoptI18n.getOption(key, "label", entry.label)) or entry.label
+                    return label, section.title
                 end
             end
         end
@@ -2072,6 +2076,19 @@ end
 -- The effect bars: a track per axis with the zero line in the middle; the bar grows left for less work / sooner
 -- (green) and right for more (amber, or blue where more means idle cores put to work), a word says the same.
 function PzoptPreview:drawBars(x, y, w, fx)
+    local isZh = PzoptI18n and PzoptI18n.isZh()
+    local AXES_ZH = {
+        cpu = "CPU: \230\184\184\230\136\143\228\184\187\231\186\191\231\168\139",
+        render = "CPU: \230\184\178\230\159\147\231\186\191\231\168\139",
+        cores = "CPU: \229\133\182\228\187\150\230\160\184\229\191\131",
+        gpu = "\230\152\190\229\141\161 (GPU)",
+        vram = "\230\152\190\229\173\152 (VRAM)",
+        ram = "\229\134\133\229\173\152 (RAM)",
+        disk = "\231\163\129\231\155\152 / \231\188\147\229\173\152",
+        load = "\229\144\175\229\138\168\228\184\142\232\175\187\230\157\161\232\128\151\230\151\182",
+        chunks = "\229\140\186\229\157\151\230\181\129\229\188\143\229\138\160\232\189\189"
+    }
+    local LEVELS_ZH = { [-3] = "\230\156\128\228\189\142", [-2] = "\232\190\131\228\189\142", [-1] = "\232\190\131\228\189\142", [0] = "\229\159\186\229\135\134(\229\142\159\231\137\136)", [1] = "\232\190\131\233\171\152", [2] = "\232\182\133\233\171\152", [3] = "\230\156\128\233\171\152" }
     local labW = math.min(170, math.floor(w * 0.3))
     local wordW = 110
     local barX = x + labW + 10
@@ -2083,15 +2100,16 @@ function PzoptPreview:drawBars(x, y, w, fx)
     for _, axis in ipairs(AXES) do
         local v = fx[axis.id] or 0
         if v > 3 then v = 3 elseif v < -3 then v = -3 end
-        self:drawTextRight(axis.label, x + labW, y + textY, C_GREY.r, C_GREY.g, C_GREY.b, 1, self.fontS)
+        local axisLab = isZh and (AXES_ZH[axis.id] or axis.label) or axis.label
+        self:drawTextRight(axisLab, x + labW, y + textY, C_GREY.r, C_GREY.g, C_GREY.b, 1, self.fontS)
         self:drawRect(barX, y + 3, barW, rowH - 6, 1, 0.11, 0.11, 0.13)
-        local word, wcol = LEVELS[0], C_DIM
+        local word, wcol = (isZh and LEVELS_ZH[0] or LEVELS[0]), C_DIM
         if v ~= 0 then
             local len = math.floor(half * math.abs(v) / 3)
             local col = v < 0 and C_OPT or (axis.moreIsWork and C_BLUE or C_STOCK)
             local bx = v < 0 and (mid - len) or (mid + 1)
             self:drawRect(bx, y + 3, len, rowH - 6, 1, col.r, col.g, col.b)
-            word = LEVELS[v]
+            word = isZh and LEVELS_ZH[v] or LEVELS[v]
             wcol = col
         end
         -- faint ticks through the track at every level, the zero line stronger
@@ -2108,7 +2126,7 @@ function PzoptPreview:drawBars(x, y, w, fx)
     for _, t in ipairs(AXIS_TICKS) do
         local tx = mid + math.floor(half * t / 3)
         self:drawRect(tx, y, 1, 5, 1, 0.55, 0.55, 0.60)
-        local label = LEVELS[t]
+        local label = isZh and (LEVELS_ZH[t] or "") or LEVELS[t]
         local lw = getTextManager():MeasureStringX(self.fontS, label)
         local lx = tx - math.floor(lw / 2)
         if lx < barX then lx = barX elseif lx + lw > barX + barW then lx = barX + barW - lw end
@@ -2116,7 +2134,8 @@ function PzoptPreview:drawBars(x, y, w, fx)
         self:text(label, lx, y + 6, col, self.fontS)
     end
     y = y + 6 + self.hS + 2
-    self:drawTextCentre(AXIS_TITLE, mid, y, C_DIM.r, C_DIM.g, C_DIM.b, 1, self.fontS)
+    local axisTitle = isZh and "\230\173\164\232\174\190\231\189\174\229\175\185\229\144\132\233\131\168\228\187\182\231\154\132\232\180\159\232\189\189\229\189\177\229\147\141 (\229\142\159\231\137\136 = \229\159\186\229\135\134)" or AXIS_TITLE
+    self:drawTextCentre(axisTitle, mid, y, C_DIM.r, C_DIM.g, C_DIM.b, 1, self.fontS)
     return y + self.hS
 end
 
@@ -2129,26 +2148,43 @@ function PzoptPreview:prerender()
     local pad = self.pad
     local x, y, w = self.colX, pad, self.colW
     if not row then
-        self:text("Point at a setting to see what it does.", x, y, C_GREY, self.fontM)
+        self:text(PzoptI18n and PzoptI18n.isZh() and "\229\176\134\233\188\160\230\160\135\230\130\172\229\129\156\229\156\168\232\174\190\231\189\174\233\161\185\228\184\138\228\187\165\230\159\165\231\156\139\229\133\182\232\175\180\230\152\142\227\128\130" or "Point at a setting to see what it does.", x, y, C_GREY, self.fontM)
         return
     end
     local entry = row.entry
     local p = perf()
+    local isZh = PzoptI18n and PzoptI18n.isZh()
     -- title and values: one line each, cut with "..." rather than wrapped
     self:text(getTextManager():WrapText(self.fontM, entry.label, w, 1, "..."), x, y, C_TEXT, self.fontM)
     y = y + self.hM + 2
     local pinnedBy = p:getPzoptOptionPinnedBy(entry.key)
-    local values = entry.live
-        and ("Key " .. entry.key .. "   now: " .. p:getPzoptOption(entry.key) .. "   after Apply: " .. row.option:pzoptCurrent())
-        or ("Key " .. entry.key .. "   since this boot: " .. p:getPzoptOption(entry.key) .. "   next launch: " .. row.option:pzoptCurrent())
-    if pinnedBy ~= "" then values = values .. "   (pinned by " .. pinnedBy .. ")" end
-    local reason = compatReason(entry.key)
-    if reason ~= "" then values = values .. "   (off for mod compatibility: " .. reason .. ")" end
+    local values
+    if isZh then
+        values = entry.live
+            and ("\233\148\174\229\144\141 " .. entry.key .. "   \229\189\147\229\137\141: " .. p:getPzoptOption(entry.key) .. "   \229\186\148\231\148\168\229\144\142: " .. row.option:pzoptCurrent())
+            or ("\233\148\174\229\144\141 " .. entry.key .. "   \230\156\172\230\172\161\229\144\175\229\138\168: " .. p:getPzoptOption(entry.key) .. "   \228\184\139\230\172\161\231\148\159\230\149\136: " .. row.option:pzoptCurrent())
+        if pinnedBy ~= "" then values = values .. "   (\229\183\178\231\148\177 " .. pinnedBy .. " \229\155\186\229\174\154)" end
+        local reason = compatReason(entry.key)
+        if reason ~= "" then values = values .. "   (\229\155\160\230\168\161\231\187\132\229\133\188\229\174\185\230\128\167\229\133\179\233\151\173: " .. reason .. ")" end
+    else
+        values = entry.live
+            and ("Key " .. entry.key .. "   now: " .. p:getPzoptOption(entry.key) .. "   after Apply: " .. row.option:pzoptCurrent())
+            or ("Key " .. entry.key .. "   since this boot: " .. p:getPzoptOption(entry.key) .. "   next launch: " .. row.option:pzoptCurrent())
+        if pinnedBy ~= "" then values = values .. "   (pinned by " .. pinnedBy .. ")" end
+        local reason = compatReason(entry.key)
+        if reason ~= "" then values = values .. "   (off for mod compatibility: " .. reason .. ")" end
+    end
     self:text(getTextManager():WrapText(self.fontS, values, w, 1, "..."), x, y, C_GREY)
     y = y + self.hS + 2
     local classes = optionClasses(entry.key)
-    local java = #classes > 0 and ("Java: " .. table.concat(classes, ", ")) or "Java: read by pzopt.Config only"
-    java = (optionDate(entry.key) and ("Released " .. optionDate(entry.key)) or "New in this version") .. "   " .. java
+    local java
+    if isZh then
+        java = #classes > 0 and ("Java: " .. table.concat(classes, ", ")) or "Java: \228\187\133\231\148\177 pzopt.Config \232\175\187\229\143\150"
+        java = (optionDate(entry.key) and ("\229\143\145\229\184\131\228\186\142 " .. optionDate(entry.key)) or "\230\156\172\231\137\136\230\156\172\230\150\176\229\162\158") .. "   " .. java
+    else
+        java = #classes > 0 and ("Java: " .. table.concat(classes, ", ")) or "Java: read by pzopt.Config only"
+        java = (optionDate(entry.key) and ("Released " .. optionDate(entry.key)) or "New in this version") .. "   " .. java
+    end
     self:text(getTextManager():WrapText(self.fontS, java, w, 1, "..."), x, y, C_DIM)
     y = y + self.hS + 8
     -- the two clips, centred in the column (with the header's "Before / after clips" ticked)
@@ -2168,11 +2204,17 @@ function PzoptPreview:prerender()
     self:drawWrapped(entry.tip, x, y, w, C_TEXT)
     y = y + self.descLines * self.hS + 8
     -- the bars
-    self:text("Effect on your hardware", x, y, C_TEXT, self.fontM)
+    self:text(isZh and "\229\175\185\231\161\172\228\187\182\232\180\159\232\189\189\231\154\132\229\189\177\229\147\141" or "Effect on your hardware", x, y, C_TEXT, self.fontM)
     y = y + self.hM + 4
     y = self:drawBars(x, y, w, EFFECTS[entry.key] or {})
-    self:drawWrapped("Against the stock game, from the measurements in docs/archive/2026-09-24/results.md: green = less load (or a shorter "
-        .. "load, chunks sooner), amber = more, blue = idle cores put to work. " .. noteFor(entry), x, y + 4, w, C_DIM)
+    local effectNote
+    if isZh then
+        effectNote = "\229\175\185\230\175\148\229\142\159\231\137\136\230\184\184\230\136\143\229\159\186\229\135\134\230\181\139\232\175\149\239\188\154\231\187\191\232\137\178 = \232\180\159\232\189\189\230\155\180\228\189\142\239\188\136\230\136\150\229\138\160\232\189\189\230\155\180\229\191\171\239\188\137\239\188\155\231\144\165\231\143\128\232\137\178 = \232\180\159\232\189\189\229\162\158\229\138\160\239\188\155\232\147\157\232\137\178 = \232\176\131\229\186\166\233\151\178\231\189\174\230\160\184\229\191\131\227\128\130 " .. noteFor(entry)
+    else
+        effectNote = "Against the stock game, from the measurements in docs/archive/2026-09-24/results.md: green = less load (or a shorter "
+            .. "load, chunks sooner), amber = more, blue = idle cores put to work. " .. noteFor(entry)
+    end
+    self:drawWrapped(effectNote, x, y + 4, w, C_DIM)
 end
 
 -- ---------------------------------------------------------------------------------------------------
@@ -2368,7 +2410,10 @@ local function search(index, query)
 end
 
 local function comboLabels(entry, default, saved)
-    local labels = { "Default (" .. default .. ((entry.note and entry.note[default]) and (", " .. entry.note[default]) or "") .. ")" }
+    local isZh = PzoptI18n and PzoptI18n.isZh()
+    local notePart = ((entry.note and entry.note[default]) and (", " .. entry.note[default]) or "")
+    local defStr = isZh and ("\233\187\152\232\174\164 (" .. default .. notePart .. ")") or ("Default (" .. default .. notePart .. ")")
+    local labels = { defStr }
     local values = {}
     local seen = {}
     for _, v in ipairs(entry.choices) do
@@ -2688,7 +2733,9 @@ local function addBezierOption(self, entry, splitpoint, y, comboWidth, BUTTON_HG
     local pinnedBy = p:getPzoptOptionPinnedBy(entry.key)
     local default = p:getPzoptOptionDefault(entry.key)
     local labels, values = comboLabels(entry, default, "")
-    table.insert(labels, "custom (the sliders below)")
+    local isZh = PzoptI18n and PzoptI18n.isZh()
+    local customLabel = isZh and "\232\135\170\229\174\154\228\185\137 (\233\128\154\232\191\135\228\184\139\230\150\185\230\187\145\229\157\151)" or "custom (the sliders below)"
+    table.insert(labels, customLabel)
     local customIndex = #labels
     local combo = self:addCombo(splitpoint, y, comboWidth, 20, entry.label, labels, 1)
     combo:setToolTipMap({ defaultTooltip = tooltipFor(entry, pinnedBy) })
@@ -2700,9 +2747,11 @@ local function addBezierOption(self, entry, splitpoint, y, comboWidth, BUTTON_HG
     local valueW = getTextManager():MeasureStringX(UIFont.Small, "0.00") + 8
     local labelW = 0
     local sliders = {}
+    local BEZIER_AXES_ZH = { "\230\142\167\229\136\182\231\130\1851 \230\151\182\233\151\180 (x1)", "\230\142\167\229\136\182\231\130\1851 \231\188\169\230\148\190 (y1)", "\230\142\167\229\136\182\231\130\1852 \230\151\182\233\151\180 (x2)", "\230\142\167\229\136\182\231\130\1852 \231\188\169\230\148\190 (y2)" }
     for i, name in ipairs(BEZIER_AXES) do
+        local axisName = isZh and BEZIER_AXES_ZH[i] or name
         local rowY = y + self.addY
-        local label = ISLabel:new(splitpoint, rowY, BUTTON_HGT, name, C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small)
+        local label = ISLabel:new(splitpoint, rowY, BUTTON_HGT, axisName, C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small)
         label:initialise()
         self.mainPanel:addChild(label)
         labelW = math.max(labelW, getTextManager():MeasureStringX(UIFont.Small, name))
@@ -2871,6 +2920,7 @@ local function withValues(base, extra)
 end
 local PROFILES = {
     {
+        id = "low_end",
         button = "Low-end hardware (4 cores or less)",
         tip = "A locked 60 fps on a 4-core CPU with an old GPU (Core i5-6300HQ / GTX 960M, 1920x1080, 2026-10-07): turns the "
            .. "master switch on, a render distance of 9 chunks (what the game itself picks for a small window: the native "
@@ -2983,17 +3033,26 @@ end
 -- "Uninstall PZ Optimization": pzopt.Uninstall puts the launcher settings back now and starts a helper that deletes the
 -- installed files once the game has quit (the classes cannot go while it runs), then the game quits the stock way.
 -- Main menu only: in a world the quit would skip the save.
-local UNINSTALL_TITLE = "Uninstall PZ Optimization..."
-local UNINSTALL_TIP = "Closes the game, then removes every file the installer or the updater put into the game folder and puts "
+local UNINSTALL_TITLE = (PzoptI18n and PzoptI18n.t("ui.buttons.uninstall", "Uninstall PZ Optimization...")) or "Uninstall PZ Optimization..."
+local UNINSTALL_TIP = (PzoptI18n and PzoptI18n.isZh())
+    and "\229\133\179\233\151\173\230\184\184\230\136\143\239\188\140\231\167\187\233\153\164\229\174\137\232\163\133\229\153\168\230\136\150\230\155\180\230\150\176\229\153\168\231\189\174\229\133\165\230\184\184\230\136\143\231\155\174\229\189\149\231\154\132\230\137\128\230\156\137\228\188\152\229\140\150\230\150\135\228\187\182\239\188\140\229\185\182\232\191\152\229\142\159\228\191\174\230\148\185\231\154\132\229\144\175\229\138\168\233\161\185\232\174\190\231\189\174\227\128\130\228\184\139\228\184\128\230\172\161\229\144\175\229\138\168\229\176\134\229\174\140\229\133\168\230\129\162\229\164\141\229\142\159\231\137\136\230\184\184\230\136\143\227\128\130projectzomboid.jar \229\142\159\230\150\135\228\187\182\228\187\142\230\156\170\232\162\171\230\148\185\229\138\168\227\128\130\228\189\160\231\154\132\232\174\190\231\189\174\230\150\135\228\187\182\239\188\136Zomboid/pzopt/\239\188\137\229\176\134\232\162\171\228\191\157\231\149\153\228\187\165\228\190\191\233\135\141\230\150\176\229\174\137\232\163\133\227\128\130\229\156\168\233\128\128\232\174\162\229\136\155\230\132\143\229\183\165\229\157\138\229\137\141\232\175\183\229\133\136\230\137\167\232\161\140\230\173\164\230\147\141\228\189\156\227\128\130"
+    or ("Closes the game, then removes every file the installer or the updater put into the game folder and puts "
     .. "back the launcher settings it changed: the next launch is the stock game. projectzomboid.jar was never modified. "
-    .. "Your settings under Zomboid/pzopt/ stay for a reinstall. Do this before you unsubscribe from the Workshop item."
+    .. "Your settings under Zomboid/pzopt/ stay for a reinstall. Do this before you unsubscribe from the Workshop item.")
 -- ISModalDialog draws plain text: lines broken by hand ("\n"), no rich-text tags
-local UNINSTALL_CONFIRM = "Uninstall PZ Optimization?\n\n"
+local UNINSTALL_CONFIRM = (PzoptI18n and PzoptI18n.isZh())
+    and ("\229\141\184\232\189\189 PZ Optimization \228\188\152\229\140\150\232\161\165\228\184\129\239\188\159\n\n"
+    .. "\230\184\184\230\136\143\229\176\134\231\171\139\229\141\179\229\133\179\233\151\173\227\128\130\229\133\179\233\151\173\229\144\142\239\188\140\229\174\137\232\163\133\229\153\168\230\136\150\230\155\180\230\150\176\229\153\168\n"
+    .. "\230\148\190\229\133\165\230\184\184\230\136\143\231\155\174\229\189\149\231\154\132\230\137\128\230\156\137\230\150\135\228\187\182\229\176\134\232\162\171\231\167\187\233\153\164\239\188\140\228\184\148\228\191\174\230\148\185\231\154\132\229\144\175\229\138\168\229\143\130\230\149\176\n"
+    .. "\229\176\134\232\191\152\229\142\159\239\188\154\228\184\139\230\172\161\229\144\175\229\138\168\229\176\134\229\174\140\229\133\168\230\129\162\229\164\141\229\142\159\231\137\136\230\184\184\230\136\143\227\128\130\n"
+    .. "\228\189\160\229\156\168 Zomboid/pzopt/ \228\184\139\231\154\132\232\174\190\231\189\174\229\176\134\232\162\171\228\191\157\231\149\153\227\128\130\n\n"
+    .. "\229\174\140\230\136\144\229\144\142\228\189\160\229\143\175\228\187\165\229\156\168\229\136\155\230\132\143\229\183\165\229\157\138\233\128\128\232\174\162\232\175\165\230\168\161\231\187\132\227\128\130")
+    or ("Uninstall PZ Optimization?\n\n"
     .. "The game closes now. Once it has, every file the installer\n"
     .. "or the updater put into the game folder is removed and the\n"
     .. "launcher settings it changed are put back: the next launch\n"
     .. "is the stock game. Your settings in Zomboid/pzopt/ stay.\n\n"
-    .. "Afterwards you can unsubscribe from the Workshop item."
+    .. "Afterwards you can unsubscribe from the Workshop item.")
 
 local function showUninstallResult(text)
     local modal = ISModalDialog:new(getCore():getScreenWidth() / 2 - 200, getCore():getScreenHeight() / 2 - 60, 400, 120,
@@ -3116,15 +3175,15 @@ Events.OnFETick.Add(function() pcall(uninstallDriveTick) end)
 -- Zomboid/pzopt/settings-export.ini. Import sets the controls of all three tabs from pasted text (the box starts with the
 -- clipboard, else that file): the listed settings to their value, every other one back to the default, pinned ones
 -- untouched; Apply / Accept saves them like the profile buttons. options.ini itself pastes as well.
-local EXPORT_TITLE = "Export settings"
-local IMPORT_TITLE = "Import settings..."
-local EXPORT_TIP = "Copies the settings of the Optimizations, Enhancements and Profiler tabs to the clipboard as text "
+local EXPORT_TITLE = (PzoptI18n and PzoptI18n.t("ui.buttons.export", "Export settings")) or "Export settings"
+local IMPORT_TITLE = (PzoptI18n and PzoptI18n.t("ui.buttons.import", "Import settings...")) or "Import settings..."
+local EXPORT_TIP = (PzoptI18n and PzoptI18n.t("ui.buttons.export_tip", "Copies the settings of the Optimizations, Enhancements and Profiler tabs to the clipboard as text (the ones that differ from the build's defaults, as the controls show them now, changes not applied yet included) and saves the same text to Zomboid/pzopt/settings-export.ini. Import settings... reads it back, here or on another PC.")) or ("Copies the settings of the Optimizations, Enhancements and Profiler tabs to the clipboard as text "
     .. "(the ones that differ from the build's defaults, as the controls show them now, changes not applied yet included) "
-    .. "and saves the same text to Zomboid/pzopt/settings-export.ini. Import settings... reads it back, here or on another PC."
-local IMPORT_TIP = "Sets the controls of the Optimizations, Enhancements and Profiler tabs from exported text: paste it into "
+    .. "and saves the same text to Zomboid/pzopt/settings-export.ini. Import settings... reads it back, here or on another PC.")
+local IMPORT_TIP = (PzoptI18n and PzoptI18n.t("ui.buttons.import_tip", "Sets the controls of the Optimizations, Enhancements and Profiler tabs from exported text: paste it into the box (it starts with the clipboard, or with Zomboid/pzopt/settings-export.ini when the clipboard holds no settings). Settings the text does not list go back to the build's defaults. Nothing is saved until you press Apply or Accept.")) or ("Sets the controls of the Optimizations, Enhancements and Profiler tabs from exported text: paste it into "
     .. "the box (it starts with the clipboard, or with Zomboid/pzopt/settings-export.ini when the clipboard holds no "
     .. "settings). Settings the text does not list go back to the build's defaults. Nothing is saved until you press Apply "
-    .. "or Accept."
+    .. "or Accept.")
 
 -- The open dialog is kept in self.pzoptTransferModal (the harness's options_io rig closes it).
 local function showMessage(self, text)
@@ -3215,10 +3274,19 @@ local function exportSettings(self)
     local text = p:getPzoptSettingsExportText(table.concat(lines, "\n") .. "\n")
     Clipboard.setClipboard(text)
     local path = p:pzoptSettingsExportWrite(text)
-    local what = count == 0 and "Every setting is at the build's default: the text says so."
-        or (count .. (count == 1 and " setting differs" or " settings differ") .. " from the build's defaults.")
-    showMessage(self, "Settings copied to the clipboard. " .. what .. "\n\n"
-        .. (path ~= "" and ("Also saved to " .. path .. ".") or "The file Zomboid/pzopt/settings-export.ini could not be written (see console.txt)."))
+    local isZh = PzoptI18n and PzoptI18n.isZh()
+    local what
+    if isZh then
+        what = count == 0 and "\230\137\128\230\156\137\232\174\190\231\189\174\229\157\135\229\164\132\228\186\142\230\158\132\229\187\186\233\187\152\232\174\164\229\128\188\227\128\130"
+            or ("\229\133\177\230\156\137 " .. count .. " \233\161\185\232\174\190\231\189\174\228\184\142\230\158\132\229\187\186\233\187\152\232\174\164\229\128\188\228\184\141\229\144\140\227\128\130")
+        showMessage(self, "\232\174\190\231\189\174\229\183\178\229\164\141\229\136\182\229\136\176\229\137\170\232\180\180\230\157\191\227\128\130" .. what .. "\n\n"
+            .. (path ~= "" and ("\229\144\140\230\151\182\229\183\178\228\191\157\229\173\152\232\135\179 " .. path .. "\227\128\130") or "\230\151\160\230\179\149\229\134\153\229\133\165\230\150\135\228\187\182 Zomboid/pzopt/settings-export.ini\239\188\136\232\175\166\230\131\133\232\167\129 console.txt\239\188\137\227\128\130"))
+    else
+        what = count == 0 and "Every setting is at the build's default: the text says so."
+            or (count .. (count == 1 and " setting differs" or " settings differ") .. " from the build's defaults.")
+        showMessage(self, "Settings copied to the clipboard. " .. what .. "\n\n"
+            .. (path ~= "" and ("Also saved to " .. path .. ".") or "The file Zomboid/pzopt/settings-export.ini could not be written (see console.txt)."))
+    end
 end
 
 -- Up to `max` names, then "and N more".
@@ -3261,16 +3329,32 @@ local function importSettings(self, text)
     for _, k in ipairs(keys) do
         if not onTabs[k] then table.insert(ignored, k) end
     end
-    local msg = set .. (set == 1 and " setting" or " settings") .. " imported"
-        .. (reset > 0 and (", " .. reset .. " more back to the build's default") or "") .. ". Press Apply or Accept to save them."
-    if #pinned > 0 then
-        msg = msg .. "\n\nPinned by pzopt.properties or -D here, left as they are: " .. listSome(pinned, 6) .. "."
-    end
-    if #invalid > 0 then
-        msg = msg .. "\n\nNot a true / false value, set to the default: " .. listSome(invalid, 6) .. "."
-    end
-    if #ignored > 0 then
-        msg = msg .. "\n\nNot settings of this version, ignored: " .. listSome(ignored, 6) .. "."
+    local isZh = PzoptI18n and PzoptI18n.isZh()
+    local msg
+    if isZh then
+        msg = "\229\183\178\229\175\188\229\133\165 " .. set .. " \233\161\185\232\174\190\231\189\174"
+            .. (reset > 0 and ("\239\188\140\229\185\182\229\176\134 " .. reset .. " \233\161\185\233\135\141\231\189\174\228\184\186\230\158\132\229\187\186\233\187\152\232\174\164\229\128\188") or "") .. "\227\128\130\232\175\183\231\130\185\229\135\187\226\128\156\229\186\148\231\148\168\226\128\157\230\136\150\226\128\156\231\161\174\229\174\154\226\128\157\228\187\165\228\191\157\229\173\152\227\128\130"
+        if #pinned > 0 then
+            msg = msg .. "\n\n\229\143\151 pzopt.properties \230\136\150 -D \229\155\186\229\174\154\239\188\140\228\191\157\230\140\129\229\142\159\230\160\183\239\188\154" .. listSome(pinned, 6) .. "\227\128\130"
+        end
+        if #invalid > 0 then
+            msg = msg .. "\n\n\233\157\158 true / false \229\128\188\239\188\140\229\183\178\233\135\141\231\189\174\228\184\186\233\187\152\232\174\164\229\128\188\239\188\154" .. listSome(invalid, 6) .. "\227\128\130"
+        end
+        if #ignored > 0 then
+            msg = msg .. "\n\n\233\157\158\229\189\147\229\137\141\231\137\136\230\156\172\231\154\132\232\174\190\231\189\174\233\161\185\239\188\140\229\183\178\229\191\189\231\149\165\239\188\154" .. listSome(ignored, 6) .. "\227\128\130"
+        end
+    else
+        msg = set .. (set == 1 and " setting" or " settings") .. " imported"
+            .. (reset > 0 and (", " .. reset .. " more back to the build's default") or "") .. ". Press Apply or Accept to save them."
+        if #pinned > 0 then
+            msg = msg .. "\n\nPinned by pzopt.properties or -D here, left as they are: " .. listSome(pinned, 6) .. "."
+        end
+        if #invalid > 0 then
+            msg = msg .. "\n\nNot a true / false value, set to the default: " .. listSome(invalid, 6) .. "."
+        end
+        if #ignored > 0 then
+            msg = msg .. "\n\nNot settings of this version, ignored: " .. listSome(ignored, 6) .. "."
+        end
     end
     showMessage(self, msg)
 end
@@ -3279,8 +3363,11 @@ local function onImportOk(self, button)
     if button.internal ~= "OK" then return end
     local text = button.parent.entry:getText()
     if knownCount(text) == 0 then
-        showMessage(self, "No settings found in the text: nothing was changed. Paste the text Export settings copied "
+        local noSetMsg = (PzoptI18n and PzoptI18n.isZh())
+            and "\230\150\135\230\156\172\228\184\173\230\156\170\230\137\190\229\136\176\228\187\187\228\189\149\230\156\137\230\149\136\232\174\190\231\189\174\239\188\154\230\156\170\232\191\155\232\161\140\228\187\187\228\189\149\228\191\174\230\148\185\227\128\130\232\175\183\231\178\152\232\180\180\233\128\154\232\191\135\226\128\156\229\175\188\229\135\186\232\174\190\231\189\174\226\128\157\229\164\141\229\136\182\231\154\132\229\134\133\229\174\185\239\188\136key=value \230\160\188\229\188\143\239\188\140\228\190\139\229\166\130 treesInChunkTexture=false\239\188\137\227\128\130"
+            or ("No settings found in the text: nothing was changed. Paste the text Export settings copied "
             .. "(key=value lines, e.g. treesInChunkTexture=false).")
+        showMessage(self, noSetMsg)
         return
     end
     importSettings(self, text)
@@ -3294,8 +3381,11 @@ local function openImportDialog(self)
     end
     -- ISTextBox puts the box at half the starting height, below the title bar
     local w, h = math.min(720, getCore():getScreenWidth() - 40), 2 * (MainOptions.style.buttonHeight + 20)
+    local boxTitle = (PzoptI18n and PzoptI18n.isZh())
+        and "\231\178\152\232\180\180\229\175\188\229\135\186\231\154\132\232\174\190\231\189\174\230\150\135\230\156\172\239\188\136\230\156\170\229\136\151\229\135\186\231\154\132\232\174\190\231\189\174\229\176\134\230\129\162\229\164\141\228\184\186\233\187\152\232\174\164\229\128\188\239\188\137\239\188\154"
+        or "Paste exported settings (settings not listed go back to the defaults):"
     local modal = ISTextBox:new(getCore():getScreenWidth() / 2 - w / 2, getCore():getScreenHeight() / 2 - 200, w, h,
-        "Paste exported settings (settings not listed go back to the defaults):", text, self, onImportOk)
+        boxTitle, text, self, onImportOk)
     modal:setMultipleLine(true)
     modal:setNumberOfLines(12)
     modal:setMaxLines(100000)
@@ -3314,14 +3404,20 @@ end
 
 -- "Install DLSS files": the natives DLSS needs that a release does not carry (pzopt.UpscalerDeps, Linux x86-64 with
 -- an RTX card). The button's title follows the Java side's state.
-local DEPS_TITLES = {
+local DEPS_TITLES = (PzoptI18n and PzoptI18n.isZh()) and {
+    missing = "\229\174\137\232\163\133 DLSS \232\191\144\232\161\140\229\186\147\230\150\135\228\187\182", error = "\233\135\141\232\175\149\228\184\139\232\189\189 DLSS \230\150\135\228\187\182", checking = "\230\173\163\229\156\168\230\163\128\230\159\165 DLSS \230\150\135\228\187\182...",
+    idle = "\230\173\163\229\156\168\230\163\128\230\159\165 DLSS \230\150\135\228\187\182...", downloading = "\230\173\163\229\156\168\228\184\139\232\189\189 DLSS \230\150\135\228\187\182 100 %", installing = "\230\173\163\229\156\168\229\174\137\232\163\133 DLSS \230\150\135\228\187\182...",
+    done = "DLSS \230\150\135\228\187\182\229\183\178\229\174\137\232\163\133\239\188\154\232\175\183\233\135\141\229\144\175\230\184\184\230\136\143", installed = "DLSS \230\150\135\228\187\182\229\183\178\229\174\137\232\163\133", unsupported = "DLSS \230\150\135\228\187\182\239\188\154\229\189\147\229\137\141\231\142\175\229\162\131\228\184\141\230\148\175\230\140\129",
+} or {
     missing = "Install DLSS files", error = "Retry the DLSS files download", checking = "Checking the DLSS files...",
     idle = "Checking the DLSS files...", downloading = "Downloading the DLSS files 100 %", installing = "Installing the DLSS files...",
     done = "DLSS files installed: restart the game", installed = "DLSS files installed", unsupported = "DLSS files: not available here",
 }
-local DEPS_TIP = "Downloads the two native files NVIDIA DLSS needs into the game's natives folder (the pzopt shim and NVIDIA's "
+local DEPS_TIP = (PzoptI18n and PzoptI18n.isZh())
+    and "\229\176\134 NVIDIA DLSS \230\137\128\233\156\128\231\154\132\228\184\164\228\184\170\229\142\159\231\148\159\229\186\147\230\150\135\228\187\182\239\188\136pzopt \229\158\171\231\137\135\229\186\147\228\184\142 NVIDIA DLSS \229\138\168\230\128\129\229\186\147\239\188\155\229\174\137\232\163\133\229\140\133\228\184\141\229\134\133\231\189\174\239\188\137\228\184\139\232\189\189\232\135\179\230\184\184\230\136\143 natives \231\155\174\229\189\149\229\185\182\230\160\161\233\170\140\229\147\136\229\184\140\227\128\130\230\148\175\230\140\129\229\133\183\229\164\135 NVIDIA RTX \230\152\190\229\141\161\231\154\132 Linux \230\136\150 Windows\239\188\155FSR 1.0 \230\151\160\233\156\128\228\187\187\228\189\149\233\162\157\229\164\150\230\150\135\228\187\182\227\128\130\229\174\137\232\163\133\229\144\142\229\156\168\232\182\133\229\136\134\232\190\168\231\142\135\228\184\173\233\128\137\230\139\169 dlss \229\185\182\233\135\141\229\144\175\230\184\184\230\136\143\229\141\179\229\143\175\227\128\130"
+    or ("Downloads the two native files NVIDIA DLSS needs into the game's natives folder (the pzopt shim and NVIDIA's "
     .. "DLSS library; releases do not carry them) and checks each one's checksum. Linux or Windows with an NVIDIA RTX card; "
-    .. "FSR 1.0 needs no files. Then pick \"Upscaler\": dlss and restart the game."
+    .. "FSR 1.0 needs no files. Then pick \"Upscaler\": dlss and restart the game.")
 
 local function setupUpscalerDepsButton(self, b)
     b.onclick = function()
@@ -3337,7 +3433,9 @@ local function setupUpscalerDepsButton(self, b)
         if not ok then return end
         local title = DEPS_TITLES[s] or DEPS_TITLES.checking
         if s == "downloading" then
-            title = "Downloading the DLSS files " .. tostring(perf():getPzoptUpscalerDepsProgress()) .. " %"
+            title = (PzoptI18n and PzoptI18n.isZh())
+                and ("\230\173\163\229\156\168\228\184\139\232\189\189 DLSS \230\150\135\228\187\182 " .. tostring(perf():getPzoptUpscalerDepsProgress()) .. " %")
+                or ("Downloading the DLSS files " .. tostring(perf():getPzoptUpscalerDepsProgress()) .. " %")
         end
         if o.title ~= title then
             o:setTitle(title)
@@ -3346,16 +3444,21 @@ local function setupUpscalerDepsButton(self, b)
         local enable = s == "missing" or s == "error"
         if o.enable ~= enable then o:setEnable(enable) end
         local msg = perf():getPzoptUpscalerDepsMessage()
-        o.tooltip = msg ~= "" and (DEPS_TIP .. " Now: " .. msg .. ".") or DEPS_TIP
+        local nowStr = (PzoptI18n and PzoptI18n.isZh()) and " \229\189\147\229\137\141\231\138\182\230\128\129: " or " Now: "
+        o.tooltip = msg ~= "" and (DEPS_TIP .. nowStr .. msg .. ".") or DEPS_TIP
     end
 end
 
 local function setupOverlayButton(b)
     local function overlayTitle()
         local ok, vis = pcall(function() return perf():isPzoptOverlayVisible() end)
-        return (ok and vis) and "Hide performance overlay" or "Show performance overlay"
+        if ok and vis then
+            return (PzoptI18n and PzoptI18n.t("dialogs.overlay.item_turn_off", "Hide performance overlay")) or "Hide performance overlay"
+        else
+            return (PzoptI18n and PzoptI18n.t("dialogs.overlay.item_turn_on", "Show performance overlay")) or "Show performance overlay"
+        end
     end
-    b.tooltip = "Toggles the performance overlay (F9 / L3 + R3)."
+    b.tooltip = (PzoptI18n and PzoptI18n.t("ui.buttons.overlay_tip", "Toggles the performance overlay (F9 / L3 + R3).")) or "Toggles the performance overlay (F9 / L3 + R3)."
     b.onclick = function()
         pcall(function() perf():togglePzoptOverlay() end)
         b:setTitle(overlayTitle())
@@ -3377,13 +3480,13 @@ local function setupUpdateButton(b)
     local function updateTitle()
         local ok, s = pcall(function() return perf():getPzoptUpdateState() end)
         if ok and s == "available" then
-            return "PZ Optimization update (New version!)"
+            return (PzoptI18n and PzoptI18n.t("dialogs.update.item_update", "PZ Optimization update (New version!)")) or "PZ Optimization update (New version!)"
         elseif ok and s == "ready" then
-            return "Restart to finish update"
+            return (PzoptI18n and PzoptI18n.t("dialogs.update.item_restart", "Restart to finish update")) or "Restart to finish update"
         end
-        return "Check for updates"
+        return (PzoptI18n and PzoptI18n.t("ui.buttons.update", "Check for updates")) or "Check for updates"
     end
-    b.tooltip = "Checks for updates and opens the PZ Optimization updater dialog."
+    b.tooltip = (PzoptI18n and PzoptI18n.t("ui.buttons.update_tip", "Checks for updates and opens the PZ Optimization updater dialog.")) or "Checks for updates and opens the PZ Optimization updater dialog."
     b.onclick = function()
         pcall(function() perf():pzoptUpdateCheck() end)
         if PzoptUpdateDialog and PzoptUpdateDialog.show then
@@ -3403,13 +3506,14 @@ local function setupUpdateButton(b)
 end
 
 local function setupCompatButton(b)
-    b.tooltip = "Checks for conflicts between active Java mods and PZ Optimization."
+    b.tooltip = (PzoptI18n and PzoptI18n.t("ui.buttons.compat_tip", "Checks active mods for known conflicts.")) or "Checks active mods for known conflicts."
     b.onclick = function()
         if PzoptCompatDialog and PzoptCompatDialog.show then
             PzoptCompatDialog.show()
         end
     end
-    b:setTitle("Mod compatibility check")
+    local title = (PzoptI18n and PzoptI18n.t("ui.buttons.compat", "Mod compatibility check")) or "Mod compatibility check"
+    b:setTitle(title)
     b:setWidthToTitle()
 end
 
@@ -3432,13 +3536,19 @@ end
 PAGES = {
     { tab = "Optimizations", sections = SECTIONS, master = MASTER, masterField = "pzoptMaster", masterClip = "drive",
       options = "pzoptOptions",
-      footer = "Performance settings take effect on the next launch. File: Zomboid/pzopt/options.ini" },
+      footer = (PzoptI18n and PzoptI18n.isZh())
+        and "\230\128\167\232\131\189\232\174\190\231\189\174\229\176\134\229\156\168\228\184\139\230\172\161\229\144\175\229\138\168\230\184\184\230\136\143\230\151\182\231\148\159\230\149\136\227\128\130\233\133\141\231\189\174\230\150\135\228\187\182\239\188\154Zomboid/pzopt/options.ini"
+        or "Performance settings take effect on the next launch. File: Zomboid/pzopt/options.ini" },
     { tab = ENHANCEMENTS_TAB, sections = ENHANCEMENT_SECTIONS, master = ENHANCEMENTS_MASTER, masterField = "pzoptEnhancementMaster",
       masterClip = "upscale", options = "pzoptEnhancementOptions",
-      footer = "Visuals apply as soon as you press Apply; HDR output, per-pixel lighting, reflections, car glass, mirrors and relief on the next launch. File: Zomboid/pzopt/options.ini" },
+      footer = (PzoptI18n and PzoptI18n.isZh())
+        and "\231\148\187\232\180\168\232\174\190\231\189\174\229\156\168\231\130\185\229\135\187\226\128\156\229\186\148\231\148\168\226\128\157\229\144\142\231\171\139\229\141\179\231\148\159\230\149\136\239\188\155HDR \232\190\147\229\135\186\227\128\129\233\128\144\229\131\143\231\180\160\229\133\137\231\133\167\227\128\129\229\143\141\229\176\132\227\128\129\232\189\166\231\170\151\228\184\142\230\181\174\233\155\149\229\176\134\229\156\168\228\184\139\230\172\161\229\144\175\229\138\168\230\151\182\231\148\159\230\149\136\227\128\130\233\133\141\231\189\174\230\150\135\228\187\182\239\188\154Zomboid/pzopt/options.ini"
+        or "Visuals apply as soon as you press Apply; HDR output, per-pixel lighting, reflections, car glass, mirrors and relief on the next launch. File: Zomboid/pzopt/options.ini" },
     { tab = PROFILER_TAB, sections = PROFILER_SECTIONS, master = PROFILER_MASTER, masterField = "pzoptProfilerMaster",
       masterClip = "overlay", options = "pzoptProfilerOptions",
-      footer = "Tools apply as soon as you press Apply, no restart needed. File: Zomboid/pzopt/options.ini" },
+      footer = (PzoptI18n and PzoptI18n.isZh())
+        and "\229\183\165\229\133\183\232\174\190\231\189\174\229\156\168\231\130\185\229\135\187\226\128\156\229\186\148\231\148\168\226\128\157\229\144\142\231\171\139\229\141\179\231\148\159\230\149\136\239\188\140\230\151\160\233\156\128\233\135\141\229\144\175\230\184\184\230\136\143\227\128\130\233\133\141\231\189\174\230\150\135\228\187\182\239\188\154Zomboid/pzopt/options.ini"
+        or "Tools apply as soon as you press Apply, no restart needed. File: Zomboid/pzopt/options.ini" },
 }
 
 -- ---------------------------------------------------------------------------------------------------
@@ -3455,12 +3565,16 @@ PAGES = {
 local GAP = 24
 -- the page shown, kept for the session
 local NAV = { kind = "home", cat = nil, sub = 0, level = "simple", problem = 1, back = "home" }
-local VIEWS = { { id = "simple", title = "Simple" }, { id = "advanced", title = "Advanced" }, { id = "everything", title = "Everything" } }
+local VIEWS = {
+    { id = "simple", title = (PzoptI18n and PzoptI18n.t("ui.views.simple", "Simple")) or "Simple" },
+    { id = "advanced", title = (PzoptI18n and PzoptI18n.t("ui.views.advanced", "Advanced")) or "Advanced" },
+    { id = "everything", title = (PzoptI18n and PzoptI18n.t("ui.views.everything", "Everything")) or "Everything" }
+}
 local LEVEL = { simple = 1, advanced = 2, everything = 3 }
 local VIEW_TIPS = {
-    simple = "The settings worth knowing about: the features and the main switches.",
-    advanced = "Also the settings that change how something is done; the defaults are what was measured best.",
-    everything = "Also the tuning numbers (budgets, thread counts, intervals). Change them to experiment.",
+    simple = (PzoptI18n and PzoptI18n.t("ui.view_tips.simple", "The settings worth knowing about: the features and the main switches.")) or "The settings worth knowing about: the features and the main switches.",
+    advanced = (PzoptI18n and PzoptI18n.t("ui.view_tips.advanced", "Also the settings that change how something is done; the defaults are what was measured best.")) or "Also the settings that change how something is done; the defaults are what was measured best.",
+    everything = (PzoptI18n and PzoptI18n.t("ui.view_tips.everything", "Also the tuning numbers (budgets, thread counts, intervals). Change them to experiment.")) or "Also the tuning numbers (budgets, thread counts, intervals). Change them to experiment.",
 }
 local C_HELP = { r = 0.85, g = 0.55, b = 0.95 }
 local C_AMBER = { r = 0.98, g = 0.72, b = 0.30 }
@@ -3547,16 +3661,17 @@ local function catStatus(cat)
         end
     end
     local status, c
+    local isZh = PzoptI18n and PzoptI18n.getLang() == "zh_cn"
     if groupOff(cat.group) then
-        status, c = "Switched off", C_DIM
+        status, c = isZh and "\229\183\178\229\133\179\233\151\173" or "Switched off", C_DIM
     elseif cat.group.cards then
-        if on > 0 then status, c = on .. " on", C_AMBER
-        elseif changed > 0 then status, c = changed .. " changed", C_AMBER
-        else status, c = "Off", C_DIM end
+        if on > 0 then status, c = isZh and (on .. " \233\161\185\229\188\128\229\144\175") or (on .. " on"), C_AMBER
+        elseif changed > 0 then status, c = isZh and (changed .. " \233\161\185\229\183\178\228\191\174\230\148\185") or (changed .. " changed"), C_AMBER
+        else status, c = isZh and "\229\133\179\233\151\173" or "Off", C_DIM end
     elseif changed > 0 then
-        status, c = changed .. " changed", C_AMBER
+        status, c = isZh and (changed .. " \233\161\185\229\183\178\228\191\174\230\148\185") or (changed .. " changed"), C_AMBER
     else
-        status, c = "Recommended", C_OPT
+        status, c = isZh and "\230\142\168\232\141\144\233\187\152\232\174\164" or "Recommended", C_OPT
     end
     cat.status, cat.statusC, cat.statusAt = status, c, now
     return status, c
@@ -3614,12 +3729,18 @@ function PzoptRowInfo:render()
         y = y + lineH
     end
     local x = 0
-    if row.tier == 2 then x = x + drawPill(self, x, y, "ADVANCED", C_ADV) + 6 end
-    if row.tier == 3 then x = x + drawPill(self, x, y, "EXPERT", C_EXPERT) + 6 end
-    if rowChanged(row) then x = x + drawPill(self, x, y, "CHANGED", C_AMBER) + 6 end
-    if not row.entry.live then x = x + drawPill(self, x, y, "next launch", C_GREY) + 6 end
-    if p:getPzoptOptionPinnedBy(row.entry.key) ~= "" then x = x + drawPill(self, x, y, "pinned", C_GREY) + 6 end
-    if compatReason(row.entry.key) ~= "" then x = x + drawPill(self, x, y, "off for a mod", C_STOCK) + 6 end
+    local pillAdvanced = (PzoptI18n and PzoptI18n.t("ui.pills.advanced", "ADVANCED")) or "ADVANCED"
+    local pillExpert = (PzoptI18n and PzoptI18n.t("ui.pills.expert", "EXPERT")) or "EXPERT"
+    local pillChanged = (PzoptI18n and PzoptI18n.t("ui.pills.changed", "CHANGED")) or "CHANGED"
+    local pillNextLaunch = (PzoptI18n and PzoptI18n.t("ui.pills.next_launch", "next launch")) or "next launch"
+    local pillPinned = (PzoptI18n and PzoptI18n.t("ui.pills.pinned", "pinned")) or "pinned"
+    local pillModOff = (PzoptI18n and PzoptI18n.t("ui.pills.mod_off", "off for a mod")) or "off for a mod"
+    if row.tier == 2 then x = x + drawPill(self, x, y, pillAdvanced, C_ADV) + 6 end
+    if row.tier == 3 then x = x + drawPill(self, x, y, pillExpert, C_EXPERT) + 6 end
+    if rowChanged(row) then x = x + drawPill(self, x, y, pillChanged, C_AMBER) + 6 end
+    if not row.entry.live then x = x + drawPill(self, x, y, pillNextLaunch, C_GREY) + 6 end
+    if p:getPzoptOptionPinnedBy(row.entry.key) ~= "" then x = x + drawPill(self, x, y, pillPinned, C_GREY) + 6 end
+    if compatReason(row.entry.key) ~= "" then x = x + drawPill(self, x, y, pillModOff, C_STOCK) + 6 end
     local right = self.width
     if (NAV.kind == "search" or NAV.kind == "problems") and row.cat then
         -- where it lives, cut to leave the tags and a few words of the description their room
@@ -3714,13 +3835,14 @@ end
 local relayout
 
 local function crumbFor(S)
-    if NAV.kind == "home" then return "Home" end
-    if NAV.kind == "problems" then return "Help  >  Fix a problem" end
-    if NAV.kind == "search" then return "Search" end
+    if NAV.kind == "home" then return (PzoptI18n and PzoptI18n.t("ui.crumbs.home", "Home")) or "Home" end
+    if NAV.kind == "problems" then return (PzoptI18n and PzoptI18n.t("ui.crumbs.problems", "Help  >  Fix a problem")) or "Help  >  Fix a problem" end
+    if NAV.kind == "search" then return (PzoptI18n and PzoptI18n.t("ui.crumbs.search", "Search")) or "Search" end
     local cat = S.tree.catById[NAV.cat]
     if not cat then return "" end
     local sub = cat.subs[NAV.sub]
-    return cat.group.title .. "  >  " .. cat.title .. "  >  " .. (sub and sub.title or "Overview")
+    local overviewText = (PzoptI18n and PzoptI18n.t("ui.crumbs.overview", "Overview")) or "Overview"
+    return cat.group.title .. "  >  " .. cat.title .. "  >  " .. (sub and sub.title or overviewText)
 end
 
 -- Shows a page: kind "home" | "cat" (cat id, sub index, 0 = Overview) | "problems". Leaves a search. The controller
@@ -3813,7 +3935,8 @@ function PzoptSidebar:build(target)
         table.insert(self.buttons, b)
         y = y + rowH
     end
-    item("<  Home", nil, function() return NAV.kind == "home" end, C_TEXT, function() navigate(S, "home") end)
+    local homeTitle = (PzoptI18n and PzoptI18n.t("ui.buttons.home", "<  Home")) or "<  Home"
+    item(homeTitle, nil, function() return NAV.kind == "home" end, C_TEXT, function() navigate(S, "home") end)
     y = y + 6
     for _, g in ipairs(S.tree.groups) do
         table.insert(self.headings, { y = y, g = g })
@@ -3827,19 +3950,22 @@ function PzoptSidebar:build(target)
     end
     table.insert(self.headings, { y = y, help = true })
     y = y + hS + 4
-    item("Fix a problem", nil, function() return NAV.kind == "problems" end, C_HELP, function(b) navigate(S, "problems", nil, nil, b) end)
+    local fixTitle = (PzoptI18n and PzoptI18n.t("ui.buttons.fix_problem", "Fix a problem")) or "Fix a problem"
+    item(fixTitle, nil, function() return NAV.kind == "problems" end, C_HELP, function(b) navigate(S, "problems", nil, nil, b) end)
 end
 
 function PzoptSidebar:render()
     local pad = 12
     for _, h in ipairs(self.headings) do
         if h.help then
-            self:drawText("HELP", pad, h.y, C_HELP.r, C_HELP.g, C_HELP.b, 1, UIFont.Small)
+            local helpTitle = (PzoptI18n and PzoptI18n.t("ui.buttons.help", "HELP")) or "HELP"
+            self:drawText(helpTitle, pad, h.y, C_HELP.r, C_HELP.g, C_HELP.b, 1, UIFont.Small)
         else
             local g = h.g
             self:drawText(string.upper(g.title), pad, h.y, g.c.r, g.c.g, g.c.b, 1, UIFont.Small)
             if groupOff(g) then
-                self:drawTextRight("off", self.width - pad, h.y, C_STOCK.r, C_STOCK.g, C_STOCK.b, 1, UIFont.Small)
+                local offText = (PzoptI18n and PzoptI18n.t("ui.status.off_lower", "off")) or "off"
+                self:drawTextRight(offText, self.width - pad, h.y, C_STOCK.r, C_STOCK.g, C_STOCK.b, 1, UIFont.Small)
             end
         end
     end
@@ -3861,15 +3987,20 @@ local function buildTree(rows, masterRows)
     local byKey = {}
     for _, row in ipairs(rows) do byKey[row.entry.key] = row end
     for _, g in ipairs(L.groups) do
-        local group = { id = g.id, title = g.title, page = g.page, c = rgb(g.colour), note = g.note, cards = g.cards,
+        local gTitle = (PzoptI18n and PzoptI18n.t("ui.groups." .. g.id .. ".title", g.title)) or g.title
+        local gNote = (PzoptI18n and PzoptI18n.t("ui.groups." .. g.id .. ".note", g.note)) or g.note
+        local group = { id = g.id, title = gTitle, page = g.page, c = rgb(g.colour), note = gNote, cards = g.cards,
                         cats = {}, master = masterRows[g.page], count = 0 }
         table.insert(tree.groups, group)
         for _, c in ipairs(g.cats) do
-            local cat = { id = c.id, title = c.title, blurb = c.blurb, group = group, subs = {}, rows = {} }
+            local cTitle = (PzoptI18n and PzoptI18n.t("ui.categories." .. c.id .. ".title", c.title)) or c.title
+            local cBlurb = (PzoptI18n and PzoptI18n.t("ui.categories." .. c.id .. ".blurb", c.blurb)) or c.blurb
+            local cat = { id = c.id, title = cTitle, blurb = cBlurb, group = group, subs = {}, rows = {} }
             table.insert(group.cats, cat)
             tree.catById[cat.id] = cat
             for _, s in ipairs(c.subs) do
-                local sub = { title = s.title, cat = cat, rows = {}, dlss = s.dlssButton,
+                local sTitle = (PzoptI18n and PzoptI18n.t("ui.subcategories." .. s.title, s.title)) or s.title
+                local sub = { title = sTitle, cat = cat, rows = {}, dlss = s.dlssButton,
                               overlay = s.overlayButton, updater = s.updaterButton, compat = s.compatButton }
                 table.insert(cat.subs, sub)
                 if s.sections then
@@ -3906,7 +4037,8 @@ local function buildTree(rows, masterRows)
                 end
             end
             if not cat.more then
-                cat.more = { title = "More", cat = cat, rows = {} }
+                local moreTitle = (PzoptI18n and PzoptI18n.t("ui.subcategories.More", "More")) or "More"
+                cat.more = { title = moreTitle, cat = cat, rows = {} }
                 table.insert(cat.subs, cat.more)
             end
             add(cat.more, row)
@@ -3920,8 +4052,11 @@ local function buildTree(rows, masterRows)
             cat.subList = table.concat(subs, ", ")
         end
     end
-    for _, pr in ipairs(L.problems or {}) do
-        local problem = { title = pr.title, cause = pr.cause, why = pr.why, rows = {} }
+    for i, pr in ipairs(L.problems or {}) do
+        local pTitle = (PzoptI18n and (PzoptI18n.t("ui.problems." .. i .. ".title", nil) or PzoptI18n.t("ui.problems." .. (pr.id or "") .. ".title", nil))) or pr.title
+        local pCause = (PzoptI18n and (PzoptI18n.t("ui.problems." .. i .. ".cause", nil) or PzoptI18n.t("ui.problems." .. (pr.id or "") .. ".cause", nil))) or pr.cause
+        local pWhy = (PzoptI18n and (PzoptI18n.t("ui.problems." .. i .. ".why", nil) or PzoptI18n.t("ui.problems." .. (pr.id or "") .. ".why", nil))) or pr.why
+        local problem = { id = pr.id or tostring(i), title = pTitle, cause = pCause, why = pWhy, rows = {} }
         for _, key in ipairs(pr.keys or {}) do
             if byKey[key] then table.insert(problem.rows, byKey[key]) end
         end
@@ -3990,11 +4125,20 @@ relayout = function(S)
     local clipsW = S.clips:getWidth() + 8 + S.clipsLabel:getWidth()
     local viewsW = S.viewLabel.elems[1].el:getWidth() + 10
     for _, v in ipairs(S.viewButtons) do viewsW = viewsW + v.elems[1].el:getWidth() + 4 end
+    local isZh = PzoptI18n and PzoptI18n.isZh()
     local status = ""
     if kind == "search" then
-        status = S.hitCount > 0 and (S.hitCount .. " of " .. #S.searchRows .. " settings match") or "Nothing matches"
+        if isZh then
+            status = S.hitCount > 0 and (S.hitCount .. " / " .. #S.searchRows .. " \233\161\185\229\140\185\233\133\141") or "\230\151\160\229\140\185\233\133\141\233\161\185"
+        else
+            status = S.hitCount > 0 and (S.hitCount .. " of " .. #S.searchRows .. " settings match") or "Nothing matches"
+        end
     elseif kind == "home" then
-        status = #S.searchRows .. " settings"
+        if isZh then
+            status = "\229\133\177 " .. #S.searchRows .. " \233\161\185\232\174\190\231\189\174"
+        else
+            status = #S.searchRows .. " settings"
+        end
     end
     S.status:setName(status)
     local statusW = status ~= "" and (S.status:getWidth() + 16) or 0
@@ -4251,10 +4395,13 @@ function layoutPage.cat(C, y)
             for _, row in ipairs(rows) do y = rowAt(row, y) end
             local hidden = #sub.rows - #rows
             if hidden > 0 then
-                y = y + SP * 2
-                local next = NAV.level == "simple" and "Advanced" or "Everything"
+                local isZh = PzoptI18n and PzoptI18n.isZh()
+                local nextStr = isZh and (NAV.level == "simple" and "\233\171\152\231\186\167" or "\229\133\168\233\131\168") or (NAV.level == "simple" and "Advanced" or "Everything")
                 local el = at(S.moreButton, x0, y)
-                el:setTitle("Show " .. hidden .. " more " .. (hidden == 1 and "setting" or "settings") .. " (" .. next .. " view)")
+                local moreTitle = isZh
+                    and ("\229\177\149\229\188\128\229\133\182\228\189\153 " .. hidden .. " \233\161\185\232\174\190\231\189\174\239\188\136" .. nextStr .. "\232\167\134\229\155\190\239\188\137")
+                    or ("Show " .. hidden .. " more " .. (hidden == 1 and "setting" or "settings") .. " (" .. nextStr .. " view)")
+                el:setTitle(moreTitle)
                 el:setWidthToTitle()
                 line(el)
                 y = y + BH + SP
@@ -4265,7 +4412,8 @@ function layoutPage.cat(C, y)
     rule(y)
     y = y + SP * 2
     local rb = at(S.catReset, x0, y)
-    rb:setTitle("Reset " .. cat.title .. " to defaults")
+    local resetTitle = (PzoptI18n and PzoptI18n.isZh()) and ("\233\135\141\231\189\174 " .. cat.title .. " \232\135\179\233\187\152\232\174\164") or ("Reset " .. cat.title .. " to defaults")
+    rb:setTitle(resetTitle)
     rb:setWidthToTitle()
     line(rb)
     S.catNote.elems[1].el.text = PAGES[g.page].footer
@@ -4315,9 +4463,16 @@ function layoutPage.search(C, y)
     local S, x0, w = C.S, C.x0, C.w
     local at, rowAt = C.at, C.rowAt
     local hS, hM, SP = C.G.hS, C.G.hM, C.G.SP
-    S.searchHead.elems[1].el.text = (S.hitCount or 0) > 0
-        and ((S.hitCount == 1 and "1 setting matches" or (S.hitCount .. " settings match")) .. " \"" .. (S.query or "") .. "\", best first")
-        or ("Nothing matches \"" .. (S.query or "") .. "\"")
+    local isZh = PzoptI18n and PzoptI18n.getLang() == "zh_cn"
+    if (S.hitCount or 0) > 0 then
+        S.searchHead.elems[1].el.text = isZh
+            and (S.hitCount .. " \233\161\185\232\174\190\231\189\174\229\140\185\233\133\141 \"" .. (S.query or "") .. "\"\239\188\140\230\140\137\231\155\184\229\133\179\229\186\166\230\142\146\229\186\143")
+            or (((S.hitCount == 1 and "1 setting matches" or (S.hitCount .. " settings match")) .. " \"" .. (S.query or "") .. "\", best first"))
+    else
+        S.searchHead.elems[1].el.text = isZh
+            and ("\230\156\170\230\137\190\229\136\176\229\140\185\233\133\141 \"" .. (S.query or "") .. "\" \231\154\132\232\174\190\231\189\174")
+            or ("Nothing matches \"" .. (S.query or "") .. "\"")
+    end
     at(S.searchHead, x0, y, w, hM + 6)
     y = y + hM + 6 + SP * 2
     local hits = S.hits or {}
@@ -4363,8 +4518,10 @@ local pageBuild = {}
 function pageBuild.header(B)
     local self, S, G, single, buttonItem, label = B.self, B.S, B.G, B.single, B.buttonItem, B.label
     local BH, hS, hM, hL = G.BH, G.hS, G.hM, G.hL
-    S.homeButton = buttonItem("<  Home", "Back to the start page: presets, every category, export / import.",
-        function() navigate(S, "home") end)
+    local isZh = PzoptI18n and PzoptI18n.isZh()
+    local homeTitle = (PzoptI18n and PzoptI18n.t("ui.buttons.home", "<  Home")) or "<  Home"
+    local homeTip = isZh and "\232\191\148\229\155\158\229\136\157\229\167\139\233\161\181\239\188\154\233\162\132\232\174\190\227\128\129\229\133\168\233\131\168\231\177\187\229\136\171\227\128\129\229\175\188\229\135\186\228\184\142\229\175\188\229\133\165\227\128\130" or "Back to the start page: presets, every category, export / import."
+    S.homeButton = buttonItem(homeTitle, homeTip, function() navigate(S, "home") end)
     S.title = single(drawPanel(function(o)
         o:drawText("PZ OPTIMIZATION", 0, 0, 1, 1, 1, 1, UIFont.Large)
         local x = textW(UIFont.Large, "PZ OPTIMIZATION") + 24
@@ -4382,9 +4539,11 @@ function pageBuild.header(B)
     entry:initialise()
     entry:instantiate()
     entry:setClearButton(true)
-    entry.tooltip = "Type words from a setting's name, description or key, a resource (gpu, vram, game thread, "
+    entry.tooltip = isZh
+        and "\232\190\147\229\133\165\232\174\190\231\189\174\233\161\185\231\154\132\229\144\141\231\167\176\227\128\129\232\175\180\230\152\142\227\128\129\229\134\133\233\131\168\233\148\174\229\144\141\227\128\129\229\143\151\229\189\177\229\147\141\231\154\132\231\161\172\228\187\182\239\188\136gpu, vram, \228\184\187\231\186\191\231\168\139, \229\138\160\232\189\189\230\151\182\233\151\180...\239\188\137\230\136\150\232\175\187\229\143\150\232\175\165\232\174\190\231\189\174\231\154\132 Java \231\177\187\229\144\141\239\188\136FBORenderCell, IsoChunk, pzopt.FogPass...\239\188\137\227\128\130\230\148\175\230\140\129\230\139\188\229\134\153\229\174\185\233\148\153\228\184\142\233\131\168\229\136\134\229\140\185\233\133\141\239\188\140\230\175\143\228\184\170\231\177\187\229\136\171\228\184\173\230\156\128\231\155\184\229\133\179\231\154\132\231\187\147\230\158\156\230\142\146\229\156\168\230\156\128\229\137\141\227\128\130"
+        or ("Type words from a setting's name, description or key, a resource (gpu, vram, game thread, "
         .. "load time...) or a Java class that reads it (FBORenderCell, IsoChunk, pzopt.FogPass...). Typos and "
-        .. "partial words are fine; the best matches of every category come first."
+        .. "partial words are fine; the best matches of every category come first.")
     S.typed, S.lastText, S.typedAt = "", "", 0
     -- polled each frame (the clear button and pasting do not all go through onTextChange) and searched once the
     -- text has been still for 120 ms, so typing a word runs one search, not one per letter
@@ -4404,14 +4563,17 @@ function pageBuild.header(B)
         if o:getText() == "" and not o:isFocused() then
             -- inside the box: the long hint, else the short one, cut to fit (it ran under the view switch at 1920 x 1080)
             local room = o.width - 16
-            local hint = "Search all " .. #S.searchRows .. " settings: name, what it does, gpu, load time..."
-            if textW(UIFont.Small, hint) > room then hint = "Search " .. #S.searchRows .. " settings..." end
+            local hint = isZh and ("\230\144\156\231\180\162\229\133\168\233\131\168 " .. #S.searchRows .. " \233\161\185\232\174\190\231\189\174\239\188\154\229\144\141\231\167\176\227\128\129\229\138\159\232\131\189\227\128\129\230\152\190\229\141\161\227\128\129\229\138\160\232\189\189\230\151\182\233\151\180...") or ("Search all " .. #S.searchRows .. " settings: name, what it does, gpu, load time...")
+            if textW(UIFont.Small, hint) > room then
+                hint = isZh and ("\230\144\156\231\180\162 " .. #S.searchRows .. " \233\161\185\232\174\190\231\189\174...") or ("Search " .. #S.searchRows .. " settings...")
+            end
             o:drawText(clipText(UIFont.Small, hint, room), 8, math.floor((o.height - hS) / 2), C_DIM.r, C_DIM.g, C_DIM.b, 1, UIFont.Small)
         end
     end
     S.entry = entry
     S.searchItem = single(entry)
-    local _, viewLabelItem = label("View", C_GREY)
+    local viewLabelText = (PzoptI18n and PzoptI18n.t("ui.views.label", "View")) or "View"
+    local _, viewLabelItem = label(viewLabelText, C_GREY)
     S.viewLabel = viewLabelItem
     S.viewButtons = {}
     for _, v in ipairs(VIEWS) do
@@ -4430,14 +4592,16 @@ function pageBuild.header(B)
         b:setWidth(textW(UIFont.Small, v.title) + 28)
         b:setHeight(BH)
         b.pzoptLabel = v.title
-        b.tooltip = VIEW_TIPS[id] .. " Search and Fix a problem always show every match."
+        local extraViewTip = isZh and " \230\144\156\231\180\162\229\146\140\233\151\174\233\162\152\230\142\146\230\159\165\229\167\139\231\187\136\229\177\149\231\164\186\230\137\128\230\156\137\229\140\185\233\133\141\233\161\185\227\128\130" or " Search and Fix a problem always show every match."
+        b.tooltip = VIEW_TIPS[id] .. extraViewTip
         table.insert(S.viewButtons, single(b))
     end
     local status = ISLabel:new(0, 0, BH, "", C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small, true)
     status:initialise()
     S.status, S.statusItem = status, single(status)
     -- "Before / after clips": the preview's GIFs, off by default; saved at once
-    local clipsLabel = ISLabel:new(0, 0, BH, "Before / after clips", 1, 1, 1, 1, UIFont.Small, true)
+    local clipsTitle = (PzoptI18n and PzoptI18n.t("ui.clips.label", "Before / after clips")) or "Before / after clips"
+    local clipsLabel = ISLabel:new(0, 0, BH, clipsTitle, 1, 1, 1, 1, UIFont.Small, true)
     clipsLabel:initialise()
     S.clipsLabel = clipsLabel
     S.clipsLabelItem = single(clipsLabel)
@@ -4448,9 +4612,11 @@ function pageBuild.header(B)
     clips:initialise()
     clips:addOption("")
     clips:setSelected(1, clipsOn())
-    clips.tooltip = "Plays a short clip of the stock game and one with the setting on, side by side, above the "
+    clips.tooltip = (PzoptI18n and PzoptI18n.t("ui.clips.tip", "Plays a short clip of the stock game and one with the setting on, side by side, above the "
         .. "description of the setting under the mouse. Off saves the memory the clips take (up to ~100 MB of video "
-        .. "memory while this screen is open). Applies at once and is remembered."
+        .. "memory while this screen is open). Applies at once and is remembered.")) or ("Plays a short clip of the stock game and one with the setting on, side by side, above the "
+        .. "description of the setting under the mouse. Off saves the memory the clips take (up to ~100 MB of video "
+        .. "memory while this screen is open). Applies at once and is remembered.")
     S.clips = clips
     S.clipsItem = single(clips)
     S.rule = single(drawPanel(function(o) o:drawRect(0, 0, o.width, 1, 1, 0.35, 0.35, 0.38) end))
@@ -4462,7 +4628,8 @@ function pageBuild.home(B)
     local self, S, p, single, button, label = B.self, B.S, B.p, B.single, B.button, B.label
     local hS, hM = B.G.hS, B.G.hM
     -- home: presets, group headings, tiles, help, tools
-    local _, presetLabelItem = label("Presets", C_GREY)
+    local presetLabelText = (PzoptI18n and PzoptI18n.t("ui.presets.label", "Presets")) or "Presets"
+    local _, presetLabelItem = label(presetLabelText, C_GREY)
     S.presetLabel = presetLabelItem
     S.presetButtons = {}
     local function preset(title, tip, fn)
@@ -4471,16 +4638,22 @@ function pageBuild.home(B)
         return item
     end
     local pinnedMaster = p:getPzoptOptionPinnedBy(MASTER.key) ~= ""
-    local recommended = preset("Recommended (every optimization on)",
-        "Turns the Performance master switch on and puts every Performance setting back to the build's default on this machine. "
-        .. "Visuals and Tools are not changed. " .. RESTART_NOTE, function() setAll(self, true) end)
-    local stockGame = preset("Stock game (every optimization off)",
-        "Turns the Performance master switch off: the game runs its original code everywhere, as if the overrides were not "
+    local recBtn = (PzoptI18n and PzoptI18n.t("ui.presets.recommended_btn", "Recommended (every optimization on)")) or "Recommended (every optimization on)"
+    local recTip = (PzoptI18n and PzoptI18n.t("ui.presets.recommended_tip_long", "Turns the Performance master switch on and puts every Performance setting back to the build's default on this machine. Visuals and Tools are not changed. " .. RESTART_NOTE)) or ("Turns the Performance master switch on and puts every Performance setting back to the build's default on this machine. "
+        .. "Visuals and Tools are not changed. " .. RESTART_NOTE)
+    local recommended = preset(recBtn, recTip, function() setAll(self, true) end)
+
+    local stockBtn = (PzoptI18n and PzoptI18n.t("ui.presets.stock_btn", "Stock game (every optimization off)")) or "Stock game (every optimization off)"
+    local stockTip = (PzoptI18n and PzoptI18n.t("ui.presets.stock_tip_long", "Turns the Performance master switch off: the game runs its original code everywhere, as if the overrides were not installed. The settings are kept for when you turn it on again; Tools and the performance overlay are not affected. " .. RESTART_NOTE)) or ("Turns the Performance master switch off: the game runs its original code everywhere, as if the overrides were not "
         .. "installed. The settings are kept for when you turn it on again; Tools and the performance overlay are not affected. "
-        .. RESTART_NOTE, function() setAll(self, false) end)
+        .. RESTART_NOTE)
+    local stockGame = preset(stockBtn, stockTip, function() setAll(self, false) end)
+
     for _, profile in ipairs(PROFILES) do
         local pr = profile
-        preset(profile.button, profile.tip .. " " .. RESTART_NOTE, function() applyProfile(self, pr) end)
+        local pBtn = (PzoptI18n and PzoptI18n.t("ui.presets." .. (pr.id or "low_end") .. "_btn", pr.button)) or pr.button
+        local pTip = (PzoptI18n and PzoptI18n.t("ui.presets." .. (pr.id or "low_end") .. "_tip", pr.tip .. " " .. RESTART_NOTE)) or (pr.tip .. " " .. RESTART_NOTE)
+        preset(pBtn, pTip, function() applyProfile(self, pr) end)
     end
     if pinnedMaster then
         for _, item in ipairs(S.presetButtons) do
@@ -4490,19 +4663,23 @@ function pageBuild.home(B)
         end
     end
     S.helpHeading = single(drawPanel(function(o)
-        o:drawText("HELP", 0, 0, C_HELP.r, C_HELP.g, C_HELP.b, 1, UIFont.Medium)
-        local x = textW(UIFont.Medium, "HELP") + 16
-        o:drawText(clipText(UIFont.Small, "Not sure what to change? Start from what you notice.", math.max(20, o.width - x)), x,
+        local helpText = (PzoptI18n and PzoptI18n.t("ui.buttons.help", "HELP")) or "HELP"
+        o:drawText(helpText, 0, 0, C_HELP.r, C_HELP.g, C_HELP.b, 1, UIFont.Medium)
+        local x = textW(UIFont.Medium, helpText) + 16
+        local hintText = (PzoptI18n and PzoptI18n.t("ui.help.hint", "Not sure what to change? Start from what you notice.")) or "Not sure what to change? Start from what you notice."
+        o:drawText(clipText(UIFont.Small, hintText, math.max(20, o.width - x)), x,
             math.floor((hM - hS) / 2), C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small)
     end))
     S.problemTile = single(drawButton(self, function() navigate(S, "problems") end, function(o, hot)
         o:drawRect(0, 0, o.width, o.height, 1, 0.115, 0.10, 0.13)
         o:drawRectBorder(0, 0, o.width, o.height, hot and 0.9 or 0.15, hot and C_HELP.r or 1, hot and C_HELP.g or 1, hot and C_HELP.b or 1)
         o:drawRect(0, 0, 5, o.height, 1, C_HELP.r, C_HELP.g, C_HELP.b)
-        o:drawText("Fix a problem", 16, 8, 1, 1, 1, 1, UIFont.Medium)
+        local fixTitle = (PzoptI18n and PzoptI18n.t("ui.buttons.fix_problem", "Fix a problem")) or "Fix a problem"
+        o:drawText(fixTitle, 16, 8, 1, 1, 1, 1, UIFont.Medium)
         local yy = 10 + hM
-        for i, l in ipairs(wrapLines(UIFont.Small, "Stutter while driving, low fps in a horde, slow loading, laggy input... "
-            .. "Pick what you notice: why it happens, and the settings that help.", o.width - 32)) do
+        local probDesc = (PzoptI18n and PzoptI18n.t("ui.help.problem_desc", "Stutter while driving, low fps in a horde, slow loading, laggy input... Pick what you notice: why it happens, and the settings that help.")) or ("Stutter while driving, low fps in a horde, slow loading, laggy input... "
+            .. "Pick what you notice: why it happens, and the settings that help.")
+        for i, l in ipairs(wrapLines(UIFont.Small, probDesc, o.width - 32)) do
             if i > 2 then break end
             o:drawText(l, 16, yy, C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small)
             yy = yy + hS
@@ -4522,9 +4699,9 @@ function pageBuild.home(B)
     local uninstall, uninstallItem = button(UNINSTALL_TITLE, nil, nil)
     setupUninstallButton(self, uninstall)
     S.toolButtons = { overlayItem, updateItem, compatItem, exportItem, importItem, uninstallItem }
-    S.homeNoteText = "Apply or Accept saves your changes to Zomboid/pzopt/options.ini. Performance settings take effect on the next "
+    S.homeNoteText = (PzoptI18n and PzoptI18n.t("ui.notes.home_note", "Apply or Accept saves your changes to Zomboid/pzopt/options.ini.")) or ("Apply or Accept saves your changes to Zomboid/pzopt/options.ini. Performance settings take effect on the next "
         .. "launch; Visuals and Tools apply at once (a few Visuals on the next launch). Settings pinned by the game folder's "
-        .. "pzopt.properties or -Dpzopt.<key> cannot be changed here."
+        .. "pzopt.properties or -Dpzopt.<key> cannot be changed here.")
     S.homeNote = single(drawPanel(function(o)
         local yy = 0
         for _, l in ipairs(wrapLines(UIFont.Small, S.homeNoteText, o.width)) do
@@ -4543,13 +4720,19 @@ function pageBuild.decorations(B)
         g.heading = single(drawPanel(function(o)
             o:drawText(string.upper(group.title), 0, 0, group.c.r, group.c.g, group.c.b, 1, UIFont.Medium)
             local x = textW(UIFont.Medium, string.upper(group.title)) + 16
-            o:drawText(clipText(UIFont.Small, group.count .. " settings.  " .. group.note, math.max(20, o.width - x)), x,
+            local isZh = PzoptI18n and PzoptI18n.getLang() == "zh_cn"
+            local groupSummary = isZh and (group.count .. " \233\161\185\232\174\190\231\189\174\227\128\130  " .. group.note) or (group.count .. " settings.  " .. group.note)
+            o:drawText(clipText(UIFont.Small, groupSummary, math.max(20, o.width - x)), x,
                 math.floor((hM - hS) / 2), C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small)
         end))
         if g.page ~= 1 then
             local page = PAGES[g.page]
-            g.reset = buttonItem("Reset " .. g.title .. " to defaults", "Puts every " .. g.title .. " setting back to the "
-                .. "build's default, the master switch on. Only the controls change; Apply or Accept saves them.", function()
+            local isZh = PzoptI18n and PzoptI18n.isZh()
+            local resetTitle = isZh and ("\233\135\141\231\189\174 " .. g.title .. " \232\135\179\233\187\152\232\174\164") or ("Reset " .. g.title .. " to defaults")
+            local resetTip = isZh
+                and ("\229\176\134 " .. g.title .. " \228\184\139\231\154\132\230\137\128\230\156\137\232\174\190\231\189\174\230\129\162\229\164\141\228\184\186\230\158\132\229\187\186\233\187\152\232\174\164\229\128\188\239\188\140\230\128\187\229\188\128\229\133\179\229\188\128\229\144\175\227\128\130\228\187\133\228\191\174\230\148\185\231\149\140\233\157\162\230\142\167\228\187\182\239\188\155\231\130\185\229\135\187\226\128\156\229\186\148\231\148\168\226\128\157\230\136\150\226\128\156\231\161\174\229\174\154\226\128\157\229\144\142\228\191\157\229\173\152\227\128\130")
+                or ("Puts every " .. g.title .. " setting back to the build's default, the master switch on. Only the controls change; Apply or Accept saves them.")
+            g.reset = buttonItem(resetTitle, resetTip, function()
                 resetOptions(self[page.options] or {}, self[page.masterField])
             end)
         end
@@ -4575,7 +4758,9 @@ function pageBuild.decorations(B)
                 local pw = textW(UIFont.Small, st) + 12
                 local fy = o.height - hS - 10
                 drawPill(o, o.width - 12 - pw, fy - 1, st, sc)
-                o:drawText(clipText(UIFont.Small, #c.rows .. " settings:  " .. c.subList, o.width - 44 - pw), 16, fy,
+                local isZh = PzoptI18n and PzoptI18n.getLang() == "zh_cn"
+                local catSummary = isZh and (#c.rows .. " \233\161\185\232\174\190\231\189\174:  " .. c.subList) or (#c.rows .. " settings:  " .. c.subList)
+                o:drawText(clipText(UIFont.Small, catSummary, o.width - 44 - pw), 16, fy,
                     C_DIM.r, C_DIM.g, C_DIM.b, 1, UIFont.Small)
             end))
             -- the subcategory tabs, Overview first
@@ -4605,7 +4790,8 @@ function pageBuild.decorations(B)
                 b:setHeight(hM + 12)
                 table.insert(cat.tabs, single(b))
             end
-            tabButton(0, "Overview", nil)
+            local overviewTitle = (PzoptI18n and PzoptI18n.t("ui.crumbs.overview", "Overview")) or "Overview"
+            tabButton(0, overviewTitle, nil)
             for i, sub in ipairs(cat.subs) do
                 local s, index = sub, i
                 tabButton(i, sub.title, sub.rows)
@@ -4624,7 +4810,10 @@ function pageBuild.decorations(B)
                         o:drawText(clipText(UIFont.Small, text, o.width - 32), 16, 10 + hM, C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small)
                     end))
                     s.card.background = true
-                    s.open = buttonItem("All " .. #s.rows .. " settings  >", "Opens the " .. s.title .. " tab.",
+                    local isZh = PzoptI18n and PzoptI18n.isZh()
+                    local openTitle = isZh and ("\229\133\168\233\131\168 " .. #s.rows .. " \233\161\185\232\174\190\231\189\174  >") or ("All " .. #s.rows .. " settings  >")
+                    local openTip = isZh and ("\230\137\147\229\188\128 " .. s.title .. " \230\160\135\231\173\190\233\161\181\227\128\130") or ("Opens the " .. s.title .. " tab.")
+                    s.open = buttonItem(openTitle, openTip,
                         function() navigate(S, "cat", c.id, index) end)
                 else
                     s.head = single(drawButton(self, function() navigate(S, "cat", c.id, index) end, function(o, hot)
@@ -4632,7 +4821,9 @@ function pageBuild.decorations(B)
                         o:drawRect(0, 0, o.width, 1, 1, 0.3, 0.3, 0.33)
                         o:drawText(s.title, 0, 6, col.r, col.g, col.b, 1, UIFont.Medium)
                         local hidden = s.headHidden or 0
-                        local more = hidden > 0 and (hidden .. " more in its tab  >") or "Open its tab  >"
+                        local more = (PzoptI18n and PzoptI18n.isZh())
+                            and (hidden > 0 and ("\232\191\152\230\156\137 " .. hidden .. " \233\161\185\232\174\190\231\189\174  >") or "\230\137\147\229\188\128\232\175\165\230\160\135\231\173\190\233\161\181  >")
+                            or (hidden > 0 and (hidden .. " more in its tab  >") or "Open its tab  >")
                         local t = hot and 1 or 0.6
                         o:drawText(more, textW(UIFont.Medium, s.title) + 16, 6 + math.floor((hM - hS) / 2), t, t, t, 1, UIFont.Small)
                     end))
@@ -4666,7 +4857,9 @@ function pageBuild.decorations(B)
                 if v ~= "false" and v ~= "off" and v ~= "0" and v ~= "off (default)" and v ~= "false (default)" then on = on + 1 end
             end
             local c = on == #problem.rows and C_OPT or C_AMBER
-            o:drawText(#problem.rows .. " settings, " .. on .. " on", 12, o.height - hS - 8, c.r, c.g, c.b, 1, UIFont.Small)
+            local isZh = PzoptI18n and PzoptI18n.getLang() == "zh_cn"
+            local probCount = isZh and (#problem.rows .. " \233\161\185\232\174\190\231\189\174\239\188\140" .. on .. " \233\161\185\229\188\128\229\144\175") or (#problem.rows .. " settings, " .. on .. " on")
+            o:drawText(probCount, 12, o.height - hS - 8, c.r, c.g, c.b, 1, UIFont.Small)
         end))
     end
 end
@@ -4756,37 +4949,48 @@ local function buildPage(self)
         if not cat then return end
         local c = cat.group.c
         o:drawText(cat.title, 0, 0, 1, 1, 1, 1, UIFont.Large)
-        o:drawText(clipText(UIFont.Small, cat.blurb, o.width), 0, hL + 4, C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small)
-        local count = #cat.rows .. " settings in " .. #cat.subs .. " subcategories"
+        local isZh = PzoptI18n and PzoptI18n.isZh()
+        local count = isZh
+            and (#cat.subs .. " \228\184\170\229\173\144\231\177\187\229\136\171\239\188\140\229\133\177 " .. #cat.rows .. " \233\161\185\232\174\190\231\189\174")
+            or (#cat.rows .. " settings in " .. #cat.subs .. " subcategories")
         if textW(UIFont.Large, cat.title) + 24 + textW(UIFont.Small, count) <= o.width then
             o:drawTextRight(count, o.width, math.floor((hL - hS) / 2), c.r, c.g, c.b, 1, UIFont.Small)
         end
         if groupOff(cat.group) then
-            o:drawText(clipText(UIFont.Small, "Switched off: the " .. cat.group.title .. " master switch on the home page is off, so these "
-                .. "settings are ignored.", o.width), 0, hL + hS + 8, C_STOCK.r, C_STOCK.g, C_STOCK.b, 1, UIFont.Small)
+            local offMsg = PzoptI18n.isZh()
+                and ("\229\183\178\229\133\179\233\151\173\239\188\154\228\184\187\233\161\181\228\184\138\231\154\132 " .. cat.group.title .. " \230\128\187\229\188\128\229\133\179\229\164\132\228\186\142\229\133\179\233\151\173\231\138\182\230\128\129\239\188\140\229\155\160\230\173\164\232\191\153\228\186\155\232\174\190\231\189\174\229\183\178\232\162\171\229\191\189\231\149\165\227\128\130")
+                or ("Switched off: the " .. cat.group.title .. " master switch on the home page is off, so these settings are ignored.")
+            o:drawText(clipText(UIFont.Small, offMsg, o.width), 0, hL + hS + 8, C_STOCK.r, C_STOCK.g, C_STOCK.b, 1, UIFont.Small)
         end
     end))
     S.tabRule = single(drawPanel(function(o) o:drawRect(0, 0, o.width, 1, 1, 0.3, 0.3, 0.33) end))
     S.tabRule.background = true
-    S.moreButton = buttonItem("Show more", "Switches the view so this subcategory shows the rest of its settings.", function()
-        setLevel(S, NAV.level == "simple" and "advanced" or "everything")
-    end)
-    S.catReset = buttonItem("Reset to defaults", "Puts every setting of this category back to the build's default on this "
-        .. "machine. Only the controls change; Apply or Accept saves them.", function()
-        local cat = S.tree.catById[NAV.cat]
-        if not cat then return end
-        local list = {}
-        for _, row in ipairs(cat.rows) do table.insert(list, row.option) end
-        resetOptions(list)
-    end)
+    S.moreButton = buttonItem(
+        PzoptI18n.t("ui.buttons.show_more", "Show more"),
+        PzoptI18n.t("ui.buttons.show_more_tip", "Switches the view so this subcategory shows the rest of its settings."),
+        function()
+            setLevel(S, NAV.level == "simple" and "advanced" or "everything")
+        end
+    )
+    S.catReset = buttonItem(
+        PzoptI18n.t("ui.buttons.reset_category", "Reset to defaults"),
+        PzoptI18n.t("ui.buttons.reset_category_tip", "Puts every setting of this category back to the build's default on this machine. Only the controls change; Apply or Accept saves them."),
+        function()
+            local cat = S.tree.catById[NAV.cat]
+            if not cat then return end
+            local list = {}
+            for _, row in ipairs(cat.rows) do table.insert(list, row.option) end
+            resetOptions(list)
+        end
+    )
     S.catNote = single(drawPanel(function(o)
         o:drawText(clipText(UIFont.Small, o.text or "", o.width), 0, 0, C_DIM.r, C_DIM.g, C_DIM.b, 1, UIFont.Small)
     end))
 
     -- problems
     S.probHead = single(drawPanel(function(o)
-        o:drawText("Fix a problem", 0, 0, 1, 1, 1, 1, UIFont.Large)
-        o:drawText(clipText(UIFont.Small, "Pick what you notice: why it happens, and the settings that help, wherever they live.", o.width),
+        o:drawText(PzoptI18n.t("ui.buttons.fix_problem", "Fix a problem"), 0, 0, 1, 1, 1, 1, UIFont.Large)
+        o:drawText(clipText(UIFont.Small, PzoptI18n.t("ui.help.fix_subtitle", "Pick what you notice: why it happens, and the settings that help, wherever they live."), o.width),
             0, hL + 4, C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small)
     end))
     S.probWhy = single(drawPanel(function(o)
@@ -4892,6 +5096,10 @@ local function buildPage(self)
         for _, section in ipairs(page.sections) do
             for _, entry in ipairs(section.entries) do
                 if p:isPzoptOptionKnown(entry.key) then
+                    if PzoptI18n then
+                        entry.label = PzoptI18n.getOption(entry.key, "label", entry.label)
+                        entry.tip = PzoptI18n.getOption(entry.key, "tip", entry.tip)
+                    end
                     table.insert(rows, { entry = entry, page = pi, section = section })
                 else
                     print("[pzopt] options tab: unknown key " .. entry.key .. ", skipped")
