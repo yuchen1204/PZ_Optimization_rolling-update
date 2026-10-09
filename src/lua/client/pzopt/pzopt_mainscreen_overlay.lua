@@ -162,6 +162,11 @@ local function dropItem(self, what, err)
     self.pzoptOverlayOption = nil
 end
 
+local function showOnMainMenu()
+    local ok, v = pcall(function() return perf():getPzoptOption("mainMenuButtons") end)
+    return ok and v == "true"
+end
+
 local function install()
     if not MainScreen or MainScreen.pzoptOverlayItem then return end
     -- the overlay works with the optimizations switched off (pzopt.Overlay needs only a matching build)
@@ -174,8 +179,10 @@ local function install()
     local stockInstantiate = MainScreen.instantiate
     function MainScreen:instantiate(...)
         stockInstantiate(self, ...)
-        local okAdd, err = pcall(addItem, self)
-        if not okAdd then print("[pzopt] overlay item: failed: " .. tostring(err)) end
+        if showOnMainMenu() then
+            local okAdd, err = pcall(addItem, self)
+            if not okAdd then print("[pzopt] overlay item: failed: " .. tostring(err)) end
+        end
     end
     local stockPrerender = MainScreen.prerender
     function MainScreen:prerender(...)

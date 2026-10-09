@@ -51,6 +51,8 @@ import java.util.Properties;
  *                            Lua checksum a client sends to the server, like SandboxVars.lua is in stock: a server without
  *                            them otherwise refuses the join with "File doesn't exist on the server" (default true; not
  *                            tied to `enabled`, the files are on disk either way)
+ *   mainMenuButtons true/false show PZ Optimization items (update, mod compat, overlay) on the main menu.
+ *                            Off by default: all buttons are accessible in the PZ Optimization options tab
  *   updateCheck true/false   the main menu asks the GitHub releases once per boot whether a newer build for this game
  *                            revision exists and offers an "PZ Optimization update" menu item that downloads and
  *                            installs it (pzopt.Updater; default true; never in harness runs)
@@ -776,6 +778,8 @@ public final class Config {
    public static final boolean HOTSAVE_WARMUP = bool("hotsaveWarmup", true);
    public static final boolean UI_PROFILE = bool("uiProfile", INSTRUMENT); // pzopt.UiProfile: exact UI update / render timing per frame and per top-level element (Zomboid/pzopt-ui.out); on in instrumented runs
    public static final boolean LUA_PROFILE = bool("luaProfile", INSTRUMENT); // pzopt.LuaProfile: the game-thread sampler also names the Lua function it caught (Zomboid/pzopt-lua.out); on in instrumented runs
+   /** mainMenuButtons: show PZ Optimization items (update, mod compat, overlay) on the main menu. Off by default: accessible in the options tab. */
+   public static final boolean MAIN_MENU_BUTTONS = bool("mainMenuButtons", false);
    public static final String GC_MODE = string("gcMode", "g1"); // pzopt.GcChoice: the next launch's collector. g1 (default, the maintainer's decision 2026-09-23) | auto (G1 on gcG1Cores cores or fewer) | stock (the launcher's own ZGC; undoes our switch)
    public static final int GC_G1_CORES = integer("gcG1Cores", 4);
    /**

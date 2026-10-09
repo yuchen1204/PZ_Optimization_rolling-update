@@ -73,7 +73,7 @@ PzoptSettingsLayout = {
               } },
             { id = "ui", title = "Menus, inventory and map", blurb = "Windows that answer in the frame you click.",
               subs = {
-                { title = "Windows", keys = { "uiRetained", "uiRetainedChildren", "uiTickStagger", "uiLuaFast", "hotsaveWarmup" } },
+                { title = "Windows", keys = { "mainMenuButtons", "uiRetained", "uiRetainedChildren", "uiTickStagger", "uiLuaFast", "hotsaveWarmup" } },
                 { title = "Map", keys = { "mapStreetCache", "mapStreetMemo", "mapVisitedFast" } },
                 { title = "Lua", keys = { "luaIndexCache", "luaInternConstants", "luaSkipEmpty" } },
               } },
@@ -82,8 +82,8 @@ PzoptSettingsLayout = {
                 { title = "Cores and power", keys = { "corePlacement", "gpuPstate", "jitSteady", "lightingSyncPark" } },
                 { title = "Sound", keys = { "audioLimiter", "audioLimiterCeilingDb", "audioLimiterStereoFold", "soundTickHz",
                     "emitterIdleSkip", "worldSoundCleanupFast", "hearingHoist", "soundZoneCache", "worldSoundFast" } },
-                { title = "Mods and multiplayer", keys = { "modProfile", "modCompat", "uiRetainedMods", "luaWorkerGate", "luaChecksumExempt" } },
-                { title = "Updates", keys = { "updateCheck", "updatePrefetch", "updateFromWorkshop" } },
+                { title = "Mods and multiplayer", keys = { "modProfile", "modCompat", "uiRetainedMods", "luaWorkerGate", "luaChecksumExempt" }, compatButton = true },
+                { title = "Updates", keys = { "updateCheck", "updatePrefetch", "updateFromWorkshop" }, updaterButton = true },
               } },
           } },
         { id = "vis", title = "Visuals", page = 2, colour = { 0.98, 0.72, 0.30 }, cards = true,
@@ -123,7 +123,7 @@ PzoptSettingsLayout = {
           cats = {
             { id = "overlay", title = "Performance overlay", blurb = "Frame times, utilization and what the game thread does, on screen.",
               subs = {
-                { title = "Overlay", sections = { "Performance overlay (" } },
+                { title = "Overlay", sections = { "Performance overlay (" }, overlayButton = true },
                 { title = "Fps colour", sections = { "Performance overlay: fps" } },
                 { title = "Console log", sections = { "Console log" } },
               } },

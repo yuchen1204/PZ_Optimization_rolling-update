@@ -419,7 +419,7 @@ function PzoptCompatDialog:close()
     self:removeFromUIManager()
     PzoptCompatDialog.instance = nil
     local ms = MainScreen.instance
-    if ms and ms.bottomPanel then
+    if self.wasBottomPanelVisible and ms and ms.bottomPanel then
         ms.bottomPanel:setVisible(true)
     end
     -- the controller's focus goes back to the menu, then onto the item that opened the dialog
@@ -451,7 +451,12 @@ function PzoptCompatDialog.show()
     dlg:setAlwaysOnTop(true)
     dlg:bringToTop()
     PzoptCompatDialog.instance = dlg
-    MainScreen.instance.bottomPanel:setVisible(false)
+    if MainScreen.instance and MainScreen.instance.bottomPanel then
+        dlg.wasBottomPanelVisible = MainScreen.instance.bottomPanel:isVisible()
+        if dlg.wasBottomPanelVisible then
+            MainScreen.instance.bottomPanel:setVisible(false)
+        end
+    end
     local joypadData = JoypadState.getMainMenuJoypad()
     if joypadData then
         dlg.prevFocus = joypadData.focus

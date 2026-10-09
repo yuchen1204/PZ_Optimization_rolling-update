@@ -431,6 +431,8 @@ local SECTIONS = {
     {
         title = "Menus, inventory and map (UI)", clip = "spin",
         entries = {
+            { key = "mainMenuButtons", label = "Show buttons on the main menu",
+              tip = "Adds 'PZ Optimization update', 'Mod compatibility check' and 'Show/Hide performance overlay' directly to the game's main menu. Off by default: all buttons are available here in the PZ Optimization options tab." },
             { key = "uiRetained", label = "UI: redraw only what changed, the moment you act",
               tip = "The game redrew every open window's Lua 60 times a second into the UI picture, although almost all of them drew exactly the same as the frame before, and showed a click or key only at the next of those redraws. With this on each window's drawing is kept and reused while nothing can have changed it (no click, key, wheel or mouse over it, no change to its data, the inventory not marked for refresh); anything you do is drawn in the same frame. Measured at 240 fps: the UI's share of the frame 4 -> 0.9 % with the HUD, 9.8 -> 1.4 % with the inventory open, 16.6 -> 2.2 % with the crafting window, 40 -> 4 % with the map." },
             { key = "uiRetainedChildren", label = "UI: reuse unchanged buttons and panels inside windows",
@@ -3348,6 +3350,69 @@ local function setupUpscalerDepsButton(self, b)
     end
 end
 
+local function setupOverlayButton(b)
+    local function overlayTitle()
+        local ok, vis = pcall(function() return perf():isPzoptOverlayVisible() end)
+        return (ok and vis) and "Hide performance overlay" or "Show performance overlay"
+    end
+    b.tooltip = "Toggles the performance overlay (F9 / L3 + R3)."
+    b.onclick = function()
+        pcall(function() perf():togglePzoptOverlay() end)
+        b:setTitle(overlayTitle())
+        b:setWidthToTitle()
+    end
+    b.prerender = function(o)
+        ISButton.prerender(o)
+        local t = overlayTitle()
+        if o.title ~= t then
+            o:setTitle(t)
+            o:setWidthToTitle()
+        end
+    end
+    b:setTitle(overlayTitle())
+    b:setWidthToTitle()
+end
+
+local function setupUpdateButton(b)
+    local function updateTitle()
+        local ok, s = pcall(function() return perf():getPzoptUpdateState() end)
+        if ok and s == "available" then
+            return "PZ Optimization update (New version!)"
+        elseif ok and s == "ready" then
+            return "Restart to finish update"
+        end
+        return "Check for updates"
+    end
+    b.tooltip = "Checks for updates and opens the PZ Optimization updater dialog."
+    b.onclick = function()
+        pcall(function() perf():pzoptUpdateCheck() end)
+        if PzoptUpdateDialog and PzoptUpdateDialog.show then
+            PzoptUpdateDialog.show()
+        end
+    end
+    b.prerender = function(o)
+        ISButton.prerender(o)
+        local t = updateTitle()
+        if o.title ~= t then
+            o:setTitle(t)
+            o:setWidthToTitle()
+        end
+    end
+    b:setTitle(updateTitle())
+    b:setWidthToTitle()
+end
+
+local function setupCompatButton(b)
+    b.tooltip = "Checks for conflicts between active Java mods and PZ Optimization."
+    b.onclick = function()
+        if PzoptCompatDialog and PzoptCompatDialog.show then
+            PzoptCompatDialog.show()
+        end
+    end
+    b:setTitle("Mod compatibility check")
+    b:setWidthToTitle()
+end
+
 -- A group's settings back to the build's defaults, its master switch on (the Visuals and Tools "Reset" buttons, a
 -- category's "Reset ... to defaults"). Only the controls change; Apply / Accept saves them.
 local function resetOptions(options, master)
@@ -3804,7 +3869,8 @@ local function buildTree(rows, masterRows)
             table.insert(group.cats, cat)
             tree.catById[cat.id] = cat
             for _, s in ipairs(c.subs) do
-                local sub = { title = s.title, cat = cat, rows = {}, dlss = s.dlssButton }
+                local sub = { title = s.title, cat = cat, rows = {}, dlss = s.dlssButton,
+                              overlay = s.overlayButton, updater = s.updaterButton, compat = s.compatButton }
                 table.insert(cat.subs, sub)
                 if s.sections then
                     for _, row in ipairs(rows) do
@@ -4093,11 +4159,18 @@ function layoutPage.home(C, y)
     local bx = x0
     local bl = {}
     for _, b in ipairs(S.toolButtons) do
-        local el = at(b, bx, y)
+        local el = b.elems[1].el
+        if bx + el:getWidth() > x1 and bx > x0 then
+            line(unpack(bl))
+            bl = {}
+            bx = x0
+            y = y + BH + 6
+        end
+        at(b, bx, y)
         bx = bx + el:getWidth() + 8
         table.insert(bl, el)
     end
-    line(unpack(bl))
+    if #bl > 0 then line(unpack(bl)) end
     y = y + BH + SP
     local noteH = #wrapLines(UIFont.Small, S.homeNoteText, w) * hS + 4
     at(S.homeNote, x0, y, w, noteH)
@@ -4148,6 +4221,9 @@ function layoutPage.cat(C, y)
                 line(ob)
                 local ry = cardY + headH2
                 if sub.dlssRow then ry = rowAt(sub.dlssRow, ry, 16) end
+                if sub.overlayRow then ry = rowAt(sub.overlayRow, ry, 16) end
+                if sub.updaterRow then ry = rowAt(sub.updaterRow, ry, 16) end
+                if sub.compatRow then ry = rowAt(sub.compatRow, ry, 16) end
                 for _, row in ipairs(rows) do ry = rowAt(row, ry, 16) end
                 card:setHeight(ry - cardY + 8)
                 y = ry + 8 + SP * 3
@@ -4156,6 +4232,10 @@ function layoutPage.cat(C, y)
                 sub.headHidden = hidden
                 line(hb)
                 y = y + hM + 8 + SP
+                if sub.dlssRow then y = rowAt(sub.dlssRow, y) end
+                if sub.overlayRow then y = rowAt(sub.overlayRow, y) end
+                if sub.updaterRow then y = rowAt(sub.updaterRow, y) end
+                if sub.compatRow then y = rowAt(sub.compatRow, y) end
                 for _, row in ipairs(rows) do y = rowAt(row, y) end
                 y = y + SP * 3
             end
@@ -4164,6 +4244,9 @@ function layoutPage.cat(C, y)
         local sub = cat.subs[NAV.sub]
         if sub then
             if sub.dlssRow then y = rowAt(sub.dlssRow, y) end
+            if sub.overlayRow then y = rowAt(sub.overlayRow, y) end
+            if sub.updaterRow then y = rowAt(sub.updaterRow, y) end
+            if sub.compatRow then y = rowAt(sub.compatRow, y) end
             local rows = visibleRows(sub.rows, NAV.level)
             for _, row in ipairs(rows) do y = rowAt(row, y) end
             local hidden = #sub.rows - #rows
@@ -4425,12 +4508,20 @@ function pageBuild.home(B)
             yy = yy + hS
         end
     end))
-    S.toolButtons = {}
+    local overlayBtn, overlayItem = button("", nil, nil)
+    setupOverlayButton(overlayBtn)
+
+    local updateBtn, updateItem = button("", nil, nil)
+    setupUpdateButton(updateBtn)
+
+    local compatBtn, compatItem = button("", nil, nil)
+    setupCompatButton(compatBtn)
+
     local _, exportItem = button(EXPORT_TITLE, EXPORT_TIP, function() exportSettings(self) end)
     local _, importItem = button(IMPORT_TITLE, IMPORT_TIP, function() openImportDialog(self) end)
     local uninstall, uninstallItem = button(UNINSTALL_TITLE, nil, nil)
     setupUninstallButton(self, uninstall)
-    S.toolButtons = { exportItem, importItem, uninstallItem }
+    S.toolButtons = { overlayItem, updateItem, compatItem, exportItem, importItem, uninstallItem }
     S.homeNoteText = "Apply or Accept saves your changes to Zomboid/pzopt/options.ini. Performance settings take effect on the next "
         .. "launch; Visuals and Tools apply at once (a few Visuals on the next launch). Settings pinned by the game folder's "
         .. "pzopt.properties or -Dpzopt.<key> cannot be changed here."
@@ -4835,6 +4926,30 @@ local function buildPage(self)
                     item.step = BH + SP
                     item.joy = { { b } }
                     sub.dlssRow = item
+                end
+                if sub.overlay then
+                    local b, item = button("", nil, nil)
+                    setupOverlayButton(b)
+                    item.elems[1].x0 = G.contentX
+                    item.step = BH + SP
+                    item.joy = { { b } }
+                    sub.overlayRow = item
+                end
+                if sub.updater then
+                    local b, item = button("", nil, nil)
+                    setupUpdateButton(b)
+                    item.elems[1].x0 = G.contentX
+                    item.step = BH + SP
+                    item.joy = { { b } }
+                    sub.updaterRow = item
+                end
+                if sub.compat then
+                    local b, item = button("", nil, nil)
+                    setupCompatButton(b)
+                    item.elems[1].x0 = G.contentX
+                    item.step = BH + SP
+                    item.joy = { { b } }
+                    sub.compatRow = item
                 end
             end
         end

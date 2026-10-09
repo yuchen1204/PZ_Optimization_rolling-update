@@ -309,7 +309,7 @@ function PzoptUpdateDialog:close()
     self:removeFromUIManager()
     PzoptUpdateDialog.instance = nil
     local ms = MainScreen.instance
-    if ms and ms.bottomPanel then
+    if self.wasBottomPanelVisible and ms and ms.bottomPanel then
         ms.bottomPanel:setVisible(true)
     end
     -- the controller's focus goes back where it came from (the menu, whose focus reset lands on the default
@@ -342,7 +342,12 @@ function PzoptUpdateDialog.show()
     PzoptUpdateDialog.instance = dlg
     -- like the stock quit dialog: the menu items go while a dialog is up, and a controller's focus moves
     -- to the dialog (the menu would otherwise keep A for itself)
-    MainScreen.instance.bottomPanel:setVisible(false)
+    if MainScreen.instance and MainScreen.instance.bottomPanel then
+        dlg.wasBottomPanelVisible = MainScreen.instance.bottomPanel:isVisible()
+        if dlg.wasBottomPanelVisible then
+            MainScreen.instance.bottomPanel:setVisible(false)
+        end
+    end
     local joypadData = JoypadState.getMainMenuJoypad()
     if joypadData then
         dlg.prevFocus = joypadData.focus
@@ -574,6 +579,11 @@ local function driveTick(self)
     end
 end
 
+local function showOnMainMenu()
+    local ok, v = pcall(function() return perf():getPzoptOption("mainMenuButtons") end)
+    return ok and v == "true"
+end
+
 local function install()
     if not MainScreen or MainScreen.pzoptUpdateItem then return end
     local ok, has = pcall(function() return getPerformance():hasPzoptOptions() end)
@@ -585,8 +595,10 @@ local function install()
     local stockInstantiate = MainScreen.instantiate
     function MainScreen:instantiate(...)
         stockInstantiate(self, ...)
-        local okAdd, err = pcall(addItem, self)
-        if not okAdd then print("[pzopt] update item: failed: " .. tostring(err)) end
+        if showOnMainMenu() then
+            local okAdd, err = pcall(addItem, self)
+            if not okAdd then print("[pzopt] update item: failed: " .. tostring(err)) end
+        end
     end
     local stockPrerender = MainScreen.prerender
     function MainScreen:prerender(...)
@@ -629,3 +641,6 @@ end
 
 install()
 Events.OnGameBoot.Add(install)
+Events.OnGameBoot.Add(function()
+    pcall(function() perf():pzoptUpdateCheck() end)
+end)
