@@ -33,3 +33,6 @@ docs/media/hdr-horde-cinematic-jev-1080.mp4
 harness/asprof/
 harness/presentprobe
 /harness/texprobe/classes/
+
+# session-report skill output (self-contained HTML reports)
+session*
