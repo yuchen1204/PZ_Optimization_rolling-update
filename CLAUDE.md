@@ -59,6 +59,19 @@ saturated" is itself a finding. Chunk-latency wins are done; do not spend more o
 - **Never kill with a self-matching pattern.** `pkill -f '<pattern>'` where the pattern appears in
   your own command line kills the tool shell (exit 144). Use bracket patterns like
   `[P]rojectZomboid64` or a saved PID.
+- **No raw CJK in `src/lua` string literals** (2026-10-09). The game's Lua lexer stores each
+  string-literal character as its low byte and re-decodes the buffer as UTF-8, so a hand-written
+  `"卸"` compiles to `"x"` and every raw Chinese string is mojibake in game (the CN options tab).
+  Chinese goes through `PzoptI18n` (the data table, pre-escaped by `scripts/i18n-build.py`) or the
+  `\ddd` UTF-8 byte escapes of `scripts/escape-cjk.py`; comments may stay raw. `build.sh` runs
+  `scripts/raw-cjk-gate.py` and fails on a violation.
+- **Deploying to the maintainer's Windows install** (they play the game there): game dir
+  `F:\pzsteamrip\Project Zomboid` (WSL `/mnt/f/pzsteamrip/Project Zomboid`), user dir
+  `C:\Users\yuchen\Zomboid`. Install with
+  `PZ_DIR=/mnt/f/pzsteamrip/Project Zomboid ZOMBOID=/mnt/c/Users/yuchen/Zomboid scripts/pzopt.sh install`
+  (uninstall first when already installed). That install is missing stock font pages, so the
+  console's `AngelCodeFont failed to load page 0` errors are pre-existing (the CNB42 font mod
+  covers them) — not a pzopt regression.
 - **All recordings and videos are AV1 HDR.** Every `--record` capture (gpu-screen-recorder
   `-k av1_hdr`: AV1 10-bit PQ / BT.2020) and every video published under `docs/media/` (the
   stitch scripts, `harness/encode-av1-hdr.sh`, the `-1080` README copies) is encoded AV1 10-bit
