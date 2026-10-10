@@ -4918,8 +4918,13 @@ local function buildPage(self)
     for _, g in ipairs(PzoptSettingsLayout.groups) do
         for _, c in ipairs(g.cats) do longest = math.max(longest, textW(UIFont.Small, c.title)) end
     end
-    G.sideW = math.max(200, math.min(330, math.max(math.floor(W * 0.14), longest + textW(UIFont.Small, "000") + 48)))
-    G.prevW = math.max(300, math.min(900, math.floor(W * 0.25)))
+    -- a narrow window (the F-box runs 1920x1080 at ~1344 px of panel) shares the width three ways in the old
+    -- geometry and the settings list was left ~560 px. Under 1500 px of panel the preview panel goes (the same
+    -- information is on the row's tooltip; the "Before / after clips" tick box brings the clips back alone) and
+    -- the sidebar caps at 240, so the list gets the rest.
+    G.narrow = W < 1500
+    G.sideW = math.max(200, math.min(G.narrow and 240 or 330, math.max(math.floor(W * 0.14), longest + textW(UIFont.Small, "000") + 48)))
+    G.prevW = G.narrow and 0 or math.max(300, math.min(900, math.floor(W * 0.25)))
     G.prevX = W - G.m - G.sbar - G.prevW
     G.contentX = G.m + G.sideW + GAP
     G.contentR = G.prevX - GAP
@@ -5257,6 +5262,7 @@ local function buildPage(self)
     preview:setAnchorBottom(true)
     preview.minX = G.contentX
     panel:addChild(preview)
+    if G.narrow then preview:setVisible(false) end  -- hidden with the panel: the rig's right edge is then panel-sbar
     if S.keyRows[1] then preview:select(S.keyRows[1]) end
     self.pzoptPreview = preview
     S.preview = preview
