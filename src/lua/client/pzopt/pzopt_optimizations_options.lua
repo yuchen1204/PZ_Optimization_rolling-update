@@ -4913,6 +4913,17 @@ local function buildPage(self)
     self.addY = 0
     local p = perf()
     local W, H = panel:getWidth(), panel:getHeight()
+    -- Some third-party presences (PZModernUI on the maintainer's install, observed 2026-10-10: the panel
+    -- reported 2496 against a modal java width of 1920, a 1.30 factor) scale the tab view's geometry after
+    -- the panel was created: the panel measures wider than the window that shows it, so any column placed
+    -- from the panel's own width lands off screen. Recalibrate W to the window's span: the stock full-modal
+    -- ratio is width/0.7 of the pre-widen java width, i.e. the java modal's width is the needed span, and
+    -- the effective geometry width is javaW^2 / panelW (the panel width brought back into the window's
+    -- units). With no factor in play panelW == javaW and this is a no-op.
+    local javaW = self.width or (self.javaObject and self.javaObject:getWidth()) or W
+    if javaW and W > javaW * 1.02 then
+        W = math.floor(javaW * javaW / W + 0.5)
+    end
     local G = { m = 16, sbar = 13, hS = hS, hM = hM, hL = hL, BH = BH, SP = SP }
     -- the sidebar as wide as its longest category name needs (with its count), within 200..330 px; the preview a
     -- quarter of the width, at least 300 px (a 1920 x 1080 window is 1344 px wide: 1/4 is 336)
