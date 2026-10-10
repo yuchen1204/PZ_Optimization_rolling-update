@@ -37,9 +37,21 @@ UI_ZH = {
             "title": "性能 (Performance)",
             "note": "更平滑的帧时间与更快的加载速度，不改变游戏原生画面。",
         },
+        "soundin": {
+            "title": "输入与声音 (Input and sound)",
+            "note": "鼠标键盘按帧即时响应，以及音频混合输出。",
+        },
+        "load": {
+            "title": "启动与加载 (Boot and loading)",
+            "note": "从启动游戏到主菜单，从点击“继续”到进入世界。",
+        },
         "vis": {
             "title": "画质 (Visuals)",
             "note": "现代光影与视觉增强（环境光遮蔽、反射、阳光阴影、HDR 等）。",
+        },
+        "adv": {
+            "title": "高级调优 (Advanced)",
+            "note": "预算与线程等微调数值，已与常规开关分开；默认值即实测最优，改前请三思。",
         },
         "tools": {
             "title": "工具 (Tools)",
@@ -47,37 +59,41 @@ UI_ZH = {
         },
     },
     "categories": {
-        "smooth": {
-            "title": "流畅度与帧节奏",
-            "blurb": "平滑的帧输出、可变刷新率 (VRR) 与超低输入延迟。",
+        "perf-core": {
+            "title": "流畅与驾驶",
+            "blurb": "帧节奏、车辆平滑与移动时的世界加载。",
         },
-        "drive": {
-            "title": "车辆驾驶",
-            "blurb": "消除车辆卡顿与橡皮筋效应，提速高速行车时的世界加载。",
+        "perf-draw": {
+            "title": "世界绘制",
+            "blurb": "区块纹理烘焙的内容与每帧绘制的数量。",
         },
-        "world": {
-            "title": "世界渲染",
-            "blurb": "优化区块纹理烘焙内容与每帧图元绘制数量。",
+        "perf-light": {
+            "title": "光照与天气",
+            "blurb": "光照快速刷新、透视墙体与屋顶、浓雾、雨滴与积水。",
         },
-        "weather": {
-            "title": "光照、剖面与天气",
-            "blurb": "光照快速刷新、透视墙面与屋顶、浓雾优化与雨水积水缓存。",
+        "perf-zombies": {
+            "title": "僵尸与尸潮",
+            "blurb": "僵尸模拟分摊到所有核心，并削减无效检测。",
         },
-        "zombies": {
-            "title": "僵尸与尸潮模拟",
-            "blurb": "将尸潮动画与物理更新分摊至多个 CPU 核心，大幅削减高频检测开销。",
+        "input": {
+            "title": "输入与显示",
+            "blurb": "输入延迟、可变刷新率与帧队列深度。",
         },
-        "load": {
-            "title": "启动与加载",
-            "blurb": "从启动游戏到主菜单，从点击“继续”到进入世界。",
+        "sound": {
+            "title": "声音",
+            "blurb": "混音限幅、音源与全局音效。",
         },
         "ui": {
-            "title": "菜单、物品栏与地图",
-            "blurb": "点击即响应的即时窗口交互，缓存世界地图绘制数据。",
+            "title": "菜单与视图",
+            "blurb": "窗口交互与世界地图。",
         },
         "system": {
-            "title": "系统、音频与模组",
-            "blurb": "CPU 核心绑定、音频限幅、模组兼容性与更新检查。",
+            "title": "系统与模组",
+            "blurb": "CPU 核心绑定、模组兼容性与游戏更新。",
+        },
+        "load-entry": {
+            "title": "启动与加载界面",
+            "blurb": "从启动到主菜单，从“继续”到进入世界。",
         },
         "image": {
             "title": "图像画质",
@@ -94,6 +110,10 @@ UI_ZH = {
         "atmos": {
             "title": "环境氛围与细节",
             "blurb": "夜色与色彩分级、植被风动摇曳、浮雕凹凸与遮挡僵尸轮廓描边。",
+        },
+        "adv-tuning": {
+            "title": "微调数值",
+            "blurb": "各种预算、线程数、间隔与距离。",
         },
         "overlay": {
             "title": "性能监控覆盖层",
@@ -149,6 +169,18 @@ UI_ZH = {
         "Overlay": "覆盖层设置",
         "Fps colour": "FPS 字体颜色",
         "Console log": "控制台日志过滤",
+        "Smoothness and pacing": "流畅与帧节奏",
+        "Driving and streaming": "驾驶与流式加载",
+        "Bake scheduling": "烘焙调度",
+        "Variable refresh and macOS display": "可变刷新率与 macOS 显示",
+        "Mix and limiter": "混音与限幅器",
+        "Emitters and world sounds": "音源与全局音效",
+        "Map and Lua": "地图与 Lua",
+        "Bake and streaming tuning": "烘焙与流式加载调优",
+        "Lighting and cutaway tuning": "光照与剖面调优",
+        "Zombie tuning": "僵尸模拟调优",
+        "Streaming and handoff tuning": "流式与交接调优",
+        "Most used": "常用设置",
         "More": "更多设置",
     },
     "buttons": {
@@ -221,6 +253,9 @@ UI_ZH = {
         "off": "关闭",
         "off_lower": "关闭",
         "recommended": "推荐默认",
+    },
+    "quick": {
+        "label": "常用设置",
     },
     "framecap": {
         "menu_framerate": "主菜单帧率",

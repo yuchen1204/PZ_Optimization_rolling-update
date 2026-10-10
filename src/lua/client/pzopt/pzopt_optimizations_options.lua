@@ -4068,6 +4068,11 @@ local function buildTree(rows, masterRows)
         end
         table.insert(tree.problems, problem)
     end
+    -- the home page's quick toggles: rows from the layout's `quick` list (stand-ins, swapped for real rows below)
+    tree.quick = {}
+    for _, key in ipairs(L.quick or {}) do
+        if byKey[key] then table.insert(tree.quick, byKey[key]) end
+    end
     return tree
 end
 
@@ -4267,6 +4272,18 @@ function layoutPage.home(C, y)
     end
     line(unpack(pl))
     y = y + BH + SP * 3
+    -- the quick toggles: the settings most players look for, rows in their own right (clicking a row opens its
+    -- category through the row's own handler; the sidebar still shows where it lives)
+    if #S.tree.quick > 0 then
+        local quickTitle = (PzoptI18n and PzoptI18n.t("ui.quick.label", "Most used")) or "Most used"
+        local quickHeading = single(drawPanel(function(o)
+            o:drawText(string.upper(quickTitle), 0, 0, C_OPT.r, C_OPT.g, C_OPT.b, 1, UIFont.Medium)
+        end))
+        at(quickHeading, x0, y, w, hM + 6)
+        y = y + hM + 6 + SP
+        for _, row in ipairs(S.tree.quick) do y = rowAt(row, y) end
+        y = y + SP * 3
+    end
     local cols = w >= 1800 and 4 or (w >= 1150 and 3 or 2)
     local tileW = math.floor((w - (cols - 1) * 12) / cols)
     local tileH = hM + 3 * hS + 34
@@ -5171,6 +5188,7 @@ local function buildPage(self)
     for _, pr in ipairs(tree.problems) do
         for i, r in ipairs(pr.rows) do pr.rows[i] = real[r] end
     end
+    for i, r in ipairs(tree.quick) do tree.quick[i] = real[r] end
     for pi, page in ipairs(PAGES) do self[page.options] = optionLists[pi] end
     panel.addChild = nil -- back to the class method
 

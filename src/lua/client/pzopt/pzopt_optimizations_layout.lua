@@ -1,89 +1,113 @@
--- pzopt: how the PZ Optimization options tab organises its settings (2026-10-04). Data only, read by
--- pzopt_optimizations_options.lua when it builds the tab (this file loads first: the client files load in name order).
---  groups -> categories -> subcategories. A subcategory lists its keys (`keys`) or takes every key of the tab sections
---  whose title starts with one of `sections`. A key no subcategory claims lands in the "More" subcategory of the
---  category its section maps to in `home` (so a new setting always shows up somewhere).
---  `simple`: the settings the Simple view shows (what a player would change); `expertKeys` / `expertPatterns`: tuning
---  numbers the Everything view adds; the rest is Advanced. `problems`: the "Fix a problem" page.
+-- pzopt: how the PZ Optimization options tab organises its settings (2026-10-10 redesign).
+-- Data only, read by pzopt_optimizations_options.lua when it builds the tab (this file loads first: the client files
+-- load in name order). The 2026-10-04 three-groups / one-bigi-ia tree was hard to find settings in; the tab now opens
+-- on the quick toggles and the sidebar carries six top entries. groups -> categories -> subcategories. A subcategory
+-- lists its keys (`keys`) or takes every key of the tab sections whose title starts with one of `sections`. A key no
+-- subcategory claims lands in the "More" subcategory of the category its section maps to in `home` (so a new setting
+-- always shows up somewhere). Row page numbers (1, 2, 3) stay as they were: they pick the master switch and footer
+-- text, not the navigation. NOTE: subcategory TITLES are the i18n JSON keys (ui.subcategories.<title>), so a renamed
+-- title needs a new JSON entry in both languages (scripts/update_i18n.py + scripts/i18n-build.py).
+--  `simple`: the settings the Simple view shows. `expertKeys` / `expertPatterns`: tuning numbers the Everything view
+--  adds (the Advanced group's subcategories collect the layout's own tuning keys). `problems`: the "Fix a problem" page.
 
 PzoptSettingsLayout = {
+    quick = { "vehicleSmooth", "bakeScheduler", "animBonesParallel", "actionEvalParallel", "playerLosFast",
+        "aotCache", "texCompress", "uiRetained", "audioLimiter", "modProfile" },
+
     groups = {
         { id = "perf", title = "Performance", page = 1, colour = { 0.42, 0.80, 0.52 },
           note = "Smoother frames and faster loads. Nothing here changes how the game looks.",
           cats = {
-            { id = "smooth", title = "Smoothness and pacing", blurb = "Even frame delivery, variable refresh and input latency.",
+            { id = "perf-core", title = "Frames and driving", blurb = "Frame pacing, the car and the world while you move.",
               subs = {
-                { title = "Frame pacing", keys = { "presentPacing", "limiterSleep", "frameClockSmooth", "borderlessFullscreen" } },
-                { title = "Variable refresh", keys = { "vrr", "vrrCap", "macGlCore", "macGlTimerQueries", "macPresent" } },
-                { title = "Input latency", keys = { "inputLatch", "keyboardFresh", "reflexSleep", "reflexBoost", "reflexCapFps",
-                    "vblankLock", "gpuMaxFrames", "frameStartGate", "vsyncAdaptive", "cursorLatch", "aimHoldMs" } },
+                { title = "Smoothness and pacing", keys = { "vehicleSmooth", "physicsStepHz", "physicsStepMode" } },
+                { title = "Driving and streaming", keys = { "driveLookSmooth", "cameraScreenPixels", "parallel",
+                    "chunkGridWidth", "chunkGridFollowView", "driveTreeCutaway", "treeRebakeLazy", "treeRebakeLingerMs",
+                    "treeCutawayReach", "treeCutawayReachPx" } },
               } },
-            { id = "drive", title = "Driving", blurb = "The car's stutter and rubber banding, and the world arriving at speed.",
+            { id = "perf-draw", title = "World drawing", blurb = "What the chunk pictures hold and how many are drawn in a frame.",
               subs = {
-                { title = "Car smoothness", keys = { "vehicleSmooth", "driveCameraLate", "driveLookSmooth", "cameraScreenPixels",
-                    "physicsStepHz", "physicsStepMode" } },
-                { title = "Chunk streaming", keys = { "parallel", "workers", "loadWorkers", "wake", "chunkHandoffDivisor",
-                    "hotsaveStaged", "hotsaveIntervalSec" } },
-                { title = "Render distance", keys = { "chunkGridWidth", "chunkGridFollowView" } },
-                { title = "Trees while driving", keys = { "driveTreeCutaway", "treeRebakeLazy", "treeRebakeLingerMs",
-                    "treeCutawayReach", "treeCutawayReachPx", "treeBakeMaxChunksPerSec" } },
-              } },
-            { id = "world", title = "World drawing", blurb = "What the chunk pictures hold and how many are drawn in a frame.",
-              subs = {
-                { title = "What bakes", keys = { "treesInChunkTexture", "treeBakeDirect", "treeBakePass", "treeAppend",
-                    "windowsInChunkTexture", "translucentTilesInChunkTexture", "glassTilesPerFrame", "floorDecalsPerFrame", "translucentLightsPerFrame",
-                    "curtainDepthNudgePct", "windSpriteSway" } },
-                { title = "Bake budgets", keys = { "bakeScheduler", "bakeFrameBudget", "bakeBudgetAdaptive", "occlusionGrantedOnly",
-                    "bakeMipLevels", "renderChunkTopUp", "bakeBudget", "rebakeBudget", "rebakeMaxFrames" } },
-                { title = "Zoom", keys = { "zoomRetain", "zoomEase", "zoomEaseMs", "zoomRebakeBudget", "zoomPlaceholder", "zoomFrameMs" } },
+                { title = "What bakes", keys = { "treesInChunkTexture", "windowsInChunkTexture",
+                    "translucentTilesInChunkTexture", "glassTilesPerFrame", "floorDecalsPerFrame",
+                    "translucentLightsPerFrame", "curtainDepthNudgePct", "windSpriteSway" } },
+                { title = "Bake scheduling", keys = { "bakeScheduler", "bakeBudgetAdaptive", "occlusionGrantedOnly",
+                    "bakeMipLevels", "renderChunkTopUp", "bakeBudget", "rebakeBudget", "rebakeMaxFrames",
+                    "treeBakeDirect", "treeBakePass", "treeAppend" } },
+                { title = "Zoom", keys = { "zoomRetain", "zoomEase", "zoomPlaceholder" } },
                 { title = "Blood and flies", keys = { "bloodBake", "bloodAppend", "bloodSettleSec", "bloodFadeFix",
-                    "bloodRebakeCoalesceMs", "bloodAppendPlants", "bloodAppendVegetation", "fliesToggleFix" } },
-                { title = "Sprite buffers", keys = { "persistentVbo", "persistentVboFrameSync", "persistentVboSlots", "vboBatchKb", "vboFastQuads" } },
+                    "bloodAppendPlants", "bloodAppendVegetation", "fliesToggleFix" } },
+                { title = "Sprite buffers", keys = { "persistentVbo", "persistentVboFrameSync", "persistentVboSlots",
+                    "vboBatchKb", "vboFastQuads" } },
               } },
-            { id = "weather", title = "Lighting, cutaways and weather", blurb = "Light refreshes, see-through walls and roofs, fog, rain and puddles.",
+            { id = "perf-light", title = "Lighting and weather", blurb = "Light refreshes, see-through walls and roofs, fog, rain and puddles.",
               subs = {
-                { title = "Lighting", keys = { "lightInfoChunkGate", "lightInfoOncePerFrame", "lightSwitchCheckFrames", "visBlurReduce",
-                    "lightingBudget", "lightingFlush", "lightingRebakeBudget", "lightingRebakeMaxFrames", "lightingRebakeMs",
-                    "lightingStrongDelta", "lightingStrongBudget", "lightingStrongFrameMs", "lightingGlobalDeltaPct", "losLightPrefetch" } },
+                { title = "Lighting", keys = { "lightInfoChunkGate", "lightInfoOncePerFrame", "lightSwitchCheckFrames",
+                    "visBlurReduce", "lightingBudget", "lightingFlush" } },
                 { title = "Cutaways", keys = { "cutawayFast", "roofHideDebounceFrames", "cutawayRadius", "cutawayVisitPrefilter",
-                    "cutawayInvalidateChanged", "gridStackInterval", "occlusionSkipLightingOnly", "visPolyAsync", "translucentOrderCache" } },
-                { title = "Fog", keys = { "fogPass", "fogScalePct", "fogMaskFrames", "weatherMaskIdleSkip", "weatherFxScalePct" } },
-                { title = "Rain and puddles", keys = { "rainTiles", "puddleCache", "rainSplashesFast", "puddleCacheFrames", "puddleEarlyZ", "puddleVbo" } },
+                    "cutawayInvalidateChanged", "gridStackInterval", "occlusionSkipLightingOnly", "visPolyAsync",
+                    "translucentOrderCache" } },
+                { title = "Fog", keys = { "fogPass", "fogMaskFrames", "weatherMaskIdleSkip" } },
+                { title = "Rain and puddles", keys = { "rainTiles", "puddleCache", "rainSplashesFast", "puddleCacheFrames",
+                    "puddleEarlyZ", "puddleVbo" } },
               } },
-            { id = "zombies", title = "Zombies and hordes", blurb = "The zombie simulation spread over every core, and cheaper checks.",
+            { id = "perf-zombies", title = "Zombies and hordes", blurb = "The zombie simulation spread over every core, and cheaper checks.",
               subs = {
                 { title = "On other cores", keys = { "animBonesParallel", "actionEvalParallel", "charDrawPrep", "frameThreads",
-                    "animatorParallel", "headOnWorker", "animatorPipeline", "animBatchAsync", "guardedCallbacks", "lightingReadParallel",
-                    "charDrawThreads", "separateParallel", "skinTransformsPrecompute", "skinPalettePrecompute", "shadowPrep", "aoContextParallel" } },
-                { title = "Cheaper checks", keys = { "playerLosFast", "ecsLookupFast", "actionConditionFast", "zombieCullSortFast", "vehicleCull",
-                    "zombieSpotFast", "zombieAtlasFast", "separateFast", "edgeTestFast", "sleepCheckMemo", "stateParamMemo",
-                    "actionGroupCache", "boneIndexCache", "lazyPose", "modelLockPerInstance", "poolStatsBatched", "actionSnapshotFilter",
-                    "emitterParamSkip", "profilerThreadMemo" } },
-                { title = "Detail by distance", keys = { "zombieLodDynamic", "zombieSimLodTiles", "zombieSimLodSteps", "zombieCheckSpread",
-                    "zombieLodMin3d", "zombieLodMinBlend", "zombieLodUncappedFps" } },
+                    "animatorParallel", "headOnWorker", "animatorPipeline", "animBatchAsync", "guardedCallbacks",
+                    "lightingReadParallel", "charDrawThreads", "separateParallel", "skinTransformsPrecompute",
+                    "skinPalettePrecompute", "shadowPrep", "aoContextParallel" } },
+                { title = "Cheaper checks", keys = { "playerLosFast", "ecsLookupFast", "actionConditionFast", "zombieCullSortFast",
+                    "vehicleCull", "zombieSpotFast", "zombieAtlasFast", "separateFast", "edgeTestFast", "sleepCheckMemo",
+                    "stateParamMemo", "actionGroupCache", "lazyPose", "modelLockPerInstance", "poolStatsBatched",
+                    "actionSnapshotFilter", "emitterParamSkip", "profilerThreadMemo" } },
+                { title = "Detail by distance", keys = { "zombieLodDynamic", "zombieSimLodTiles", "zombieCheckSpread" } },
               } },
-            { id = "load", title = "Boot and loading", blurb = "From launch to the menu, and from Continue to the world.",
+          } },
+        { id = "soundin", title = "Input and sound", page = 1, colour = { 0.62, 0.74, 0.90 },
+          note = "Mouse and keys at the frame they happen, and the audio mix.",
+          cats = {
+            { id = "input", title = "Input and display", blurb = "Input latency, variable refresh and the frame queue.",
               subs = {
-                { title = "Loading screen", keys = { "noLoadingScreen", "resumeShot", "centerFirstLoad", "resumeShotDetail", "noLoadFade",
-                    "noIntroWait", "noClickToStart" } },
-                { title = "Boot", keys = { "aotCache", "fmodAsync", "preloadAnimSets", "bootPump", "bootFileThreads", "earlyModels",
-                    "luaPrecompile", "animClipCache", "packIndex", "scriptParserFast", "itemParamSwitch", "earlyTilePacks" } },
-                { title = "Files and textures", keys = { "texCompress", "fileThreads", "fileInflight", "textureBufferMb", "parallelDepthMaps",
-                    "loaderCpuFixes", "shaderCache", "mipmapArrays", "tileDefPreload", "skipIdChecks", "voronoiFast" } },
+                { title = "Input latency", keys = { "inputLatch", "keyboardFresh", "reflexSleep", "reflexBoost",
+                    "reflexCapFps", "frameStartGate", "vsyncAdaptive", "cursorLatch", "aimHoldMs", "gpuMaxFrames",
+                    "vblankLock" } },
+                { title = "Variable refresh and macOS display", keys = { "vrr", "vrrCap", "macGlCore",
+                    "macGlTimerQueries", "macPresent", "borderlessFullscreen", "presentPacing", "limiterSleep",
+                    "frameClockSmooth" } },
               } },
-            { id = "ui", title = "Menus, inventory and map", blurb = "Windows that answer in the frame you click.",
+            { id = "sound", title = "Sound", blurb = "The mix, the emitters and the world sounds.",
               subs = {
-                { title = "Windows", keys = { "mainMenuButtons", "uiRetained", "uiRetainedChildren", "uiTickStagger", "uiLuaFast", "hotsaveWarmup" } },
-                { title = "Map", keys = { "mapStreetCache", "mapStreetMemo", "mapVisitedFast" } },
-                { title = "Lua", keys = { "luaIndexCache", "luaInternConstants", "luaSkipEmpty" } },
+                { title = "Mix and limiter", keys = { "audioLimiter", "audioLimiterCeilingDb", "audioLimiterStereoFold" } },
+                { title = "Emitters and world sounds", keys = { "soundTickHz", "emitterIdleSkip", "hearingHoist",
+                    "soundZoneCache", "worldSoundFast", "worldSoundCleanupFast" } },
               } },
-            { id = "system", title = "System, sound and mods", blurb = "Cores and power, the audio mix, other mods, updates.",
+            { id = "ui", title = "Menus and view", blurb = "Windows and the map.",
+              subs = {
+                { title = "Windows", keys = { "mainMenuButtons", "uiRetained", "uiRetainedChildren", "uiTickStagger",
+                    "uiLuaFast", "hotsaveWarmup" } },
+                { title = "Map and Lua", keys = { "mapStreetCache", "mapStreetMemo", "mapVisitedFast",
+                    "luaIndexCache", "luaInternConstants", "luaSkipEmpty" } },
+              } },
+            { id = "system", title = "System and mods", blurb = "CPU cores, other mods and the game's updates.",
               subs = {
                 { title = "Cores and power", keys = { "corePlacement", "gpuPstate", "jitSteady", "lightingSyncPark" } },
-                { title = "Sound", keys = { "audioLimiter", "audioLimiterCeilingDb", "audioLimiterStereoFold", "soundTickHz",
-                    "emitterIdleSkip", "worldSoundCleanupFast", "hearingHoist", "soundZoneCache", "worldSoundFast" } },
-                { title = "Mods and multiplayer", keys = { "modProfile", "modCompat", "uiRetainedMods", "luaWorkerGate", "luaChecksumExempt" }, compatButton = true },
+                { title = "Mods and multiplayer", keys = { "modProfile", "modCompat", "uiRetainedMods", "luaWorkerGate",
+                    "luaChecksumExempt" }, compatButton = true },
                 { title = "Updates", keys = { "updateCheck", "updatePrefetch", "updateFromWorkshop" }, updaterButton = true },
+              } },
+          } },
+        { id = "load", title = "Boot and loading", page = 1, colour = { 0.60, 0.62, 0.72 },
+          note = "From launch to the menu, and from Continue to the world.",
+          cats = {
+            { id = "load-entry", title = "Boot and loading screen", blurb = "Launch to the menu, Continue to the world.",
+              subs = {
+                { title = "Loading screen", keys = { "noLoadingScreen", "resumeShot", "centerFirstLoad",
+                    "resumeShotDetail", "noLoadFade", "noIntroWait", "noClickToStart" } },
+                { title = "Boot", keys = { "aotCache", "fmodAsync", "preloadAnimSets", "bootPump", "earlyModels",
+                    "luaPrecompile", "animClipCache", "packIndex", "scriptParserFast", "itemParamSwitch",
+                    "earlyTilePacks" } },
+                { title = "Files and textures", keys = { "texCompress", "parallelDepthMaps", "loaderCpuFixes",
+                    "shaderCache", "mipmapArrays", "tileDefPreload", "skipIdChecks", "voronoiFast" } },
               } },
           } },
         { id = "vis", title = "Visuals", page = 2, colour = { 0.98, 0.72, 0.30 }, cards = true,
@@ -118,6 +142,24 @@ PzoptSettingsLayout = {
                 { title = "Zombie outlines", sections = { "Occluded zombie outlines" } },
               } },
           } },
+        { id = "adv", title = "Advanced", page = 1, colour = { 0.78, 0.70, 0.86 },
+          note = "Tuning numbers kept out of the way. The defaults are the measured best; change them to experiment.",
+          cats = {
+            { id = "adv-tuning", title = "Tuning", blurb = "Budgets, thread counts, intervals, distances.",
+              subs = {
+                { title = "Bake and streaming tuning", keys = { "bakeFrameBudget", "bootFileThreads", "fileThreads",
+                    "fileInflight", "textureBufferMb" } },
+                { title = "Lighting and cutaway tuning", keys = { "lightingRebakeBudget", "lightingRebakeMaxFrames",
+                    "lightingRebakeMs", "lightingStrongDelta", "lightingStrongBudget", "lightingStrongFrameMs",
+                    "lightingGlobalDeltaPct", "losLightPrefetch", "bloodRebakeCoalesceMs" } },
+                { title = "Zombie tuning", keys = { "boneIndexCache", "zombieSimLodSteps", "zombieLodMin3d",
+                    "zombieLodMinBlend", "zombieLodUncappedFps" } },
+                { title = "Streaming and handoff tuning", keys = { "loadWorkers", "hotsaveIntervalSec", "hotsaveStaged",
+                    "treeBakeMaxChunksPerSec", "zoomEaseMs", "zoomFrameMs", "zoomRebakeBudget", "fogScalePct",
+                    "weatherFxScalePct", "driveCameraLate",
+                    "wake", "chunkHandoffDivisor", "workers" } },
+              } },
+          } },
         { id = "tools", title = "Tools", page = 3, colour = { 0.45, 0.68, 0.98 },
           note = "The performance overlay (F9), its game-thread profiler and the console log.",
           cats = {
@@ -132,11 +174,12 @@ PzoptSettingsLayout = {
 
     -- a key no subcategory lists: its section's title prefix -> category id
     home = {
-        { "Chunk textures", "world" }, { "Cutaways", "weather" }, { "Entity updates", "zombies" }, { "More game-thread", "zombies" },
-        { "Sprite buffers", "world" }, { "Input latency", "smooth" }, { "Menus", "ui" }, { "Mod compat", "system" },
-        { "Driving", "drive" }, { "Variable refresh", "smooth" }, { "CPU cores", "system" }, { "Sound", "system" },
-        { "Multiplayer", "system" }, { "Updates", "system" }, { "Render distance", "drive" }, { "Chunk streaming", "drive" },
-        { "Boot", "load" }, { "World load", "load" },
+        { "Chunk textures", "perf-draw" }, { "Cutaways", "perf-light" }, { "Entity updates", "perf-zombies" },
+        { "More game-thread", "perf-zombies" }, { "Sprite buffers", "perf-draw" }, { "Input latency", "input" },
+        { "Menus", "ui" }, { "Mod compat", "system" }, { "Driving", "perf-core" }, { "Variable refresh", "input" },
+        { "CPU cores", "system" }, { "Sound", "sound" }, { "Multiplayer", "system" }, { "Updates", "system" },
+        { "Render distance", "perf-core" }, { "Chunk streaming", "perf-core" }, { "Boot", "load-entry" },
+        { "World load", "load-entry" },
     },
 
     simple = { "presentPacing", "vrr", "vrrCap", "inputLatch", "reflexSleep", "cursorLatch", "vehicleSmooth", "driveLookSmooth",
@@ -152,10 +195,9 @@ PzoptSettingsLayout = {
         "overlaySampling", "overlay", "overlayStats", "overlayGraph", "overlayCorner", "overlayFont", "overlayFpsColor", "consoleLog" },
 
     -- tuning numbers and thread counts (Everything view); names matching expertPatterns count too, on the Performance pages
-    expertKeys = { "workers", "loadWorkers", "frameThreads", "charDrawThreads", "bootFileThreads", "fileThreads", "fileInflight",
-        "textureBufferMb", "physicsStepHz", "physicsStepMode", "vblankLock", "gpuMaxFrames", "aimHoldMs", "zoomEaseMs",
-        "curtainDepthNudgePct", "lightingGlobalDeltaPct", "fogScalePct", "weatherFxScalePct", "macGlTimerQueries", "gameThreadProfileHz",
-        "overlayRefreshMs", "overlayGraphHz", "overlayFlameDepth", "overlayTexture" },
+    expertKeys = { "vblankLock", "gpuMaxFrames", "aimHoldMs", "zoomEaseMs", "curtainDepthNudgePct", "lightingGlobalDeltaPct",
+        "fogScalePct", "weatherFxScalePct", "macGlTimerQueries", "gameThreadProfileHz", "overlayRefreshMs", "overlayGraphHz",
+        "overlayFlameDepth", "overlayTexture" },
     expertPatterns = { "Budget$", "MaxFrames$", "Ms$", "Frames$", "Threads$", "Divisor$", "Hz$", "Kb$", "Mb$", "Slots$", "Delta$",
         "Interval", "Px$", "Steps$", "Tiles$", "Sec$", "Spread$", "PerSec$", "Min3d$", "MinBlend$", "UncappedFps$", "^dev" },
 
