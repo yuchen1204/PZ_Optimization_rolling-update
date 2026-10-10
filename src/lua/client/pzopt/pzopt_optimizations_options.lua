@@ -3650,6 +3650,14 @@ local function rowChanged(row)
     return v ~= perf():getPzoptOptionDefault(row.entry.key)
 end
 
+-- the "N on" side of catStatus must not die on a half-built control either (pzoptCurrent reads o.control.pzoptValue,
+-- nil before option.toUI ran; a build failure above it must not take the sidebar down)
+local function rowOn(row)
+    if not row.option.pzoptBool then return false end
+    local ok, v = pcall(function() return row.option:pzoptCurrent() end)
+    return ok and v == "true"
+end
+
 local function groupOff(group)
     local m = group.master
     return m ~= nil and m.option:pzoptCurrent() == "false"
@@ -3663,7 +3671,7 @@ local function catStatus(cat)
     for _, row in ipairs(cat.rows) do
         if rowChanged(row) then
             changed = changed + 1
-            if row.option.pzoptBool and row.option:pzoptCurrent() == "true" then on = on + 1 end
+            if rowOn(row) then on = on + 1 end
         end
     end
     local status, c
@@ -4273,13 +4281,10 @@ function layoutPage.home(C, y)
     line(unpack(pl))
     y = y + BH + SP * 3
     -- the quick toggles: the settings most players look for, rows in their own right (clicking a row opens its
-    -- category through the row's own handler; the sidebar still shows where it lives)
-    if #S.tree.quick > 0 then
-        local quickTitle = (PzoptI18n and PzoptI18n.t("ui.quick.label", "Most used")) or "Most used"
-        local quickHeading = single(drawPanel(function(o)
-            o:drawText(string.upper(quickTitle), 0, 0, C_OPT.r, C_OPT.g, C_OPT.b, 1, UIFont.Medium)
-        end))
-        at(quickHeading, x0, y, w, hM + 6)
+    -- category through the row's own handler; the sidebar still shows where it lives). S.quickHeading is the label
+    -- panel pageBuild.home made.
+    if S.quickHeading and #S.tree.quick > 0 then
+        at(S.quickHeading, x0, y, w, hM + 6)
         y = y + hM + 6 + SP
         for _, row in ipairs(S.tree.quick) do y = rowAt(row, y) end
         y = y + SP * 3
@@ -4693,6 +4698,11 @@ function pageBuild.home(B)
         o:drawText(clipText(UIFont.Small, hintText, math.max(20, o.width - x)), x,
             math.floor((hM - hS) / 2), C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small)
     end))
+    -- the quick toggles' heading: "MOST USED" over the rows layoutPage.home draws
+    local quickTitle = (PzoptI18n and PzoptI18n.t("ui.quick.label", "Most used")) or "Most used"
+    S.quickHeading = single(drawPanel(function(o)
+        o:drawText(string.upper(quickTitle), 0, 0, C_OPT.r, C_OPT.g, C_OPT.b, 1, UIFont.Medium)
+    end))
     S.problemTile = single(drawButton(self, function() navigate(S, "problems") end, function(o, hot)
         o:drawRect(0, 0, o.width, o.height, 1, 0.115, 0.10, 0.13)
         o:drawRectBorder(0, 0, o.width, o.height, hot and 0.9 or 0.15, hot and C_HELP.r or 1, hot and C_HELP.g or 1, hot and C_HELP.b or 1)
@@ -4876,8 +4886,8 @@ function pageBuild.decorations(B)
             o:drawText(clipText(UIFont.Small, problem.cause, o.width - 24), 12, 8 + hM, C_GREY.r, C_GREY.g, C_GREY.b, 1, UIFont.Small)
             local on = 0
             for _, row in ipairs(problem.rows) do
-                local v = row.option:pzoptCurrent()
-                if v ~= "false" and v ~= "off" and v ~= "0" and v ~= "off (default)" and v ~= "false (default)" then on = on + 1 end
+                local ok, v = pcall(function() return row.option:pzoptCurrent() end)
+                if ok and v and v ~= "false" and v ~= "off" and v ~= "0" and v ~= "off (default)" and v ~= "false (default)" then on = on + 1 end
             end
             local c = on == #problem.rows and C_OPT or C_AMBER
             local isZh = PzoptI18n and PzoptI18n.getLang() == "zh_cn"
