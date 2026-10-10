@@ -5294,8 +5294,52 @@ end
 
 -- The tab is added with the others (after Display) but built the first time it is shown: the in-game menu builds the
 -- whole options screen while the world is entered.
+-- The stock options window is a centered box at 70 % of the width and 80 % of the height of the game's window
+-- (measured on every rig: 1344x864 at a 1920x1080 window, 3584x1728 at 5120x2160), leaving the settings a
+-- fraction of the space on a large screen (maintainer's request, 2026-10-10: restored after the preview-strip
+-- fix, the widen itself drew right there). This stretches the LIVE MainOptions instance to its own size / 0.7
+-- x / 0.8 before anything else builds: ratio-only, no absolute pixels, so any resolution, aspect ratio or
+-- third-party scale holds. doLayout runs only once create() has laid the tabs (centerKeybindings reads
+-- keyBindingLength from create's first lines), and both steps are pcall-guarded: a disagreement loses nothing.
+local function pzoptWidenSettingsModal(self)
+    local ok, err = pcall(function()
+        local w = self.width or (self.javaObject and self.javaObject:getWidth())
+        local h = self.height or (self.javaObject and self.javaObject:getHeight())
+        if not w or not h or w <= 0 or h <= 0 then return end
+        local bigW, bigH = w / 0.7, h / 0.8
+        if bigW <= w * 1.02 or bigH <= h * 1.02 then
+            PzoptLogInfo("[pzopt] options modal: no widening (" .. tostring(w) .. " x " .. tostring(h) .. ")")
+            return
+        end
+        self.width, self.height = bigW, bigH
+        self.x, self.y = 0, 0
+        if self.javaObject and self.javaObject.setWidth then
+            self.javaObject:setWidth(bigW)
+            self.javaObject:setHeight(bigH)
+            self.javaObject:setX(0)
+            self.javaObject:setY(0)
+        end
+        -- the anchored / centred children only re-derive in stock doLayout, and only after create() ran:
+        -- before that (this opens at install, the first tab click) create() lays everything out from the
+        -- widened numbers, so a pre-create doLayout is neither needed nor safe (keyBindingLength is nil)
+        if self.tabs and MainOptions.keyBindingLength ~= nil and self.doLayout then
+            local okLayout, errLayout = pcall(self.doLayout, self)
+            if not okLayout then
+                print("[pzopt] options modal: widening: doLayout skipped: " .. tostring(errLayout))
+            end
+        end
+        PzoptLogInfo("[pzopt] options modal: widened to " .. tostring(bigW) .. " x " .. tostring(bigH)
+            .. " (was " .. tostring(w) .. " x " .. tostring(h) .. ")")
+    end)
+    if not ok then
+        print("[pzopt] options modal: widening skipped: " .. tostring(err))
+    end
+end
+
 function MainOptions:pzoptAddOptimizationsPanel()
     self.pzoptBuilt = false
+    -- widening before addPage: the page panel and every later read take the enlarged width from here
+    pzoptWidenSettingsModal(self)
     self:addPage(TAB)
     self.pzoptPanel = self.mainPanel
 end
