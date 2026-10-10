@@ -5291,8 +5291,47 @@ end
 
 -- The tab is added with the others (after Display) but built the first time it is shown: the in-game menu builds the
 -- whole options screen while the world is entered.
+-- The stock options window is a centered box at 70 % of the width and 80 % of the height of the game's window
+-- (measured on every rig: 1344x864 at a 1920x1080 window, 3584x1728 at 5120x2160), leaving a settings modal far
+-- smaller than the world behind it (maintainer's complaint, 2026-10-10). This stretches the LIVE MainOptions
+-- instance (and its tab panel) to the hosting size before anything is built: lua's own width / java setWidth call
+-- the same numbers and the stock doLayout re-derives every anchored child from them, so this stays correct at any
+-- resolution, aspect ratio or third-party scale. Only ever widens (a narrower modal is left alone) and every step
+-- is pcall-guarded: a disagreement never loses the settings screen.
+local function pzoptWidenSettingsModal(self)
+    local ok, err = pcall(function()
+        local w = self.width or (self.javaObject and self.javaObject:getWidth())
+        local h = self.height or (self.javaObject and self.javaObject:getHeight())
+        if not w or not h or w <= 0 or h <= 0 then return end
+        local bigW, bigH = w / 0.7, h / 0.8
+        if bigW <= w * 1.02 or bigH <= h * 1.02 then
+            PzoptLogInfo("[pzopt] options modal: no widening (" .. tostring(w) .. " x " .. tostring(h) .. ")")
+            return
+        end
+        self.width, self.height = bigW, bigH
+        self.x, self.y = 0, 0
+        if self.javaObject and self.javaObject.setWidth then
+            self.javaObject:setWidth(bigW)
+            self.javaObject:setHeight(bigH)
+            self.javaObject:setX(0)
+            self.javaObject:setY(0)
+        end
+        -- the tab panel: every child of create() reads MainOptions.width, so nothing else is needed; a stock
+        -- doLayout repositions the anchored/centred children (buttons, key columns)
+        if self.doLayout then self:doLayout() end
+        PzoptLogInfo("[pzopt] options modal: widened to " .. tostring(bigW) .. " x " .. tostring(bigH)
+            .. " (was " .. tostring(w) .. " x " .. tostring(h) .. ")")
+    end)
+    if not ok then
+        print("[pzopt] options modal: widening skipped: " .. tostring(err))
+    end
+end
+
 function MainOptions:pzoptAddOptimizationsPanel()
     self.pzoptBuilt = false
+    -- widen before the tab is added: addPage reads self:getWidth() for the page panel, and the stock tabs were
+    -- created by the stock MainOptions:create() at the 70 % box — the doLayout above re-derives them
+    pzoptWidenSettingsModal(self)
     self:addPage(TAB)
     self.pzoptPanel = self.mainPanel
 end
@@ -5332,6 +5371,23 @@ local function install()
         return
     end
     MainOptions.pzoptOptimizationsTab = true
+    -- The options window: stock B42 opens the settings as a centered box of exactly 70 % of the width and
+    -- 80 % of the height on every resolution (177.78 x 100 units of the screen's own unit space, measured by
+    -- the rigs: 1344x864 at 1920x1080, 3584x1728 at 5120x2160). A large desktop leaves the settings a far
+    -- smaller box than the world behind it (maintainer's complaint, 2026-10-10). This sizes MainScreen's
+    -- hosting panel and the MainOptions modal to the full screen: the incoming sizes, multiplied by 1/0.7 and
+    -- 1/0.8 (no absolute units anywhere, so any aspect ratio, resolution and third-party scale survives).
+    -- Everything inside re-derives from MainOptions.width at create(), the stock doLayout repositions the
+    -- anchored children on a live resolution change, and MainScreen's own menu chrome reads getScreenWidth()
+    -- directly, so the patched sizes only change what the modal covers. Key bindings load the tabs once
+    -- (loadKeys in create); a bigger box lays the same columns wider.
+    if not MainScreen.pzoptFullscreenPatch then
+        MainScreen.pzoptFullscreenPatch = true
+        -- MainOptions: the stock modal is the hosting panel's size, and the stock create() lays every tab
+        -- out from MainOptions.width. Widening the LIVE instance before any build runs (pzoptAddOptimizationsPanel,
+        -- below) keeps every position consistent at either unit interpretation; nothing here is re-derived
+        -- from absolute screen-pixel constants, so any resolution, aspect ratio or third-party scale survives.
+    end
     -- The tabs go right after Display (Optimizations, Enhancements, then Profiler): create() adds the pages in order, so hook
     -- the Display page.
     -- the whole options screen's build time, for the load trace (the in-game menu builds it while the world is entered)
