@@ -5324,21 +5324,17 @@ local function pzoptWidenSettingsModal(self)
         end
         self.width, self.height = bigW, bigH
         self.x, self.y = 0, 0
+        self.pzoptWidened = true
         if self.javaObject and self.javaObject.setWidth then
             self.javaObject:setWidth(bigW)
             self.javaObject:setHeight(bigH)
             self.javaObject:setX(0)
             self.javaObject:setY(0)
         end
-        -- the anchored / centred children only re-derive in stock doLayout, and only after create() ran:
-        -- before that (this opens at install, the first tab click) create() lays everything out from the
-        -- widened numbers, so a pre-create doLayout is neither needed nor safe (keyBindingLength is nil)
-        if self.tabs and MainOptions.keyBindingLength ~= nil and self.doLayout then
-            local okLayout, errLayout = pcall(self.doLayout, self)
-            if not okLayout then
-                print("[pzopt] options modal: widening: doLayout skipped: " .. tostring(errLayout))
-            end
-        end
+        -- the anchored / centred children only re-derive in stock doLayout, and only after create() ran to
+        -- the keybindings (self.keyButtonWidth): addDisplayPanel is called mid-create, before that, so the
+        -- pre-create widen sets just the numbers — create() lays everything out from them — and ensurePageBuilt
+        -- (below) re-runs doLayout once the screen is complete
         PzoptLogInfo("[pzopt] options modal: widened to " .. tostring(bigW) .. " x " .. tostring(bigH)
             .. " (was " .. tostring(w) .. " x " .. tostring(h) .. ")")
     end)
@@ -5359,6 +5355,16 @@ end
 ensurePageBuilt = function(self, tab)
     if self.pzoptPanel and not self.pzoptBuilt then
         self.pzoptBuilt = true
+        -- the widen's deferred layout: stock doLayout repositions the anchored / centred children
+        -- (tab panel, buttons, key columns) at the widened size; keyButtonWidth exists here (create ran
+        -- addKeybindingPanel before this ever fires)
+        if self.pzoptWidened and self.doLayout then
+            local okL, errL = pcall(self.doLayout, self)
+            if not okL then
+                print("[pzopt] options modal: widened doLayout skipped: " .. tostring(errL))
+            end
+            self.pzoptWidened = nil
+        end
         local ok, err = pcall(buildPage, self)
         if not ok then
             print("[pzopt] options tab " .. TAB .. ": build failed: " .. tostring(err))
