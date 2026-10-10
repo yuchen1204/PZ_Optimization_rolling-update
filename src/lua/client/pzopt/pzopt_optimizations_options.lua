@@ -4213,8 +4213,10 @@ relayout = function(S)
     end
 
     -- the sidebar and the preview: on every page but home; the preview shows a setting of the page shown
+    -- (the preview panel exists at width 0 on most-narrow windows: relayout keeps it hidden — 2026-10-10,
+    -- relayout re-showing a 0-width panel was the scrollbar-strip squeeze)
     S.sidebar:setVisible(not home)
-    S.preview:setVisible(not home)
+    S.preview:setVisible(not home and S.G.prevW > 0)
     if not home and (not S.preview.row or not shown[S.preview.row]) then
         for _, row in ipairs(S.keyRows) do
             if shown[row] and not row.isMaster then
@@ -4918,13 +4920,14 @@ local function buildPage(self)
     for _, g in ipairs(PzoptSettingsLayout.groups) do
         for _, c in ipairs(g.cats) do longest = math.max(longest, textW(UIFont.Small, c.title)) end
     end
-    -- a narrow window (the F-box runs 1920x1080 at ~1344 px of panel) shares the width three ways in the old
-    -- geometry and the settings list was left ~560 px. Under 1500 px of panel the preview panel goes (the same
-    -- information is on the row's tooltip; the "Before / after clips" tick box brings the clips back alone) and
-    -- the sidebar caps at 240, so the list gets the rest.
+    -- a narrow window (the maintainer's laptop runs a windowed 1920x1080 where the modal measures ~1450 units)
+    -- shared the width three ways in the old geometry and the settings list was left ~560 units — the effect
+    -- bars of the preview squeezed to a scrollbar strip (maintainer, 2026-10-10). Under 1500 units the sidebar
+    -- caps at 200 and the preview at a fixed 300, so both keep working; under 1200 the preview goes entirely
+    -- (relayout keeps it hidden; the row tooltips carry the same information).
     G.narrow = W < 1500
-    G.sideW = math.max(200, math.min(G.narrow and 240 or 330, math.max(math.floor(W * 0.14), longest + textW(UIFont.Small, "000") + 48)))
-    G.prevW = G.narrow and 0 or math.max(300, math.min(900, math.floor(W * 0.25)))
+    G.sideW = math.max(180, math.min(G.narrow and 200 or 330, math.max(math.floor(W * 0.12), longest + textW(UIFont.Small, "00") + 40)))
+    G.prevW = (W < 1200 and 0) or (G.narrow and 300 or math.max(300, math.min(900, math.floor(W * 0.25))))
     G.prevX = W - G.m - G.sbar - G.prevW
     G.contentX = G.m + G.sideW + GAP
     G.contentR = G.prevX - GAP
@@ -5262,7 +5265,7 @@ local function buildPage(self)
     preview:setAnchorBottom(true)
     preview.minX = G.contentX
     panel:addChild(preview)
-    if G.narrow then preview:setVisible(false) end  -- hidden with the panel: the rig's right edge is then panel-sbar
+    if G.prevW == 0 then preview:setVisible(false) end  -- hidden with the panel: the rig's right edge is then panel-sbar
     if S.keyRows[1] then preview:select(S.keyRows[1]) end
     self.pzoptPreview = preview
     S.preview = preview
